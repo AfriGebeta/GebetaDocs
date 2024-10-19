@@ -9,12 +9,22 @@ import { type HomeLayoutProps } from 'fumadocs-ui/home-layout';
  */
 export const baseOptions: HomeLayoutProps = {
   nav: {
-    title: 'My App',
+    title: 'Gebeta Maps',
   },
   links: [
     {
       text: 'Documentation',
       url: '/docs',
+      active: 'nested-url',
+    },
+    {
+      text: 'Map Playground',
+      url: '/map-playground',
+      active: 'nested-url',
+    },
+    {
+      text: 'API Playground',
+      url: '/api-playground',
       active: 'nested-url',
     },
   ],
