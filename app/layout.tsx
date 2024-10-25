@@ -22,7 +22,8 @@ export default function Layout({children}: { children: ReactNode }) {
         >
             {children}
 
-            <footer className="relative flex flex-col md:flex-row justify-between md:items-center gap-y-[32px] h-[300px] px-[80px] py-[40px] ">
+            <footer
+                className="relative flex flex-col md:flex-row justify-between md:items-center gap-y-[32px] h-[300px] px-[80px] py-[40px] ">
                 <div>
                     <div className="flex gap-[4px] items-center">
                         <Image
@@ -69,7 +70,11 @@ export default function Layout({children}: { children: ReactNode }) {
                                 <ul className="mt-[8px] space-y-[8px] text-[#a0a0a0] text-[14px]">
                                     {
                                         item.links.map((link, index) => (
-                                            <li key={index}>{link.text}</li>
+                                            <li>
+                                                <Link href={link.url} key={index}>
+                                                    {link.text}
+                                                </Link>
+                                            </li>
                                         ))
                                     }
                                 </ul>
