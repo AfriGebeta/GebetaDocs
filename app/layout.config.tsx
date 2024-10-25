@@ -13,8 +13,8 @@ export const baseOptions: HomeLayoutProps = {
   },
   links: [
     {
-      text: 'Documentation',
-      url: '/docs',
+      text: 'SDKs',
+      url: '/sdk',
       active: 'nested-url',
     },
     {
