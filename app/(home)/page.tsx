@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Hero from "@/layout/home/hero";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Route } from "lucide-react";
+import { ArrowRight, BringToFront, MapPin, Route, Waypoints, Webhook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -38,28 +38,28 @@ export default function HomePage() {
       name: "Matrix",
       description:
         "A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.",
-      icon: <Route />,
+      icon: <Webhook />,
       link: "/matrix",
     },
     {
       name: "One-to-Many",
       description:
         "The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.",
-      icon: <Route />,
+      icon: <MapPin />,
       link: "/onm",
     },
     {
       name: "Route Optimization",
       description:
         "Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.",
-      icon: <Route />,
+      icon: <Waypoints />,
       link: "/route-optimization",
     },
     {
       name: "Forward and Reverse Geocoding",
       description:
         "Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.",
-      icon: <Route />,
+      icon: <BringToFront />,
       link: "/geocoding",
     },
   ];
