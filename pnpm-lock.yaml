@@ -4487,6 +4487,7 @@ snapshots:
       '@fontsource/zen-dots': 5.1.0
       '@radix-ui/react-icons': 1.3.0(react@18.3.1)
       '@radix-ui/react-slot': 1.1.0(@types/react@18.3.11)(react@18.3.1)
+      '@radix-ui/react-tooltip': 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@scalar/api-reference-react': 0.3.116(@hyperjump/browser@1.1.6)(react@18.3.1)(tailwindcss@3.4.14)(typescript@5.6.3)
       class-variance-authority: 0.7.0
       clsx: 2.1.1

@@ -67,7 +67,7 @@ export default function HomePage() {
   const router = useRouter();
 
   return (
-    <main className="flex flex-col h-screen m-6 xl:mx-32 xl:my-24 gap-16">
+    <main className="flex flex-col min-h-screen m-6 xl:mx-32 xl:my-24 gap-16">
       <GridPattern
         squares={[
           [4, 4],
