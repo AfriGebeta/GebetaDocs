@@ -1,39 +1,38 @@
 ---
-title: Reverse Geocoding
-description: Find precise location coordinates by searching for a place name, returning an array of matching locations.
+title: Reverse Geocoding  
+description: Retrieve accurate location coordinates by entering a place name, returning an array of potential matches with their corresponding details.  
 ---
 
+
 ## Request Sample
-
 ```bash
-curl https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}
+curl https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}
 ```
-
 
 ### Parameters
 
-| Parameter      | Type      | Description                                        | Required |
-|----------------|-----------|----------------------------------------------------|----------|
-| `name`         | `string`  | The name of the place you want to search for       | `yes` |
-| `apiKey`       | `string`  | Your API key for accessing Gebeta Maps.            | `yes` |
+| **Parameter** | **Type**  | **Description**                                                   | **Required** |
+|---------------|-----------|-------------------------------------------------------------------|--------------|
+| `lat`         | `string`  | Specifies the latitude of the location you want to query.         | `yes`        |
+| `lon`         | `string`  | Specifies the longitude of the location you want to query.        | `yes`        |
+| `apiKey`      | `string`  | Your API key for accessing Gebeta Maps.                           | `yes`        |
 
-## Response Codes for Directions API
+## Response Codes for Reverse Geocoding API
 
-| Status Code | Message                         | Description                                                                                       |
-|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
-| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
-| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
-| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
-| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
-| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+| **Status Code** | **Message**                         | **Description**                                                                                       |
+|------------------|-------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `200`            | `OK`                                | The request was successful. The system found the matching location coordinates and returned the data. |
+| `404`            | `Not Found`                         | No matching location exists for the provided coordinates. Check the values and try again.             |
+| `401`            | `Not Authorized - No Token`         | Authentication failed. A valid API key must be provided.                                            |
+| `401`            | `Not Authorized - Invalid Token`     | The API key provided is either invalid or expired. Please use a current, valid API key.               |
+| `422`            | `Invalid Input`                    | The request parameters are incorrect. Review and correct the input values as needed.                  |
 
 ## Example
 
-<Tabs items={['Javascript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
-  <Tab value="Javascript">
+<Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
+  <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}')
+fetch('https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -45,9 +44,10 @@ use reqwest::blocking::get;
 use std::collections::HashMap;
 
 fn main() {
-    let place_to_search = "bole";
+    let lat = "8.989022";
+    let lon = "38.79036";
     let api_key = "{your-api-key}";
-    let url = format!("https://mapapi.gebeta.app/api/v1/route/geocoding?name={}&apiKey={}", place_to_search, api_key);
+    let url = format!("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={}&lon={}&apiKey={}", lat, lon, api_key);
     
     let response: HashMap<String, String> = get(&url)
         .unwrap()
@@ -69,9 +69,10 @@ import (
 )
 
 func main() {
-    placeToSearch := "bole"
+    lat := "8.989022"
+    lon := "38.79036"
     apiKey := "{your-api-key}"
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/geocoding?name=%s&apiKey=%s", placeToSearch, apiKey)
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=%s&lon=%s&apiKey=%s", lat, lon, apiKey)
 
     resp, err := http.Get(url)
     if err != nil {
@@ -88,9 +89,10 @@ func main() {
   <Tab value="PHP">
   ```php
 <?php
-$placeToSearch = "bole";
+$lat = "8.989022";
+$lon = "38.79036";
 $apiKey = "{your-api-key}";
-$url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name={$placeToSearch}&apiKey={$apiKey}";
+$url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={$lat}&lon={$lon}&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -102,9 +104,10 @@ print_r($data);
   ```python
 import requests
 
-place_to_search = "bole"
+lat = "8.989022"
+lon = "38.79036"
 api_key = "{your-api-key}"
-url = f"https://mapapi.gebeta.app/api/v1/route/geocoding?name={place_to_search}&apiKey={api_key}"
+url = f"https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={lat}&lon={lon}&apiKey={api_key}"
 
 response = requests.get(url)
 data = response.json()
@@ -116,14 +119,14 @@ print(data)
 require 'net/http'
 require 'json'
 
-place_to_search = "bole"
+lat = "8.989022"
+lon = "38.79036"
 api_key = "{your-api-key}"
-url = URI("https://mapapi.gebeta.app/api/v1/route/geocoding?name=#{place_to_search}&apiKey=#{api_key}")
+url = URI("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=#{lat}&lon=#{lon}&apiKey=#{api_key}")
 
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
 puts data
-
   ```
   </Tab>
   <Tab value="Dart">
@@ -132,9 +135,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  String placeToSearch = "bole";
+  String lat = "8.989022";
+  String lon = "38.79036";
   String apiKey = "{your-api-key}";
-  String url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=$placeToSearch&apiKey=$apiKey";
+  String url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=$lat&lon=$lon&apiKey=$apiKey";
 
   final response = await http.get(Uri.parse(url));
 
@@ -152,66 +156,69 @@ void main() async {
 <Accordions>
   <Accordion title="Success Response">
   ```json
-{
+  {
+  "msg": "ok",
   "data": [
     {
-      "City": "Addis Ababa",
+      "name": "haji suktala building materials",
+      "latitude": 9.05559,
+      "longitude": 38.705503,
       "Country": "Ethiopia",
-      "latitude": 8.975327,
-      "longitude": 38.772218,
-      "name": "bole bulbula",
-      "type": "neighborhood"
-    },
-    {
-      "City": "Addis Ababa",
-      "Country": "Ethiopia",
-      "latitude": 8.978027,
-      "longitude": 38.884797,
-      "name": "bole arabsa",
-      "type": "neighborhood"
-    },
-    {
-      "City": "Addis Ababa",
-      "Country": "Ethiopia",
-      "latitude": 8.99797,
-      "longitude": 38.786733,
-      "name": "bole medhane alem",
-      "type": "neighborhood"
-    },
-    {
-      "City": "Addis Ababa",
-      "Country": "Ethiopia",
-      "latitude": 8.989022,
-      "longitude": 38.79036,
-      "name": "bole",
-      "type": "neighborhood"
-    },
-    {
       "City": "addis ababa",
-      "Country": "Ethiopia",
-      "latitude": 8.994742,
-      "longitude": 38.790644,
-      "name": "impress building l bole medhanialem l ኢምፕረስ ህንፃ l ቦሌ መድሃኒአለም",
-      "type": "Building"
+      "type": "Building",
+      "duration": 347.13057844,
+      "distance": 347.13057844
     },
     {
-      "City": "addis ababa",
+      "name": "yeshumnesh habte menuta",
+      "latitude": 9.054104,
+      "longitude": 38.705375,
       "Country": "Ethiopia",
-      "latitude": 8.99391,
-      "longitude": 38.789082,
-      "name": "sunshine buildings | bole medhanialem",
-      "type": "Building"
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 201.28878069,
+      "distance": 201.28878069
+    },
+    {
+      "name": "cbe birr agent - addis ababa",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "finance store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "fatuma seid yesuf",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "hambra engneering plc",
+      "latitude": 9.05238,
+      "longitude": 38.70223,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "establishment",
+      "duration": 214.47480581,
+      "distance": 214.47480581
     },
   ],
-  "msg": "ok"
+  "count": 5
 }
-
   ```
-  
   </Accordion>
   <Accordion title="Error Response">
     ```json
-    error:	"Invalid token"
+{
+  "error": "Invalid token"
+}
     ```
   </Accordion>
 </Accordions>
