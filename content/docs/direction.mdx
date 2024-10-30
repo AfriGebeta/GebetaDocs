@@ -56,10 +56,17 @@ curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destina
 | `instruction` | `string`  | A turn by turn instruction from the origin point to destnation                                   | `no`         |
 | `waypoints`   | `string[]`| An optional array of latitude and longitude pairs (formatted as "lat,lon") separated by semicolons, indicating intermediate locations to visit en route.   | `no` |
 
+## Response Codes for Directions API
 
-## Example
+| Status Code | Message                         | Description                                                                                       |
+|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
+| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
+| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
+| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
 
-Here's the complete implementation for the `curl` request to the Directions API, including various programming language examples formatted in a tabbed structure:
 
 ## Directions API - CURL Request
 
