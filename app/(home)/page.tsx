@@ -157,7 +157,7 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
-        <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2">
+        <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
           <p className="text-4xl font-semibold">
             Get Started With Your{" "}
             <span className="text-primary">Favourite Frameworks</span>
@@ -186,7 +186,7 @@ export default function HomePage() {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <p>Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
+          <p className="text-center">Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
           <Ripple />
         </div>
       </div>
