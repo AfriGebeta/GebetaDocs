@@ -1,0 +1,217 @@
+---
+title: Reverse Geocoding
+description: Find precise location coordinates by searching for a place name, returning an array of matching locations.
+---
+
+## Request Sample
+
+```bash
+curl https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}
+```
+
+
+### Parameters
+
+| Parameter      | Type      | Description                                        | Required |
+|----------------|-----------|----------------------------------------------------|----------|
+| `name`         | `string`  | The name of the place you want to search for       | `yes` |
+| `apiKey`       | `string`  | Your API key for accessing Gebeta Maps.            | `yes` |
+
+## Response Codes for Directions API
+
+| Status Code | Message                         | Description                                                                                       |
+|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
+| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
+| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
+| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+
+## Example
+
+<Tabs items={['Javascript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
+  <Tab value="Javascript">
+  ```javascript
+fetch('https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+  ```
+  </Tab>
+  <Tab value="Rust">
+  ```rust
+use reqwest::blocking::get;
+use std::collections::HashMap;
+
+fn main() {
+    let place_to_search = "bole";
+    let api_key = "{your-api-key}";
+    let url = format!("https://mapapi.gebeta.app/api/v1/route/geocoding?name={}&apiKey={}", place_to_search, api_key);
+    
+    let response: HashMap<String, String> = get(&url)
+        .unwrap()
+        .json()
+        .unwrap();
+    
+    println!("{:?}", response);
+}  
+  ```
+  </Tab>
+  <Tab value="Go">
+  ```go 
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    placeToSearch := "bole"
+    apiKey := "{your-api-key}"
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/geocoding?name=%s&apiKey=%s", placeToSearch, apiKey)
+
+    resp, err := http.Get(url)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    var result map[string]interface{}
+    json.NewDecoder(resp.Body).Decode(&result)
+    fmt.Println(result)
+}
+  ```
+  </Tab>
+  <Tab value="PHP">
+  ```php
+<?php
+$placeToSearch = "bole";
+$apiKey = "{your-api-key}";
+$url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name={$placeToSearch}&apiKey={$apiKey}";
+
+$response = file_get_contents($url);
+$data = json_decode($response, true);
+print_r($data);
+?>
+  ```
+  </Tab>
+  <Tab value="Python">
+  ```python
+import requests
+
+place_to_search = "bole"
+api_key = "{your-api-key}"
+url = f"https://mapapi.gebeta.app/api/v1/route/geocoding?name={place_to_search}&apiKey={api_key}"
+
+response = requests.get(url)
+data = response.json()
+print(data)
+  ```
+  </Tab>
+  <Tab value="Ruby">
+  ```ruby
+require 'net/http'
+require 'json'
+
+place_to_search = "bole"
+api_key = "{your-api-key}"
+url = URI("https://mapapi.gebeta.app/api/v1/route/geocoding?name=#{place_to_search}&apiKey=#{api_key}")
+
+response = Net::HTTP.get(url)
+data = JSON.parse(response)
+puts data
+
+  ```
+  </Tab>
+  <Tab value="Dart">
+  ```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+void main() async {
+  String placeToSearch = "bole";
+  String apiKey = "{your-api-key}";
+  String url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=$placeToSearch&apiKey=$apiKey";
+
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    print(data);
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+}
+  ```  
+  </Tab>
+</Tabs>
+
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+{
+  "data": [
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.975327,
+      "longitude": 38.772218,
+      "name": "bole bulbula",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.978027,
+      "longitude": 38.884797,
+      "name": "bole arabsa",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.99797,
+      "longitude": 38.786733,
+      "name": "bole medhane alem",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.989022,
+      "longitude": 38.79036,
+      "name": "bole",
+      "type": "neighborhood"
+    },
+    {
+      "City": "addis ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.994742,
+      "longitude": 38.790644,
+      "name": "impress building l bole medhanialem l ኢምፕረስ ህንፃ l ቦሌ መድሃኒአለም",
+      "type": "Building"
+    },
+    {
+      "City": "addis ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.99391,
+      "longitude": 38.789082,
+      "name": "sunshine buildings | bole medhanialem",
+      "type": "Building"
+    },
+  ],
+  "msg": "ok"
+}
+
+  ```
+  
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+    error:	"Invalid token"
+    ```
+  </Accordion>
+</Accordions>

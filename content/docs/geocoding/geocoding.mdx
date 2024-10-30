@@ -1,0 +1,41 @@
+---
+title: Getting Started
+description: Geocoding is the process of finding locations that match a user’s search query or interest on the map.
+---
+
+With the Gebeta Maps Geocoding API, you can retrieve information about places like restaurants, hotels, parks, or museums. Each place includes ratings, reviews, photos, contact information, and more. Additionally, you can access detailed information such as distance, directions, and place availability.
+
+## Use Cases
+
+<Cards>
+  <Card title="Forward Geocoding" description="Convert addresses or place names into precise coordinates." href="/docs/geocoding/geocoding-forward">
+    - Pinpoint locations on a map.
+    - Calculate distances and directions to other places.
+    - Perform spatial analyses with geographic data.
+  </Card>
+
+  <Card title="Reverse Geocoding" description="Convert latitude and longitude coordinates into physical addresses." href="/docs/geocoding/geocoding-reverse">
+    - Label specific points on a map.
+    - Retrieve administrative boundaries for mapped areas.
+    - Enable reverse geocoding in applications needing location context.
+  </Card>
+</Cards>
+
+## API Limits and Restrictions
+
+The Geocoding API has a rate limit of **50 requests per second** per API token. Exceeding this limit will result in an error and rejected requests. To manage this, consider:
+- Throttling your requests.
+- Using multiple tokens for different applications or users.
+
+## Pricing
+
+Gebeta Maps Geocoding API pricing is based on usage:
+
+| Request Volume               | Cost per 1,000 Requests |
+|------------------------------|-------------------------|
+| `First 100,000 request `   | $2                      |
+| `Next 400,000 request `    | $1.75                   |
+| `Next 500,000 request `    | $1.5                    |
+| `Over 1,000,000 request `  | $1                      |
+
+For example, 2,000,000 requests would cost $2,000. For more details, refer to our [pricing page](https://maps.gebeta.app/#/pricing).

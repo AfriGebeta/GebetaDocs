@@ -20,6 +20,7 @@
     "framer-motion": "^11.11.9",
     "fumadocs-core": "13.4.10",
     "fumadocs-mdx": "10.0.2",
+    "fumadocs-typescript": "^3.0.1",
     "fumadocs-ui": "13.4.10",
     "gebeta-docs": "file:",
     "lucide-react": "^0.453.0",
