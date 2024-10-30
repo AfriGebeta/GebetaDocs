@@ -1,10 +1,9 @@
 ---
-title: Matrix API
+title: ONM API
 description: A comprehensive service that provides travel times and distances between multiple origins and destinations.
 ---
 
-Harness the power of the Matrix API to efficiently calculate optimal routes tailored to various scenarios. Whether you're looking to streamline delivery routes, plan seamless trips, or analyze traffic patterns, this API offers valuable insights to enhance your decision-making. With its ability to handle multiple origins and destinations simultaneously, the Matrix API is an essential tool for logistics, travel planning, and urban mobility analysis.
-
+Use the ONM API to calculate the best routes for different scenarios, such as optimizing delivery routes, planning trips, or analyzing traffic patterns. 
 
 ## Use Cases
 
@@ -43,27 +42,28 @@ Harness the power of the Matrix API to efficiently calculate optimal routes tail
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
+curl https://mapapi.gebeta.app/api/route/onm/?json=[]&origin={}&apiKey={}
 ```
 
 ### Parameters
 
 | **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
 |----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
-| `json`               | `string`  | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
+| `origin`             | `string`  | The origin in latitude and longitude format, e.g., `{longitude, latitude}`.                                 | `yes`        |
+| `json`               | `string[]`  | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
 | `apiKey`             | `string`  | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
-| `includeCoordinate`  | `boolean` | Whether to include GPS coordinates or not in the response.                                                   | `no`         |
+| `includeCoordinate`  | `boolean` | Whether to include GPS coordinates in the response.                                                          | `no`         |
 
 ## Example
 
-Here's the complete implementation for the `curl` request to the Matrix API, including various programming language examples formatted in a tabbed structure:
+Here's the complete implementation for the `curl` request to the ONM API, including various programming language examples formatted in a tabbed structure:
 
-## Matrix API - CURL Request
+## ONM API - CURL Request
 
-To get a route matrix using the Matrix API, you can use the following `curl` command:
+To get a route using the ONM API, you can use the following `curl` command:
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/matrix/?json=[latitude1,longitude1;latitude2,longitude2]&apiKey={your-api-key}"
+curl "https://mapapi.gebeta.app/api/route/onm/?json=[latitude1,longitude1;latitude2,longitude2]&origin={origin-latitude,origin-longitude}&apiKey={your-api-key}"
 ```
 
 ### Example
@@ -71,7 +71,7 @@ curl "https://mapapi.gebeta.app/api/route/matrix/?json=[latitude1,longitude1;lat
 <Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
   <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/route/matrix/?json=[8.989022,38.79036;9.03045,38.76530]&apiKey={your-api-key}')
+fetch('https://mapapi.gebeta.app/api/route/onm/?json=[8.989022,38.79036;9.03045,38.76530]&origin={origin-latitude,origin-longitude}&apiKey={your-api-key}')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -85,10 +85,11 @@ use std::collections::HashMap;
 
 fn main() {
     let api_key = "{your-api-key}";
+    let origin = "origin-latitude,origin-longitude";
     let coordinates = "8.989022,38.79036;9.03045,38.76530";
     let url = format!(
-        "https://mapapi.gebeta.app/api/route/matrix/?json=[{}]&apiKey={}",
-        coordinates, api_key
+        "https://mapapi.gebeta.app/api/route/onm/?json=[{}]&origin={}&apiKey={}",
+        coordinates, origin, api_key
     );
 
     let response: HashMap<String, String> = get(&url)
@@ -113,9 +114,10 @@ import (
 
 func main() {
     apiKey := "{your-api-key}"
+    origin := "origin-latitude,origin-longitude"
     coordinates := "8.989022,38.79036;9.03045,38.76530"
     
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/matrix/?json=[%s]&apiKey=%s", coordinates, apiKey)
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm/?json=[%s]&origin=%s&apiKey=%s", coordinates, origin, apiKey)
 
     resp, err := http.Get(url)
     if err != nil {
@@ -134,8 +136,9 @@ func main() {
   ```php
 <?php
 $apiKey = "{your-api-key}";
+$origin = "origin-latitude,origin-longitude";
 $coordinates = "8.989022,38.79036;9.03045,38.76530";
-$url = "https://mapapi.gebeta.app/api/route/matrix/?json=[{$coordinates}]&apiKey={$apiKey}";
+$url = "https://mapapi.gebeta.app/api/route/onm/?json=[{$coordinates}]&origin={$origin}&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -149,8 +152,9 @@ print_r($data);
 import requests
 
 api_key = "{your-api-key}"
+origin = "origin-latitude,origin-longitude"
 coordinates = "8.989022,38.79036;9.03045,38.76530"
-url = f"https://mapapi.gebeta.app/api/route/matrix/?json=[{coordinates}]&apiKey={api_key}"
+url = f"https://mapapi.gebeta.app/api/route/onm/?json=[{coordinates}]&origin={origin}&apiKey={api_key}"
 
 response = requests.get(url)
 data = response.json()
@@ -164,8 +168,9 @@ require 'net/http'
 require 'json'
 
 api_key = "{your-api-key}"
+origin = "origin-latitude,origin-longitude"
 coordinates = "8.989022,38.79036;9.03045,38.76530"
-url = URI("https://mapapi.gebeta.app/api/route/matrix/?json=[#{coordinates}]&apiKey=#{api_key}")
+url = URI("https://mapapi.gebeta.app/api/route/onm/?json=[#{coordinates}]&origin=#{origin}&apiKey=#{api_key}")
 
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
@@ -180,8 +185,9 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   String apiKey = "{your-api-key}";
+  String origin = "origin-latitude,origin-longitude";
   String coordinates = "8.989022,38.79036;9.03045,38.76530";
-  String url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey=$apiKey";
+  String url = "https://mapapi.gebeta.app/api/route/onm/?json=[$coordinates]&origin=$origin&apiKey=$apiKey";
 
   final response = await http.get(Uri.parse(url));
 
@@ -196,9 +202,39 @@ void main() async {
   </Tab>
 </Tabs>
 
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+{
+  "msg": "Ok",
+  "directions": [
+    {
+      "msg": "Ok",
+      "timetaken": 504.00467,
+      "totalDistance": 1512.014,
+      "direction": [
+        [
+          9.033223152160645,
+          38.73643493652344
+        ]
+      ]
+    }
+  ]
+}
+  ```
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+{
+  "error": "Invalid token"
+}
+    ```
+  </Accordion>
+</Accordions>
+
 ## API Limits and Restrictions
 
-The Matrix API has some restrictions and limits that you need to be aware of before using it:
+The ONM API has some restrictions and limits that you need to be aware of before using it:
 
 - **Coordinates Waypoints**: Should only be less than or equal to 10.
 - **Rate Limit**: 50 requests per second from a single API token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.
@@ -206,7 +242,7 @@ The Matrix API has some restrictions and limits that you need to be aware of bef
 
 ## Pricing
 
-The Matrix API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements:
+The ONM API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements:
 
 | Request Volume               | Cost per 10,000 Elements |
 |------------------------------|---------------------------|
@@ -215,4 +251,4 @@ The Matrix API charges you based on the number of elements you request. An eleme
 | `Next 5,000,000 elements`    | $1.5                      |
 | `Over 10,000,000 elements`   | $1                        |
 
-For example, if you request 20,000,000 elements, you will pay $20,000. Note that one Matrix API call is considered by the number of coordinates in the `json` array, so you will be charged accordingly. For more information, check the [pricing page](https://maps.gebeta.app/#/pricing).
+For example, if you request 20,000,000 elements, you will pay $20,000. Note that one ONM API call is considered by the number of coordinates in the `json` array, so you will be charged accordingly. For more information, check the [pricing page](https://maps.gebeta.app/#/pricing).
