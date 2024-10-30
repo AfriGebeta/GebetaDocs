@@ -45,6 +45,18 @@ The Directions API enables users to find the optimal route between two locations
 curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destination={lat2},{lat2}&apiKey={apiKey}
 ```
 
+
+### Parameters
+
+| **Parameter** | **Type**  | **Description**                                                                                  | **Required** |
+|---------------|-----------|--------------------------------------------------------------------------------------------------|--------------|
+| `origin`      | `string`  | Specifies the latitude and longitude of the origin location in the format lat,lon.               | `yes`        |
+| `destination` | `string`  | Specifies the latitude and longitude of the destination location in the format lat,lon.          | `yes`        |
+| `apiKey`      | `string`  | Your API key for accessing Gebeta Maps.                                                          | `yes`        |
+| `instruction` | `string`  | A turn by turn instruction from the origin point to destnation                                   | `no`         |
+| `waypoints`   | `string[]`| An optional array of latitude and longitude pairs (formatted as "lat,lon") separated by semicolons, indicating intermediate locations to visit en route.   | `no` |
+
+
 ## Example
 
 Here's the complete implementation for the `curl` request to the Directions API, including various programming language examples formatted in a tabbed structure:
@@ -205,6 +217,78 @@ void main() async {
   ```  
   </Tab>
 </Tabs>
+
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+{
+  "msg": "ok",
+  "data": [
+    {
+      "name": "haji suktala building materials",
+      "latitude": 9.05559,
+      "longitude": 38.705503,
+      "Country": "Ethiopia",
+      "City": "addis ababa",
+      "type": "Building",
+      "duration": 347.13057844,
+      "distance": 347.13057844
+    },
+    {
+      "name": "yeshumnesh habte menuta",
+      "latitude": 9.054104,
+      "longitude": 38.705375,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 201.28878069,
+      "distance": 201.28878069
+    },
+    {
+      "name": "cbe birr agent - addis ababa",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "finance store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "fatuma seid yesuf",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "hambra engneering plc",
+      "latitude": 9.05238,
+      "longitude": 38.70223,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "establishment",
+      "duration": 214.47480581,
+      "distance": 214.47480581
+    },
+  ],
+  "count": 5
+}
+
+  ```
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+{
+  "error": "Invalid token"
+}
+    ```
+  </Accordion>
+</Accordions>
+
 
 
 ## API Limits and Restrictions
