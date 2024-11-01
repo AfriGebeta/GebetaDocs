@@ -21,10 +21,6 @@ export const footer: Array<FooterProps> = [
                 url: "/docs",
             },
             {
-                text: "Blog",
-                url: "/blog",
-            },
-            {
                 text: "Community",
                 url: "https://t.me/gebetamaps",
             },
