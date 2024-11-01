@@ -1,0 +1,226 @@
+---
+title: Matrix API
+description: A comprehensive service that provides travel times and distances between multiple origins and destinations.
+---
+
+Harness the power of the Matrix API to efficiently calculate optimal routes tailored to various scenarios. Whether you're looking to streamline delivery routes, plan seamless trips, or analyze traffic patterns, this API offers valuable insights to enhance your decision-making. With its ability to handle multiple origins and destinations simultaneously, the Matrix API is an essential tool for logistics, travel planning, and urban mobility analysis.
+
+
+## Use Cases
+
+<Cards>
+  <Card title="Nearest Point of Interest" description="Locate the nearest points of interest from your current location, such as restaurants, hospitals, or gas stations." icon="🏪">
+    - Quickly find essential services nearby.
+    - Enhance user convenience with instant location-based suggestions.
+    - Improve decision-making for emergency or everyday needs.
+  </Card>
+
+  <Card title="Delivery Route Optimization" description="Optimize your delivery routes by finding the best order to visit multiple destinations." icon="📦">
+    - Streamline delivery processes to save time and resources.
+    - Minimize fuel costs by optimizing routes.
+    - Improve customer satisfaction with faster deliveries.
+  </Card>
+
+  <Card title="Trip Planning" description="Plan your trips effectively by identifying the best routes to multiple destinations." icon="🗺️">
+    - Organize multi-stop trips with ease.
+    - Enhance travel experience with well-planned itineraries.
+    - Save time by avoiding unnecessary detours.
+  </Card>
+
+  <Card title="Transportation Cost Estimation" description="Estimate transportation costs by calculating travel distances, fuel prices, and vehicle efficiency." icon="💰">
+    - Provide users with accurate cost projections for trips.
+    - Assist in budgeting for travel expenses.
+    - Support decision-making for vehicle selection and trip planning.
+  </Card>
+
+  <Card title="Traffic Data Access" description="Utilize real-time and historical traffic data for research, planning, or forecasting purposes." icon="📊">
+    - Analyze traffic patterns for better decision-making.
+    - Plan future infrastructure projects based on traffic flow data.
+    - Support academic research with comprehensive traffic analytics.
+  </Card>
+</Cards>
+
+## Usage
+
+```bash
+curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
+```
+
+### Parameters
+
+| **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
+|----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
+| `json`               | `string`  | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
+| `apiKey`             | `string`  | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
+| `includeCoordinate`  | `boolean` | Whether to include GPS coordinates or not in the response.                                                   | `no`         |
+
+## Response Codes for Matrix API
+
+| Status Code | Message                         | Description                                                                                       |
+|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
+| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
+| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
+| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+
+
+## Matrix API - CURL Request
+
+To get a route matrix using the Matrix API, you can use the following `curl` command:
+
+```bash
+curl "https://mapapi.gebeta.app/api/route/matrix/?json=[latitude1,longitude1;latitude2,longitude2]&apiKey={your-api-key}"
+```
+
+### Example
+
+<Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
+  <Tab value="JavaScript">
+  ```javascript
+fetch('https://mapapi.gebeta.app/api/route/matrix/?json=[8.989022,38.79036;9.03045,38.76530]&apiKey={your-api-key}')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+  ```
+  </Tab>
+  
+  <Tab value="Rust">
+  ```rust
+use reqwest::blocking::get;
+use std::collections::HashMap;
+
+fn main() {
+    let api_key = "{your-api-key}";
+    let coordinates = "8.989022,38.79036;9.03045,38.76530";
+    let url = format!(
+        "https://mapapi.gebeta.app/api/route/matrix/?json=[{}]&apiKey={}",
+        coordinates, api_key
+    );
+
+    let response: HashMap<String, String> = get(&url)
+        .unwrap()
+        .json()
+        .unwrap();
+
+    println!("{:?}", response);
+}
+  ```
+  </Tab>
+  
+  <Tab value="Go">
+  ```go 
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    apiKey := "{your-api-key}"
+    coordinates := "8.989022,38.79036;9.03045,38.76530"
+    
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/matrix/?json=[%s]&apiKey=%s", coordinates, apiKey)
+
+    resp, err := http.Get(url)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    var result map[string]interface{}
+    json.NewDecoder(resp.Body).Decode(&result)
+    fmt.Println(result)
+}
+  ```
+  </Tab>
+  
+  <Tab value="PHP">
+  ```php
+<?php
+$apiKey = "{your-api-key}";
+$coordinates = "8.989022,38.79036;9.03045,38.76530";
+$url = "https://mapapi.gebeta.app/api/route/matrix/?json=[{$coordinates}]&apiKey={$apiKey}";
+
+$response = file_get_contents($url);
+$data = json_decode($response, true);
+print_r($data);
+?>
+  ```
+  </Tab>
+  
+  <Tab value="Python">
+  ```python
+import requests
+
+api_key = "{your-api-key}"
+coordinates = "8.989022,38.79036;9.03045,38.76530"
+url = f"https://mapapi.gebeta.app/api/route/matrix/?json=[{coordinates}]&apiKey={api_key}"
+
+response = requests.get(url)
+data = response.json()
+print(data)
+  ```
+  </Tab>
+  
+  <Tab value="Ruby">
+  ```ruby
+require 'net/http'
+require 'json'
+
+api_key = "{your-api-key}"
+coordinates = "8.989022,38.79036;9.03045,38.76530"
+url = URI("https://mapapi.gebeta.app/api/route/matrix/?json=[#{coordinates}]&apiKey=#{api_key}")
+
+response = Net::HTTP.get(url)
+data = JSON.parse(response)
+puts data
+  ```
+  </Tab>
+  
+  <Tab value="Dart">
+  ```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+void main() async {
+  String apiKey = "{your-api-key}";
+  String coordinates = "8.989022,38.79036;9.03045,38.76530";
+  String url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey=$apiKey";
+
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    print(data);
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+}
+  ```  
+  </Tab>
+</Tabs>
+
+## API Limits and Restrictions
+
+The Matrix API has some restrictions and limits that you need to be aware of before using it:
+
+- **Coordinates Waypoints**: Should only be less than or equal to 10.
+- **Rate Limit**: 50 requests per second from a single API token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.
+- **Inter-Country Requests**: Not allowed. You can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message, and your request will be invalid. For inter-country travel, consider using other map services or APIs that support this feature.
+
+## Pricing
+
+The Matrix API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements:
+
+| Request Volume               | Cost per 10,000 Elements |
+|------------------------------|---------------------------|
+| `First 1,000,000 elements`   | $2                        |
+| `Next 4,000,000 elements`    | $1.75                     |
+| `Next 5,000,000 elements`    | $1.5                      |
+| `Over 10,000,000 elements`   | $1                        |
+
+For example, if you request 20,000,000 elements, you will pay $20,000. Note that one Matrix API call is considered by the number of coordinates in the `json` array, so you will be charged accordingly. For more information, check the [pricing page](https://maps.gebeta.app/#/pricing).

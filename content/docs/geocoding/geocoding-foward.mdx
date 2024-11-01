@@ -1,0 +1,323 @@
+---
+title: Forward Geocoding
+description: Find precise location coordinates by searching for a place name, returning an array of matching locations.
+---
+
+## Request Sample
+
+```bash
+curl https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}
+```
+
+
+### Parameters
+
+| Parameter      | Type      | Description                                        | Required |
+|----------------|-----------|----------------------------------------------------|----------|
+| `name`         | `string`  | The name of the place you want to search for       | `yes` |
+| `apiKey`       | `string`  | Your API key for accessing Gebeta Maps.            | `yes` |
+
+## Response Codes for Forward Geocoding API
+
+| Status Code | Message                         | Description                                                                                       |
+|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
+| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
+| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
+| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+
+## Example
+
+<Tabs items={['Javascript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart', 'Java', 'Kotlin', 'Swift']}>
+  <Tab value="Javascript">
+    ```javascript
+    fetch('https://mapapi.gebeta.app/api/v1/route/geocoding?name=bole&apiKey={your-api-key}')
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    ```
+  </Tab>
+  
+  <Tab value="Rust">
+    ```rust
+    use reqwest::blocking::get;
+    use std::collections::HashMap;
+
+    fn main() {
+        let place_to_search = "bole";
+        let api_key = "{your-api-key}";
+        let url = format!("https://mapapi.gebeta.app/api/v1/route/geocoding?name={}&apiKey={}", place_to_search, api_key);
+        
+        let response: HashMap<String, String> = get(&url)
+            .unwrap()
+            .json()
+            .unwrap();
+        
+        println!("{:?}", response);
+    }  
+    ```
+  </Tab>
+  
+  <Tab value="Go">
+    ```go 
+    package main
+
+    import (
+        "encoding/json"
+        "fmt"
+        "net/http"
+    )
+
+    func main() {
+        placeToSearch := "bole"
+        apiKey := "{your-api-key}"
+        url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/geocoding?name=%s&apiKey=%s", placeToSearch, apiKey)
+
+        resp, err := http.Get(url)
+        if err != nil {
+            panic(err)
+        }
+        defer resp.Body.Close()
+
+        var result map[string]interface{}
+        json.NewDecoder(resp.Body).Decode(&result)
+        fmt.Println(result)
+    }
+    ```
+  </Tab>
+  
+  <Tab value="PHP">
+    ```php
+    <?php
+    $placeToSearch = "bole";
+    $apiKey = "{your-api-key}";
+    $url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name={$placeToSearch}&apiKey={$apiKey}";
+
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    print_r($data);
+    ?>
+    ```
+  </Tab>
+  
+  <Tab value="Python">
+    ```python
+    import requests
+
+    place_to_search = "bole"
+    api_key = "{your-api-key}"
+    url = f"https://mapapi.gebeta.app/api/v1/route/geocoding?name={place_to_search}&apiKey={api_key}"
+
+    response = requests.get(url)
+    data = response.json()
+    print(data)
+    ```
+  </Tab>
+  
+  <Tab value="Ruby">
+    ```ruby
+    require 'net/http'
+    require 'json'
+
+    place_to_search = "bole"
+    api_key = "{your-api-key}"
+    url = URI("https://mapapi.gebeta.app/api/v1/route/geocoding?name=#{place_to_search}&apiKey=#{api_key}")
+
+    response = Net::HTTP.get(url)
+    data = JSON.parse(response)
+    puts data
+    ```
+  </Tab>
+  
+  <Tab value="Dart">
+    ```dart
+    import 'dart:convert';
+    import 'package:http/http.dart' as http;
+
+    void main() async {
+      String placeToSearch = "bole";
+      String apiKey = "{your-api-key}";
+      String url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=$placeToSearch&apiKey=$apiKey";
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        print(data);
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    }
+    ```  
+  </Tab>
+  
+  <Tab value="Java">
+    ```java
+    import java.io.BufferedReader;
+    import java.io.InputStreamReader;
+    import java.net.HttpURLConnection;
+    import java.net.URL;
+
+    public class GeocodingFetch {
+        public static void main(String[] args) {
+            String apiKey = "{your-api-key}";
+            String place = "bole";
+            String urlString = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=" + place + "&apiKey=" + apiKey;
+
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept", "application/json");
+
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    System.out.println(response.toString());
+                } else {
+                    System.out.println("Error: " + connection.getResponseCode());
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+    ```
+  </Tab>
+  
+  <Tab value="Kotlin">
+    ```kotlin
+    import java.net.HttpURLConnection
+    import java.net.URL
+
+    fun main() {
+        val apiKey = "{your-api-key}"
+        val place = "bole"
+        val urlString = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=$place&apiKey=$apiKey"
+
+        try {
+            val url = URL(urlString)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.setRequestProperty("Accept", "application/json")
+
+            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                println(response)
+            } else {
+                println("Error: ${connection.responseCode}")
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+        }
+    }
+    ```
+  </Tab>
+  
+  <Tab value="Swift">
+    ```swift
+    import Foundation
+
+    let apiKey = "{your-api-key}"
+    let place = "bole"
+    let urlString = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=\(place)&apiKey=\(apiKey)"
+
+    if let url = URL(string: urlString) {
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                if let data = data {
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print(jsonString)
+                    }
+                }
+            } else {
+                print("Error: \(response.debugDescription)")
+            }
+        }
+        task.resume()
+    }
+    ```
+  </Tab>
+</Tabs>
+
+
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+{
+  "data": [
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.975327,
+      "longitude": 38.772218,
+      "name": "bole bulbula",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.978027,
+      "longitude": 38.884797,
+      "name": "bole arabsa",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.99797,
+      "longitude": 38.786733,
+      "name": "bole medhane alem",
+      "type": "neighborhood"
+    },
+    {
+      "City": "Addis Ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.989022,
+      "longitude": 38.79036,
+      "name": "bole",
+      "type": "neighborhood"
+    },
+    {
+      "City": "addis ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.994742,
+      "longitude": 38.790644,
+      "name": "impress building l bole medhanialem l ኢምፕረስ ህንፃ l ቦሌ መድሃኒአለም",
+      "type": "Building"
+    },
+    {
+      "City": "addis ababa",
+      "Country": "Ethiopia",
+      "latitude": 8.99391,
+      "longitude": 38.789082,
+      "name": "sunshine buildings | bole medhanialem",
+      "type": "Building"
+    },
+  ],
+  "msg": "ok"
+}
+
+  ```
+  
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+    error:	"Invalid token"
+    ```
+  </Accordion>
+</Accordions>
