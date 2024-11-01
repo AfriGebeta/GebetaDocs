@@ -5,8 +5,8 @@ import {ShineBorder} from "@/components/custom/cards/animated-beams";
 import {Button} from "@/components/ui/button";
 import {Card} from "@/components/ui/card";
 import Hero from "@/layout/home/hero";
-import {cn} from "@/lib/utils";
-import {ArrowRight, Route} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowRight, BringToFront, MapPin, Route, Waypoints, Webhook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
@@ -28,35 +28,35 @@ export default function HomePage() {
       description:
         "A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.",
       icon: <Route />,
-      link: "/direction",
+      link: "/docs/direction",
     },
     {
       name: "Matrix",
       description:
         "A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.",
-      icon: <Route />,
-      link: "/matrix",
+      icon: <Webhook />,
+      link: "/docs/matrix",
     },
     {
       name: "One-to-Many",
       description:
         "The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.",
-      icon: <Route />,
-      link: "/onm",
+      icon: <MapPin />,
+      link: "/docs/onm",
     },
     {
       name: "Route Optimization",
       description:
         "Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.",
-      icon: <Route />,
-      link: "/route-optimization",
+      icon: <Waypoints />,
+      link: "/docs/route-optimization",
     },
     {
       name: "Forward and Reverse Geocoding",
       description:
         "Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.",
-      icon: <Route />,
-      link: "/geocoding",
+      icon: <BringToFront />,
+      link: "/docs/geocoding/geocoding",
     },
   ];
 
@@ -153,7 +153,7 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
-        <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2">
+        <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
           <p className="text-4xl font-semibold">
             Get Started With Your{" "}
             <span className="text-primary">Favourite Frameworks</span>
@@ -182,7 +182,7 @@ export default function HomePage() {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <p>Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
+          <p className="text-center">Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
           <Ripple />
         </div>
       </div>

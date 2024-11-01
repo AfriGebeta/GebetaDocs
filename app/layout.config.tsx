@@ -14,7 +14,7 @@ export const baseOptions: HomeLayoutProps = {
   links: [
     {
       text: 'SDKs',
-      url: '/sdk',
+      url: '/docs#sdks-for-seamless-integration',
       active: 'nested-url',
     },
     {

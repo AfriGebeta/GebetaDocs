@@ -1,0 +1,224 @@
+---
+title: Reverse Geocoding  
+description: Retrieve accurate location coordinates by entering a place name, returning an array of potential matches with their corresponding details.  
+---
+
+
+## Request Sample
+```bash
+curl https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}
+```
+
+### Parameters
+
+| **Parameter** | **Type**  | **Description**                                                   | **Required** |
+|---------------|-----------|-------------------------------------------------------------------|--------------|
+| `lat`         | `string`  | Specifies the latitude of the location you want to query.         | `yes`        |
+| `lon`         | `string`  | Specifies the longitude of the location you want to query.        | `yes`        |
+| `apiKey`      | `string`  | Your API key for accessing Gebeta Maps.                           | `yes`        |
+
+## Response Codes for Reverse Geocoding API
+
+| **Status Code** | **Message**                         | **Description**                                                                                       |
+|------------------|-------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `200`            | `OK`                                | The request was successful. The system found the matching location coordinates and returned the data. |
+| `404`            | `Not Found`                         | No matching location exists for the provided coordinates. Check the values and try again.             |
+| `401`            | `Not Authorized - No Token`         | Authentication failed. A valid API key must be provided.                                            |
+| `401`            | `Not Authorized - Invalid Token`     | The API key provided is either invalid or expired. Please use a current, valid API key.               |
+| `422`            | `Invalid Input`                    | The request parameters are incorrect. Review and correct the input values as needed.                  |
+
+## Example
+
+<Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
+  <Tab value="JavaScript">
+  ```javascript
+fetch('https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+  ```
+  </Tab>
+  <Tab value="Rust">
+  ```rust
+use reqwest::blocking::get;
+use std::collections::HashMap;
+
+fn main() {
+    let lat = "8.989022";
+    let lon = "38.79036";
+    let api_key = "{your-api-key}";
+    let url = format!("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={}&lon={}&apiKey={}", lat, lon, api_key);
+    
+    let response: HashMap<String, String> = get(&url)
+        .unwrap()
+        .json()
+        .unwrap();
+    
+    println!("{:?}", response);
+}  
+  ```
+  </Tab>
+  <Tab value="Go">
+  ```go 
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    lat := "8.989022"
+    lon := "38.79036"
+    apiKey := "{your-api-key}"
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=%s&lon=%s&apiKey=%s", lat, lon, apiKey)
+
+    resp, err := http.Get(url)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    var result map[string]interface{}
+    json.NewDecoder(resp.Body).Decode(&result)
+    fmt.Println(result)
+}
+  ```
+  </Tab>
+  <Tab value="PHP">
+  ```php
+<?php
+$lat = "8.989022";
+$lon = "38.79036";
+$apiKey = "{your-api-key}";
+$url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={$lat}&lon={$lon}&apiKey={$apiKey}";
+
+$response = file_get_contents($url);
+$data = json_decode($response, true);
+print_r($data);
+?>
+  ```
+  </Tab>
+  <Tab value="Python">
+  ```python
+import requests
+
+lat = "8.989022"
+lon = "38.79036"
+api_key = "{your-api-key}"
+url = f"https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={lat}&lon={lon}&apiKey={api_key}"
+
+response = requests.get(url)
+data = response.json()
+print(data)
+  ```
+  </Tab>
+  <Tab value="Ruby">
+  ```ruby
+require 'net/http'
+require 'json'
+
+lat = "8.989022"
+lon = "38.79036"
+api_key = "{your-api-key}"
+url = URI("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=#{lat}&lon=#{lon}&apiKey=#{api_key}")
+
+response = Net::HTTP.get(url)
+data = JSON.parse(response)
+puts data
+  ```
+  </Tab>
+  <Tab value="Dart">
+  ```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+void main() async {
+  String lat = "8.989022";
+  String lon = "38.79036";
+  String apiKey = "{your-api-key}";
+  String url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=$lat&lon=$lon&apiKey=$apiKey";
+
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    print(data);
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+}
+  ```  
+  </Tab>
+</Tabs>
+
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+  {
+  "msg": "ok",
+  "data": [
+    {
+      "name": "haji suktala building materials",
+      "latitude": 9.05559,
+      "longitude": 38.705503,
+      "Country": "Ethiopia",
+      "City": "addis ababa",
+      "type": "Building",
+      "duration": 347.13057844,
+      "distance": 347.13057844
+    },
+    {
+      "name": "yeshumnesh habte menuta",
+      "latitude": 9.054104,
+      "longitude": 38.705375,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 201.28878069,
+      "distance": 201.28878069
+    },
+    {
+      "name": "cbe birr agent - addis ababa",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "finance store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "fatuma seid yesuf",
+      "latitude": 9.051433,
+      "longitude": 38.705426,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "store",
+      "duration": 203.30454625,
+      "distance": 203.30454625
+    },
+    {
+      "name": "hambra engneering plc",
+      "latitude": 9.05238,
+      "longitude": 38.70223,
+      "Country": "Ethiopia",
+      "City": "Addis Ababa",
+      "type": "establishment",
+      "duration": 214.47480581,
+      "distance": 214.47480581
+    },
+  ],
+  "count": 5
+}
+  ```
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+{
+  "error": "Invalid token"
+}
+    ```
+  </Accordion>
+</Accordions>
