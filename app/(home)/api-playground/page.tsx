@@ -13,7 +13,7 @@ function ApiDocs() {
           title: 'Gebeta Maps API Playground',
         },
         spec: {
-          url: 'https://petstore.swagger.io/v2/swagger.json',
+          url: 'gebeta-api.openapi.json',
         },
         theme: 'purple',
         darkMode: theme === 'dark' ? true : false,
