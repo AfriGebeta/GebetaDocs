@@ -1,7 +1,6 @@
 // src/redux/store.js
 import {configureStore} from "@reduxjs/toolkit";
 import {combineReducers} from 'redux';
-import thunk from 'redux-thunk';
 import playGroundReducer from "./reducers/playgroundSlice"
 import tokenReducer from "./reducers/tokenSlice"
 

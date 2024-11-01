@@ -49,6 +49,7 @@
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
+    "sharp": "^0.33.5",
     "shiki": "^1.22.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"

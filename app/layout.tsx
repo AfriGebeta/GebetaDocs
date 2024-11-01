@@ -4,7 +4,7 @@ import {Inter} from 'next/font/google';
 import type {ReactNode} from 'react';
 import gebetamaps from '@/assets/icons/gebetamaps.svg';
 import Image from 'next/image';
-import {footer} from "@/app/constants";
+import {footer} from "@/constants"
 import Link from "next/link";
 import {YoutubeIcon} from "lucide-react";
 import {InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon} from "@radix-ui/react-icons";

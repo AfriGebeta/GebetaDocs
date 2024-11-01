@@ -1,4 +1,3 @@
-
 import {Card} from "@/components/ui/card";
 import {useRouter} from "next/navigation";
 import {Route} from "lucide-react";
