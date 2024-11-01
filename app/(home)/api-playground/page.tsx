@@ -1,6 +1,6 @@
 "use client"
-import { ApiReferenceReact } from '@scalar/api-reference-react'
-import { useTheme } from 'next-themes'
+import {ApiReferenceReact} from '@scalar/api-reference-react'
+import {useTheme} from 'next-themes'
 
 function ApiDocs() {
   const {theme} = useTheme()

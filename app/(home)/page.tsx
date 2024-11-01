@@ -1,24 +1,20 @@
 "use client";
 import GridPattern from "@/components/custom/backgrounds/grid-pattern";
 import Ripple from "@/components/custom/backgrounds/ripple";
-import { ShineBorder } from "@/components/custom/cards/animated-beams";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {ShineBorder} from "@/components/custom/cards/animated-beams";
+import {Button} from "@/components/ui/button";
+import {Card} from "@/components/ui/card";
 import Hero from "@/layout/home/hero";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BringToFront, MapPin, Route, Waypoints, Webhook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ReactElement } from "react";
+import {useRouter} from "next/navigation";
+import {ReactElement} from "react";
 import Flutter from "@/assets/icons/icons8-flutter-48.png";
 import Node from "@/assets/icons/icons8-nodejs-48.png";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import {Tooltip, TooltipContent, TooltipProvider,} from "@/components/ui/tooltip";
+import {TooltipTrigger} from "@radix-ui/react-tooltip";
 
 export default function HomePage() {
   const features: {

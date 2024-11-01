@@ -1,9 +1,9 @@
 "use client";
 import clsx from "clsx";
-import { LayoutGroup, motion } from "framer-motion";
-import { useTheme } from "next-themes";
-import { Highlight, themes } from "prism-react-renderer";
-import { Fragment, useState } from "react";
+import {LayoutGroup, motion} from "framer-motion";
+import {useTheme} from "next-themes";
+import {Highlight, themes} from "prism-react-renderer";
+import {useState} from "react";
 
 const tabs = [
   {

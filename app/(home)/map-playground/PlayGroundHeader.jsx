@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import GeocodingDropdown from "./GeocodingDropdown";
 import {useDispatch, useSelector} from "react-redux";
-import {changeToken} from "redux/reducers/tokenSlice"
+import {changeToken} from "@/redux/reducers/tokenSlice"
 
 const PlayGroundHeader = () => {
 

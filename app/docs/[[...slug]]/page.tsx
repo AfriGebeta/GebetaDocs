@@ -1,12 +1,7 @@
-import { source } from '@/app/source';
-import type { Metadata } from 'next';
-import {
-  DocsPage,
-  DocsBody,
-  DocsDescription,
-  DocsTitle,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
+import {source} from '@/app/source';
+import type {Metadata} from 'next';
+import {DocsBody, DocsDescription, DocsPage, DocsTitle,} from 'fumadocs-ui/page';
+import {notFound} from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
