@@ -32,35 +32,35 @@ export default function HomePage() {
       description:
         "A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.",
       icon: <Route />,
-      link: "/direction",
+      link: "/docs/direction",
     },
     {
       name: "Matrix",
       description:
         "A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.",
       icon: <Webhook />,
-      link: "/matrix",
+      link: "/docs/matrix",
     },
     {
       name: "One-to-Many",
       description:
         "The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.",
       icon: <MapPin />,
-      link: "/onm",
+      link: "/docs/onm",
     },
     {
       name: "Route Optimization",
       description:
         "Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.",
       icon: <Waypoints />,
-      link: "/route-optimization",
+      link: "/docs/route-optimization",
     },
     {
       name: "Forward and Reverse Geocoding",
       description:
         "Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.",
       icon: <BringToFront />,
-      link: "/geocoding",
+      link: "/docs/geocoding/geocoding",
     },
   ];
 
