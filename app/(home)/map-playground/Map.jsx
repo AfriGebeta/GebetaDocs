@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 import {MapContainer, Marker, Polyline, TileLayer, useMapEvents} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import {PlayGroundContext} from "poviders/Playground"
+import {PlayGroundContext} from "@/poviders/Playground"
 
 const redIcon = new L.Icon({
     iconUrl: "/red.png",

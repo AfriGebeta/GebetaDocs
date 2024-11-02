@@ -1,6 +1,6 @@
 import './global.css';
 import {RootProvider} from 'fumadocs-ui/provider';
-import {Inter} from 'next/font/google';
+// import {Inter} from 'next/font/google';
 import type {ReactNode} from 'react';
 import gebetamaps from '@/assets/icons/gebetamaps.svg';
 import Image from 'next/image';
@@ -9,10 +9,11 @@ import Link from "next/link";
 import {YoutubeIcon} from "lucide-react";
 import {InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon} from "@radix-ui/react-icons";
 
+// import {Inter} from 'next/font/google';
 
-const inter = Inter({
-    subsets: ['latin'],
-});
+// const inter = Inter({
+//     subsets: ['latin'],
+// });
 
 const metadata = {
     title: "GebetaMaps Documentation",
@@ -20,7 +21,7 @@ const metadata = {
 
 export default function Layout({children}: { children: ReactNode }) {
     return (
-        <html lang="en" className={inter.className} suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning>
         <head>
             <title>GebetaMaps Documentation</title>
         </head>
