@@ -48,7 +48,7 @@ description: The Route Optimization API is designed to identify the most efficie
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}&includeCoordinate=1
+curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}
 ```
 
 ### Parameters
@@ -57,7 +57,6 @@ curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}&includ
 |----------------------|---------------|--------------------------------------------------------------------------------------------------------------|--------------|
 | `json`               | `string[]`    | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
 | `apiKey`             | `string`      | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
-| `includeCoordinate`   | `boolean`     | Whether to include GPS coordinates in the response.                                                          | `no`         |
 
 ## Response Codes for Route Optimization API
 
@@ -65,7 +64,6 @@ curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}&includ
 |-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
 | `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
 | `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
 | `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
 | `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
 | `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
@@ -76,7 +74,7 @@ curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}&includ
 To get a route using the TSS API, you can use the following `curl` command:
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/tss/?json=[8.989022,38.79036;9.03045,38.76530]&apiKey={your-api-key}&includeCoordinate=1"
+curl "https://mapapi.gebeta.app/api/route/tss/?json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}"
 ```
 
 ### Example
@@ -84,7 +82,7 @@ curl "https://mapapi.gebeta.app/api/route/tss/?json=[8.989022,38.79036;9.03045,3
 <Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
   <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/route/tss/?json=[8.989022,38.79036;9.03045,38.76530]&apiKey={your-api-key}&includeCoordinate=1')
+fetch('https://mapapi.gebeta.app/api/route/tss/?json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -98,9 +96,9 @@ use std::collections::HashMap;
 
 fn main() {
     let api_key = "{your-api-key}";
-    let coordinates = "8.989022,38.79036;9.03045,38.76530";
+    let coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
     let url = format!(
-        "https://mapapi.gebeta.app/api/route/tss/?json=[{}]&apiKey={}&includeCoordinate=1",
+        "https://mapapi.gebeta.app/api/route/tss/?json=[{}]&apiKey={}",
         coordinates, api_key
     );
 
@@ -126,7 +124,7 @@ import (
 
 func main() {
     apiKey := "{your-api-key}"
-    coordinates := "8.989022,38.79036;9.03045,38.76530"
+    coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
     
     url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/tss/?json=[%s]&apiKey=%s&includeCoordinate=1", coordinates, apiKey)
 
@@ -147,8 +145,8 @@ func main() {
   ```php
 <?php
 $apiKey = "{your-api-key}";
-$coordinates = "8.989022,38.79036;9.03045,38.76530";
-$url = "https://mapapi.gebeta.app/api/route/tss/?json=[{$coordinates}]&apiKey={$apiKey}&includeCoordinate=1";
+$coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
+$url = "https://mapapi.gebeta.app/api/route/tss/?json=[{$coordinates}]&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -162,8 +160,8 @@ print_r($data);
 import requests
 
 api_key = "{your-api-key}"
-coordinates = "8.989022,38.79036;9.03045,38.76530"
-url = f"https://mapapi.gebeta.app/api/route/tss/?json=[{coordinates}]&apiKey={api_key}&includeCoordinate=1"
+coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
+url = f"https://mapapi.gebeta.app/api/route/tss/?json=[{coordinates}]&apiKey={api_key}"
 
 response = requests.get(url)
 data = response.json()
@@ -177,8 +175,8 @@ require 'net/http'
 require 'json'
 
 api_key = "{your-api-key}"
-coordinates = "8.989022,38.79036;9.03045,38.76530"
-url = URI("https://mapapi.gebeta.app/api/route/tss/?json=[#{coordinates}]&apiKey=#{api_key}&includeCoordinate=1")
+coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
+url = URI("https://mapapi.gebeta.app/api/route/tss/?json=[#{coordinates}]&apiKey=#{api_key}")
 
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
@@ -193,8 +191,8 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   String apiKey = "{your-api-key}";
-  String coordinates = "8.989022,38.79036;9.03045,38.76530";
-  String url = "https://mapapi.gebeta.app/api/route/tss/?json=[$coordinates]&apiKey=$apiKey&includeCoordinate=1";
+  String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
+  String url = "https://mapapi.gebeta.app/api/route/tss/?json=[$coordinates]&apiKey=$apiKey";
 
   final response = await http.get(Uri.parse(url));
 
@@ -241,9 +239,12 @@ void main() async {
   </Accordion>
   <Accordion title="Error Response">
     ```json
-{
-  "error": "Invalid token"
-}
+"error": {
+        "additional": null,
+        "code": "A_ERR00004",
+        "message": "Invalid access token!",
+        "status": 401
+    }
     ```
   </Accordion>
 </Accordions>
