@@ -1,9 +1,10 @@
 ---
 title: Direction API
-description: A comprehensive service offering directions across various travel modes, including driving, walking, cycling, and public transit.
+description: A  comprehensive driving directions service that provides accurate, real-time navigation to ensure a seamless travel experience..
 ---
 
 The Directions API enables users to find the optimal route between two locations, providing essential information such as travel time, distance, traffic conditions, and detailed turn-by-turn instructions.
+
 
 ## Use Cases
 
@@ -39,22 +40,24 @@ The Directions API enables users to find the optimal route between two locations
   </Card>
 </Cards>
 
+
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destination={lat2},{lat2}&apiKey={apiKey}
+curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1,lon1}&destination={lat2,lat2}&waypoints=[{lat,lng}]&instruction=1&apiKey={apiKey}
 ```
 
+## Parameter
 
-### Parameters
 
 | **Parameter** | **Type**  | **Description**                                                                                  | **Required** |
 |---------------|-----------|--------------------------------------------------------------------------------------------------|--------------|
 | `origin`      | `string`  | Specifies the latitude and longitude of the origin location in the format lat,lon.               | `yes`        |
 | `destination` | `string`  | Specifies the latitude and longitude of the destination location in the format lat,lon.          | `yes`        |
 | `apiKey`      | `string`  | Your API key for accessing Gebeta Maps.                                                          | `yes`        |
-| `instruction` | `string`  | A turn by turn instruction from the origin point to destnation                                   | `no`         |
+| `instruction` | `string`  | A turn by turn instruction from the origin point to destnation. use value 1 to include instruction and 0 to ignore. | `no`         |
 | `waypoints`   | `string[]`| An optional array of latitude and longitude pairs (formatted as "lat,lon") separated by semicolons, indicating intermediate locations to visit en route.   | `no` |
+
 
 ## Response Codes for Directions API
 
@@ -62,10 +65,10 @@ curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destina
 |-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
 | `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
 | `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
 | `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
 | `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
 | `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+
 
 
 ## Directions API - CURL Request
@@ -73,15 +76,15 @@ curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destina
 To get directions from one location to another using the Directions API, you can use the following `curl` command:
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destination={lat2},{lon2}&apiKey={apiKey}"
+curl "curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1,lon1}&destination={lat2,lat2}&waypoints=[{lat,lng}]&instruction=1&apiKey={apiKey}"
 ```
 
-### Example
+## Example
 
 <Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
   <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/route/direction/?origin=8.989022,38.79036&destination=9.03045,38.76530&apiKey={your-api-key}')
+fetch('https://mapapi.gebeta.app/api/route/direction/?origin={8.989022,38.79036}&destination={9.03045,38.76530}&apiKey=your-api-key')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -98,20 +101,33 @@ fn main() {
     let lon1 = "38.79036";
     let lat2 = "9.03045";
     let lon2 = "38.76530";
-    let api_key = "{your-api-key}";
-    
+    let api_key = "your-api-key";
+
+    // Correct the URL format based on your provided structure
     let url = format!(
-        "https://mapapi.gebeta.app/api/route/direction/?origin={},{}&destination={},{}&apiKey={}",
+        "https://mapapi.gebeta.app/api/route/direction/?origin={{{},{}}}&destination={{{{},{}}}&apiKey={}",
         lat1, lon1, lat2, lon2, api_key
     );
-    
-    let response: HashMap<String, String> = get(&url)
-        .unwrap()
-        .json()
-        .unwrap();
-    
-    println!("{:?}", response);
+
+    // Send the request and handle errors properly
+    match get(&url) {
+        Ok(response) => {
+            // Attempt to parse the JSON response
+            match response.json::<HashMap<String, String>>() {
+                Ok(json) => {
+                    println!("{:?}", json);
+                },
+                Err(e) => {
+                    eprintln!("Failed to parse JSON: {:?}", e);
+                }
+            }
+        },
+        Err(e) => {
+            eprintln!("Request failed: {:?}", e);
+        }
+    }
 }
+
   ```
   </Tab>
   
@@ -132,7 +148,7 @@ func main() {
     lon2 := "38.76530"
     apiKey := "{your-api-key}"
     
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/direction/?origin=%s,%s&destination=%s,%s&apiKey=%s", lat1, lon1, lat2, lon2, apiKey)
+    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/direction/?origin={%s,%s}&destination={%s,%s}&apiKey=%s", lat1, lon1, lat2, lon2, apiKey)
 
     resp, err := http.Get(url)
     if err != nil {
@@ -155,7 +171,7 @@ $lon1 = "38.79036";
 $lat2 = "9.03045";
 $lon2 = "38.76530";
 $apiKey = "{your-api-key}";
-$url = "https://mapapi.gebeta.app/api/route/direction/?origin={$lat1},{$lon1}&destination={$lat2},{$lon2}&apiKey={$apiKey}";
+$url = "https://mapapi.gebeta.app/api/route/direction/?origin={$lat1,$lon1}&destination={$lat2,$lon2}&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -172,12 +188,21 @@ lat1 = "8.989022"
 lon1 = "38.79036"
 lat2 = "9.03045"
 lon2 = "38.76530"
-api_key = "{your-api-key}"
-url = f"https://mapapi.gebeta.app/api/route/direction/?origin={lat1},{lon1}&destination={lat2},{lon2}&apiKey={api_key}"
+api_key = "your-api-key"  # Replace with your actual API key
 
-response = requests.get(url)
-data = response.json()
-print(data)
+# Construct the URL with the correct format
+url = f"https://mapapi.gebeta.app/api/route/direction/?origin={{{}}},{{{{}}}}&destination={{{{}}},{{{{}}}}}&apiKey={api_key}".format(lat1, lon1, lat2, lon2)
+
+try:
+    response = requests.get(url)
+    response.raise_for_status()  # Raises an error for bad responses
+    data = response.json()  # Parse JSON response
+    print(data)
+except requests.exceptions.HTTPError as http_err:
+    print(f"HTTP error occurred: {http_err}")
+except Exception as err:
+    print(f"An error occurred: {err}")
+
   ```
   </Tab>
   
@@ -185,17 +210,26 @@ print(data)
   ```ruby
 require 'net/http'
 require 'json'
-
+ 
 lat1 = "8.989022"
 lon1 = "38.79036"
 lat2 = "9.03045"
 lon2 = "38.76530"
-api_key = "{your-api-key}"
-url = URI("https://mapapi.gebeta.app/api/route/direction/?origin=#{lat1},#{lon1}&destination=#{lat2},#{lon2}&apiKey=#{api_key}")
+api_key = "your-api-key"  # Replace with your actual API key
 
-response = Net::HTTP.get(url)
-data = JSON.parse(response)
-puts data
+# Construct the URL
+url = URI("https://mapapi.gebeta.app/api/route/direction/?origin={{#{lat1},#{lon1}}}&destination={{#{lat2},#{lon2}}}&apiKey=#{api_key}")
+
+begin
+  response = Net::HTTP.get(url)
+  data = JSON.parse(response)
+  puts data
+rescue JSON::ParserError => e
+  puts "Failed to parse JSON: #{e.message}"
+rescue StandardError => e
+  puts "An error occurred: #{e.message}"
+end
+
   ```
   </Tab>
   
@@ -209,18 +243,25 @@ void main() async {
   String lon1 = "38.79036";
   String lat2 = "9.03045";
   String lon2 = "38.76530";
-  String apiKey = "{your-api-key}";
-  String url = "https://mapapi.gebeta.app/api/route/direction/?origin=$lat1,$lon1&destination=$lat2,$lon2&apiKey=$apiKey";
+  String apiKey = "your-api-key";  // Replace with your actual API key
 
-  final response = await http.get(Uri.parse(url));
+  // Construct the URL with the correct format
+  String url = "https://mapapi.gebeta.app/api/route/direction/?origin={$lat1,$lon1}&destination={$lat2,$lon2}&apiKey=$apiKey";
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    print(data);
-  } else {
-    print('Error: ${response.statusCode}');
+  try {
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      print(data);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
   }
 }
+
   ```  
   </Tab>
 </Tabs>
@@ -229,60 +270,23 @@ void main() async {
   <Accordion title="Success Response">
   ```json
 {
-  "msg": "ok",
-  "data": [
-    {
-      "name": "haji suktala building materials",
-      "latitude": 9.05559,
-      "longitude": 38.705503,
-      "Country": "Ethiopia",
-      "City": "addis ababa",
-      "type": "Building",
-      "duration": 347.13057844,
-      "distance": 347.13057844
-    },
-    {
-      "name": "yeshumnesh habte menuta",
-      "latitude": 9.054104,
-      "longitude": 38.705375,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "store",
-      "duration": 201.28878069,
-      "distance": 201.28878069
-    },
-    {
-      "name": "cbe birr agent - addis ababa",
-      "latitude": 9.051433,
-      "longitude": 38.705426,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "finance store",
-      "duration": 203.30454625,
-      "distance": 203.30454625
-    },
-    {
-      "name": "fatuma seid yesuf",
-      "latitude": 9.051433,
-      "longitude": 38.705426,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "store",
-      "duration": 203.30454625,
-      "distance": 203.30454625
-    },
-    {
-      "name": "hambra engneering plc",
-      "latitude": 9.05238,
-      "longitude": 38.70223,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "establishment",
-      "duration": 214.47480581,
-      "distance": 214.47480581
-    },
-  ],
-  "count": 5
+    "msg": "Ok",
+    "timetaken": 51.905,
+    "totalDistance": 15.715,
+    "direction": [
+        [
+            9.18759536743164,
+            38.763946533203125
+        ],
+        [
+            9.187566757202148,
+            38.763954162597656
+        ],
+        [
+            9.1875581741333,
+            38.763362884521484
+        ]
+    ]
 }
 
   ```
@@ -290,7 +294,12 @@ void main() async {
   <Accordion title="Error Response">
     ```json
 {
-  "error": "Invalid token"
+    "error": {
+        "additional": null,
+        "code": "A_ERR00004",
+        "message": "Invalid access token!",
+        "status": 401
+    }
 }
     ```
   </Accordion>
@@ -298,11 +307,12 @@ void main() async {
 
 
 
-## API Limits and Restrictions
+## API Limits and Restrictions**
 
 The Geocoding API has a rate limit of **50 requests per second** per API token. Exceeding this limit will result in an error and rejected requests. To manage this, consider:
 - Throttling your requests.
 - Using multiple tokens for different applications or users.
+
 
 ## Pricing
 

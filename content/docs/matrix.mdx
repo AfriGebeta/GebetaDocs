@@ -45,14 +45,13 @@ Harness the power of the Matrix API to efficiently calculate optimal routes tail
 ```bash
 curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
 ```
-
-### Parameters
+## Parameters
 
 | **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
 |----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
 | `json`               | `string`  | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
 | `apiKey`             | `string`  | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
-| `includeCoordinate`  | `boolean` | Whether to include GPS coordinates or not in the response.                                                   | `no`         |
+
 
 ## Response Codes for Matrix API
 
@@ -60,7 +59,6 @@ curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
 |-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
 | `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
 | `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `404`       | `NoSegment`                     | The provided coordinates do not match any known road segment. Verify the coordinates and try again. |
 | `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
 | `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
 | `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
@@ -68,18 +66,19 @@ curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
 
 ## Matrix API - CURL Request
 
+
 To get a route matrix using the Matrix API, you can use the following `curl` command:
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/matrix/?json=[latitude1,longitude1;latitude2,longitude2]&apiKey={your-api-key}"
+curl "https://mapapi.gebeta.app/api/route/matrix/?json=[{latitude1,longitude1},{latitude2,longitude2}]&apiKey={your-api-key}"
 ```
 
-### Example
+## Example
 
 <Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
   <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/route/matrix/?json=[8.989022,38.79036;9.03045,38.76530]&apiKey={your-api-key}')
+fetch('https://mapapi.gebeta.app/api/route/matrix/?json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -93,7 +92,7 @@ use std::collections::HashMap;
 
 fn main() {
     let api_key = "{your-api-key}";
-    let coordinates = "8.989022,38.79036;9.03045,38.76530";
+    let coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
     let url = format!(
         "https://mapapi.gebeta.app/api/route/matrix/?json=[{}]&apiKey={}",
         coordinates, api_key
@@ -121,7 +120,7 @@ import (
 
 func main() {
     apiKey := "{your-api-key}"
-    coordinates := "8.989022,38.79036;9.03045,38.76530"
+    coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
     
     url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/matrix/?json=[%s]&apiKey=%s", coordinates, apiKey)
 
@@ -142,8 +141,8 @@ func main() {
   ```php
 <?php
 $apiKey = "{your-api-key}";
-$coordinates = "8.989022,38.79036;9.03045,38.76530";
-$url = "https://mapapi.gebeta.app/api/route/matrix/?json=[{$coordinates}]&apiKey={$apiKey}";
+$coordinates = "{8.989022,38.79036};{9.03045,38.76530}";
+$url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -157,8 +156,8 @@ print_r($data);
 import requests
 
 api_key = "{your-api-key}"
-coordinates = "8.989022,38.79036;9.03045,38.76530"
-url = f"https://mapapi.gebeta.app/api/route/matrix/?json=[{coordinates}]&apiKey={api_key}"
+coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
+url = f"https://mapapi.gebeta.app/api/route/matrix/?json=[coordinates]&apiKey={api_key}"
 
 response = requests.get(url)
 data = response.json()
@@ -172,7 +171,7 @@ require 'net/http'
 require 'json'
 
 api_key = "{your-api-key}"
-coordinates = "8.989022,38.79036;9.03045,38.76530"
+coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
 url = URI("https://mapapi.gebeta.app/api/route/matrix/?json=[#{coordinates}]&apiKey=#{api_key}")
 
 response = Net::HTTP.get(url)
@@ -188,7 +187,7 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   String apiKey = "{your-api-key}";
-  String coordinates = "8.989022,38.79036;9.03045,38.76530";
+  String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
   String url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey=$apiKey";
 
   final response = await http.get(Uri.parse(url));
@@ -204,13 +203,16 @@ void main() async {
   </Tab>
 </Tabs>
 
+
 ## API Limits and Restrictions
+
 
 The Matrix API has some restrictions and limits that you need to be aware of before using it:
 
 - **Coordinates Waypoints**: Should only be less than or equal to 10.
 - **Rate Limit**: 50 requests per second from a single API token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.
 - **Inter-Country Requests**: Not allowed. You can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message, and your request will be invalid. For inter-country travel, consider using other map services or APIs that support this feature.
+
 
 ## Pricing
 
