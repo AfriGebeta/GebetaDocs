@@ -203,6 +203,81 @@ void main() async {
   </Tab>
 </Tabs>
 
+<Accordions>
+  <Accordion title="Success Response">
+  ```json
+{
+    "msg": "Ok",
+    "durations": [
+        {
+            "duration": [
+                0,
+                20.873835
+            ]
+        },
+        {
+            "duration": [
+                61.390656,
+                0
+            ]
+        }
+    ],
+    "distances": [
+        {
+            "duration": [
+                0,
+                62.621502
+            ]
+        },
+        {
+            "duration": [
+                184.17197,
+                0
+            ]
+        }
+    ],
+    "destinations": [
+        {
+            "location": {
+                "lat": 8.987685,
+                "lng": 38.764793
+            }
+        },
+        {
+            "location": {
+                "lat": 8.987945,
+                "lng": 38.76513
+            }
+        }
+    ],
+    "origins": [
+        {
+            "location": {
+                "lat": 8.987685,
+                "lng": 38.764793
+            }
+        },
+        {
+            "location": {
+                "lat": 8.987945,
+                "lng": 38.76513
+            }
+        }
+    ]
+}
+  ```
+  </Accordion>
+  <Accordion title="Error Response">
+    ```json
+"error": {
+        "additional": null,
+        "code": "A_ERR00004",
+        "message": "Invalid access token!",
+        "status": 401
+    }
+    ```
+  </Accordion>
+</Accordions>
 
 ## API Limits and Restrictions
 

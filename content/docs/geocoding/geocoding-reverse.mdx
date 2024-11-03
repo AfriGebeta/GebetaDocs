@@ -216,9 +216,12 @@ void main() async {
   </Accordion>
   <Accordion title="Error Response">
     ```json
-{
-  "error": "Invalid token"
-}
+"error": {
+        "additional": null,
+        "code": "A_ERR00004",
+        "message": "Invalid access token!",
+        "status": 401
+    }
     ```
   </Accordion>
 </Accordions>

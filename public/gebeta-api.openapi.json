@@ -1,1 +1,1056 @@
-{"openapi":"3.0.1","info":{"title":"My Project","description":"","version":"1.0.0"},"tags":[],"paths":{"/api/route/onm/":{"get":{"summary":"ONM","deprecated":false,"description":"Find the Nearest Location and Compare Distances Across Multiple Destinations","tags":[],"parameters":[{"name":"origin","in":"query","description":"","required":true,"example":"{8.457685259188599,38.764792722654455}","schema":{"type":"string"}},{"name":"json","in":"query","description":"","required":true,"example":"[{8.987685259188599,38.764792722654455},{9.087685259188599,38.764792722654455}]","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/route/matrix/":{"get":{"summary":"Matrix","deprecated":false,"description":"Calculate optimal routes tailored to various scenarios. Provides travel times and distances between multiple origins and destinations.","tags":[],"parameters":[{"name":"json","in":"query","description":"","required":true,"example":"[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}},{"name":"includeCoordinate","in":"query","description":"","required":false,"example":"1","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/route/tss":{"get":{"summary":"Route Optimizations (TSS)","deprecated":false,"description":"The Route Optimization API is designed to identify the most efficient routes based on specific criteria, such as minimizing travel time, distance, cost, or environmental impact.","tags":[],"parameters":[{"name":"json","in":"query","description":"","required":true,"example":"[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}},{"name":"includeCoordinate","in":"query","description":"","required":false,"example":"1","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/route/direction/":{"get":{"summary":"Direction","deprecated":false,"description":"Find the optimal route between two locations, providing essential information such as travel time, distance, traffic conditions, and detailed turn-by-turn instructions.","tags":[],"parameters":[{"name":"origin","in":"query","description":"","required":true,"example":"{8.987685259188599,38.764792722654455}","schema":{"type":"string"}},{"name":"destination","in":"query","description":"","required":true,"example":"{9.087685259188599,38.764792722654455}","schema":{"type":"string"}},{"name":"traffic","in":"query","description":"","required":false,"example":"0","schema":{"type":"string"}},{"name":"instruction","in":"query","description":"","required":false,"example":"0","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}},{"name":"waypoints","in":"query","description":"","required":false,"example":"[{8.9879443, 38.7651287}]","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/geocoding":{"get":{"summary":"Find Place","deprecated":false,"description":"","tags":[],"parameters":[{"name":"name","in":"query","description":"","required":true,"example":"meskel","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/findowned":{"get":{"summary":"Find Owned","deprecated":false,"description":"Look up addresses you have stored in the gebeta database","tags":[],"parameters":[{"name":"name","in":"query","description":"","required":true,"example":"welkite","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}},{"name":"type","in":"query","description":"","required":true,"example":"city","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/revgeocoding":{"get":{"summary":"Reverse Geolocation","deprecated":false,"description":"","tags":[],"parameters":[{"name":"lat","in":"query","description":"","required":true,"example":"9.02152","schema":{"type":"string"}},{"name":"lon","in":"query","description":"","required":true,"example":"38.80131","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/getOwnedNearby":{"get":{"summary":"Find Owned Reverse Geolocation","deprecated":false,"description":"","tags":[],"parameters":[{"name":"lat","in":"query","description":"","required":true,"example":"8.98421","schema":{"type":"string"}},{"name":"lon","in":"query","description":"","required":true,"example":"38.80243","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}},{"name":"type","in":"query","description":"","required":true,"example":"terminal","schema":{"type":"string"}},{"name":"detailLevel","in":"query","description":"","required":true,"example":"1","schema":{"type":"string"}},{"name":"limit","in":"query","description":"","required":true,"example":"2","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/getAllPlaces":{"get":{"summary":"Find All Places","deprecated":false,"description":"","tags":[],"parameters":[{"name":"page","in":"query","description":"","required":true,"example":"12","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/updatePlace":{"put":{"summary":"Update Place","deprecated":false,"description":"","tags":[],"parameters":[],"requestBody":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer"},"name":{"type":"string"},"detail":{"type":"object","properties":{"phone":{"type":"string"}},"required":["phone"]},"apiKey":{"type":"string"}},"required":["id","name","detail","apiKey"]},"example":{"id":124726,"name":"welkite","detail":{"phone":"0929111582"},"apiKey":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55bmFtZSI6InpheXJpZGUiLCJpZCI6IjM1NTY1Mjk3LTZjZGUtNDVmNy1hYjllLTAwMjU1Y2MxZGVlZSIsInVzZXJuYW1lIjoiemF5cmlkZSJ9.s3mr--J2KM72MWedho9Vo5qOZn-zSKJLMNF"}}}},"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}},"/api/v1/route/findallowned":{"get":{"summary":"Find All Owned","deprecated":false,"description":"","tags":[],"parameters":[{"name":"page","in":"query","description":"","required":true,"example":"1","schema":{"type":"string"}},{"name":"apiKey","in":"query","description":"","required":true,"example":"","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"type":"object","properties":{}}}},"headers":{}}},"security":[]}}},"components":{"schemas":{},"securitySchemes":{}},"servers":[]}
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Gebeta",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/route/onm/": {
+      "get": {
+        "summary": "onm",
+        "deprecated": false,
+        "description": "Find the Nearest Location and Compare Distances Across Multiple Destinations",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "{8.457685259188599,38.764792722654455}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "json",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "[{8.987685259188599,38.764792722654455},{9.087685259188599,38.764792722654455}]",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "directions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "msg": {
+                            "type": "string"
+                          },
+                          "timetaken": {
+                            "type": "number"
+                          },
+                          "totalDistance": {
+                            "type": "number"
+                          },
+                          "direction": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "directions"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "msg": "Ok",
+                      "directions": [
+                        {
+                          "msg": "Ok",
+                          "timetaken": 27145.13,
+                          "totalDistance": 81435.39,
+                          "direction": [
+                            [
+                              9.067654609680176,
+                              38.75811004638672
+                            ],
+                            [
+                              9.067713737487793,
+                              38.75811767578125
+                            ],
+                            [
+                              9.068061828613281,
+                              38.758182525634766
+                            ],
+                            [
+                              9.068098068237305,
+                              38.75818634033203
+                            ],
+                            [
+                              9.068119049072266,
+                              38.758174896240234
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/route/matrix/": {
+      "get": {
+        "summary": "matrix",
+        "deprecated": false,
+        "description": "Calculate optimal routes tailored to various scenarios. Provides travel times and distances between multiple origins and destinations.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "json",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "durations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "duration": {
+                            "type": "array",
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "duration"
+                        ]
+                      }
+                    },
+                    "distances": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "duration": {
+                            "type": "array",
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "duration"
+                        ]
+                      }
+                    },
+                    "destinations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "lat": {
+                                "type": "number"
+                              },
+                              "lng": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "lat",
+                              "lng"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "location"
+                        ]
+                      }
+                    },
+                    "origins": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "lat": {
+                                "type": "number"
+                              },
+                              "lng": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "lat",
+                              "lng"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "location"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "durations",
+                    "distances",
+                    "destinations",
+                    "origins"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "msg": "Ok",
+                      "durations": [
+                        {
+                          "duration": [
+                            0,
+                            20.873835
+                          ]
+                        },
+                        {
+                          "duration": [
+                            61.390656,
+                            0
+                          ]
+                        }
+                      ],
+                      "distances": [
+                        {
+                          "duration": [
+                            0,
+                            62.621502
+                          ]
+                        },
+                        {
+                          "duration": [
+                            184.17197,
+                            0
+                          ]
+                        }
+                      ],
+                      "destinations": [
+                        {
+                          "location": {
+                            "lat": 8.987685,
+                            "lng": 38.764793
+                          }
+                        },
+                        {
+                          "location": {
+                            "lat": 8.987945,
+                            "lng": 38.76513
+                          }
+                        }
+                      ],
+                      "origins": [
+                        {
+                          "location": {
+                            "lat": 8.987685,
+                            "lng": 38.764793
+                          }
+                        },
+                        {
+                          "location": {
+                            "lat": 8.987945,
+                            "lng": 38.76513
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/route/tss": {
+      "get": {
+        "summary": "tss",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "json",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "bestorder": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "timetaken": {
+                      "type": "number"
+                    },
+                    "totalDistance": {
+                      "type": "number"
+                    },
+                    "originalorder": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "direction": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "bestorder",
+                    "timetaken",
+                    "totalDistance",
+                    "originalorder",
+                    "direction"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": "{\n    \"msg\": \"msg\",\n    \"bestorder\": [\n        0,\n        1,\n        2,\n        0\n    ],\n    \"timetaken\": 10840.284,\n    \"totalDistance\": 32520.854,\n    \"originalorder\": [\n        0,\n        1,\n        2\n    ],\n    \"direction\": [\n        [\n            8.98755168914795,\n            38.764892578125\n        ],\n        [\n            8.987594604492188,\n            38.76495361328125\n        ],\n        [\n            8.987668991088867,\n            38.76502990722656\n        ],\n        \n    ]\n}"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/route/direction/": {
+      "get": {
+        "summary": "direction",
+        "deprecated": false,
+        "description": "Find the optimal route between two locations, providing essential information such as travel time, distance, traffic conditions, and detailed turn-by-turn instructions.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "{8.987685259188599,38.764792722654455}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "{9.087685259188599,38.764792722654455}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "instruction",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "0",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "waypoints",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "[{8.9879443, 38.7651287}]",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "timetaken": {
+                      "type": "number"
+                    },
+                    "totalDistance": {
+                      "type": "number"
+                    },
+                    "direction": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "timetaken",
+                    "totalDistance",
+                    "direction"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "msg": "Ok",
+                      "timetaken": 5102.905,
+                      "totalDistance": 15308.715,
+                      "direction": [
+                        [
+                          9.18759536743164,
+                          38.763946533203125
+                        ],
+                        [
+                          9.187566757202148,
+                          38.763954162597656
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.187539100646973,
+                          38.76198959350586
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.1871976852417,
+                          38.76167678833008
+                        ],
+                        [
+                          9.187050819396973,
+                          38.76163101196289
+                        ],
+                        [
+                          9.187050819396973,
+                          38.76163101196289
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/route/geocoding": {
+      "get": {
+        "summary": "findPlace",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "meskel",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "city": {
+                            "type": "string"
+                          },
+                          "country": {
+                            "type": "string"
+                          },
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lng": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "city",
+                          "country",
+                          "lat",
+                          "lng",
+                          "name",
+                          "type"
+                        ]
+                      }
+                    },
+                    "msg": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "msg"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "data": [
+                        {
+                          "city": "Addis Ababa",
+                          "country": "Ethiopia",
+                          "lat": 8.978027,
+                          "lng": 38.884797,
+                          "name": "bole arabsa",
+                          "type": "neighborhood"
+                        },
+                        {
+                          "city": "Addis Ababa",
+                          "country": "Ethiopia",
+                          "lat": 8.99797,
+                          "lng": 38.786733,
+                          "name": "bole medhane alem",
+                          "type": "neighborhood"
+                        },
+                        {
+                          "city": "Addis Ababa",
+                          "country": "Ethiopia",
+                          "lat": 8.975327,
+                          "lng": 38.772218,
+                          "name": "bole bulbula",
+                          "type": "neighborhood"
+                        }
+                      ],
+                      "msg": "ok"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/route/findowned": {
+      "get": {
+        "summary": "findowned",
+        "deprecated": false,
+        "description": "Look up addresses you have stored in the gebeta database",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "welkite",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "city",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "latitude": {
+                            "type": "number"
+                          },
+                          "longitude": {
+                            "type": "number"
+                          },
+                          "Country": {
+                            "type": "string"
+                          },
+                          "City": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "details": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "msg": "ok",
+                      "data": [
+                        {
+                          "id": 103566,
+                          "name": "Welkite",
+                          "latitude": 8.992,
+                          "longitude": 38.774,
+                          "Country": "ethiopia",
+                          "City": "addis ababa",
+                          "type": "city",
+                          "details": "{}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/route/revgeocoding": {
+      "get": {
+        "summary": "rev",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "9.02152",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "38.80131",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "latitude": {
+                            "type": "integer"
+                          },
+                          "longitude": {
+                            "type": "integer"
+                          },
+                          "Country": {
+                            "type": "string"
+                          },
+                          "City": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "latitude",
+                          "longitude",
+                          "Country",
+                          "City",
+                          "type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "msg",
+                    "data"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "msg": "ok",
+                      "data": [
+                        {
+                          "name": "test",
+                          "latitude": 10,
+                          "longitude": 10,
+                          "Country": "test",
+                          "City": "test",
+                          "type": "test"
+                        },
+                        {
+                          "name": "test",
+                          "latitude": 10.1,
+                          "longitude": 10.1,
+                          "Country": "test",
+                          "City": "test",
+                          "type": "test"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/route/getOwnedNearby": {
+      "get": {
+        "summary": "ownedrev",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "8.98421",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "38.80243",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "api key",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "terminal",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "detailLevel",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "example": "2",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  },
+  "servers": []
+}
