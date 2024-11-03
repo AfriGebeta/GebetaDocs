@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from "react";
 import GeocodingDropdown from "./GeocodingDropdown";
 import {useDispatch, useSelector} from "react-redux";

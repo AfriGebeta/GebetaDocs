@@ -1,23 +1,19 @@
-// src/redux/store.js
+// redux/store.js
+"use client"
 import {configureStore} from "@reduxjs/toolkit";
 import {combineReducers} from 'redux';
-import playGroundReducer from "./reducers/playgroundSlice"
-import tokenReducer from "./reducers/tokenSlice"
+import playGroundReducer from "./reducers/playgroundSlice";
+import tokenReducer from "./reducers/tokenSlice";
 
 const rootReducer = combineReducers({
-   playground : playGroundReducer,
-   token : tokenReducer,
-})
-
-// const persistConfig = {
-//  key: 'root',
-//  storage,
-// }
-
-// const persistedReducer = persistReducer(persistConfig, rootReducer)
+    playground: playGroundReducer,
+    token: tokenReducer,
+});
 
 export const store = configureStore({
-   reducer: rootReducer,
-})
-
-// export const persistor = persistStore(store)
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
+});
