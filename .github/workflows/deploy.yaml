@@ -35,7 +35,20 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
 
+      - name: Clean up previous build files
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} "rm -rf ${DROPLET_PATH}/*"
+
       - name: Upload build version to VPS
         run: |
           DROPLET_PATH="GebetaDocs"
-          rsync -avz ./ ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }}:${DROPLET_PATH}/
+          rsync -avz --delete ./out/ ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }}:${DROPLET_PATH}/
+
+      - name: Restart application with PM2
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} << 'EOF'
+            cd ${DROPLET_PATH}  # Change to the directory where your app is located
+            pm2 stop gebeta-docs || true
+            pnpm install
+            pm2 start pnpm --name "gebeta-docs" -- start
+          EOF
