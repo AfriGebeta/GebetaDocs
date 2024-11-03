@@ -9,7 +9,7 @@ export const footer: Array<FooterProps> = [
         links: [
             {
                 text: "Pricing",
-                url: "/pricing"
+                url: "https://gebeta.app/#/pricing"
             },
         ]
     },

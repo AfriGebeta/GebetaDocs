@@ -68,7 +68,7 @@ export default function Layout({children}: { children: ReactNode }) {
                         {
                             footer.map((item, index) => (
                                 <div key={index}>
-                                    <h6 className="text-[14px] font-medium text-[14px]">{item.title}</h6>
+                                    <h6 className="text-[14px] font-medium">{item.title}</h6>
                                     <ul className="mt-[8px] space-y-[8px] text-[#a0a0a0] text-[14px]">
                                         {
                                             item.links.map((link, index) => (
