@@ -1,0 +1,41 @@
+name: Deploy Gebeta Docs
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Build docs and deploy to VPS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Build and install
+        run: pnpm install && pnpm run build
+        working-directory: . 
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+
+      - name: Upload build version to VPS
+        run: |
+          DROPLET_PATH="GebetaDocs"
+          rsync -avz ./ ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }}:${DROPLET_PATH}/
