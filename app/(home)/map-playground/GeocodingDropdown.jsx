@@ -2,7 +2,7 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux"
 import {changeTopicPlayGround} from "@/redux/reducers/playgroundSlice"
-import {PlayGroundContext} from "@/poviders/Playground"
+import {PlayGroundContext} from "@/providers/Playground"
 
 
 function GeocodingDropdown( ) {

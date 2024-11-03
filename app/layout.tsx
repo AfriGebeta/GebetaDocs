@@ -9,11 +9,11 @@ import Link from "next/link";
 import {YoutubeIcon} from "lucide-react";
 import {InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon} from "@radix-ui/react-icons";
 
-import {Inter} from 'next/font/google';
-
-const inter = Inter({
-    subsets: ['latin'],
-});
+// import {Inter} from 'next/font/google';
+//
+// const inter = Inter({
+//     subsets: ['latin'],
+// });
 
 const metadata = {
     title: "GebetaMaps Documentation",

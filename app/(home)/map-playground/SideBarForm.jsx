@@ -6,7 +6,7 @@ import ResponseSample from "./Responsesample";
 import JsonViewer from "./JsonViewer";
 import {getRoute} from "@/redux/api/routeAPI"
 import Notify from "./Notify"
-import {PlayGroundContext} from "@/poviders/Playground"
+import {PlayGroundContext} from "@/providers/Playground"
 import {BASE_URL} from "@/services/apiClient";
 
 const SideBarForm = ({
