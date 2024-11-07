@@ -38,7 +38,7 @@ export default async function Page({
         ]}
         className={cn(
           "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-          "inset-x-0 inset-y-[-30%] h-[160%] skew-y-12 z-[-1]"
+          "inset-x-0 inset-y-[-30%] h-[100%] skew-y-12 z-[-1]"
         )}
       />
       <DocsTitle>{page.data.title}</DocsTitle>

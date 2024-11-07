@@ -75,7 +75,7 @@ export default function HomePage() {
         ]}
         className={cn(
           "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-          "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12 z-[-1]"
+          "inset-x-0 inset-y-[-30%] h-[150%] skew-y-12 z-[-1]"
         )}
       />
       <div className="flex flex-col lg:flex-row justify-between max-lg:gap-6">
