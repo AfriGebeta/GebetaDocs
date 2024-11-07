@@ -1,20 +1,14 @@
 "use client";
 import GridPattern from "@/components/custom/backgrounds/grid-pattern";
-import Ripple from "@/components/custom/backgrounds/ripple";
-import {ShineBorder} from "@/components/custom/cards/animated-beams";
-import {Button} from "@/components/ui/button";
-import {Card} from "@/components/ui/card";
+import { ShineBorder } from "@/components/custom/cards/animated-beams";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import Hero from "@/layout/home/hero";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BringToFront, MapPin, Route, Waypoints, Webhook } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {ReactElement} from "react";
-import Flutter from "@/assets/icons/icons8-flutter-48.png";
-import Node from "@/assets/icons/icons8-nodejs-48.png";
-import {Tooltip, TooltipContent, TooltipProvider,} from "@/components/ui/tooltip";
-import {TooltipTrigger} from "@radix-ui/react-tooltip";
+import { useRouter } from "next/navigation";
+import { ReactElement } from "react";
 
 export default function HomePage() {
   const features: {
@@ -153,7 +147,7 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
-        <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
+        {/* <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
           <p className="text-4xl font-semibold">
             Get Started With Your{" "}
             <span className="text-primary">Favourite Frameworks</span>
@@ -184,7 +178,7 @@ export default function HomePage() {
           </div>
           <p className="text-center">Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
           <Ripple />
-        </div>
+        </div> */}
       </div>
     </main>
   );
