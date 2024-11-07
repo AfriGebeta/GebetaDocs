@@ -13,11 +13,6 @@ export const baseOptions: HomeLayoutProps = {
   },
   links: [
     {
-      text: 'SDKs',
-      url: '/docs#sdks-for-seamless-integration',
-      active: 'nested-url',
-    },
-    {
       text: 'Map Playground',
       url: '/map-playground',
       active: 'nested-url',
