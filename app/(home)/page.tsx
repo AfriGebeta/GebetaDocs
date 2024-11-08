@@ -1,5 +1,6 @@
 "use client";
 import GridPattern from "@/components/custom/backgrounds/grid-pattern";
+import Ripple from "@/components/custom/backgrounds/ripple";
 import { ShineBorder } from "@/components/custom/cards/animated-beams";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -147,7 +148,7 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
-        {/* <div className="relative flex min-h-[35rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
+        <div className="relative flex min-h-[20rem] items-center justify-center w-full flex-col py-24 overflow-hidden rounded-lg bg-background gap-2 text-center">
           <p className="text-4xl font-semibold">
             Get Started With Your{" "}
             <span className="text-primary">Favourite Frameworks</span>
@@ -156,7 +157,7 @@ export default function HomePage() {
             We provide SDKs with currently with 2 technologies. We&apos;re doing
             our best to add more.
           </p>
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
@@ -175,10 +176,10 @@ export default function HomePage() {
                 <TooltipContent>NodeJS SDK</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          </div>
-          <p className="text-center">Want to contribute? <span className="underline"><Link href={"/"}>Join The Gebeta Open Source Community</Link></span></p>
+          </div> */}
+          <p className="text-center">Want to contribute? <span className="underline"><Link href={"https://github.com/GebetaMaps/gebeta-public-sdk"}>Join The Gebeta Open Source Community</Link></span></p>
           <Ripple />
-        </div> */}
+        </div>
       </div>
     </main>
   );
