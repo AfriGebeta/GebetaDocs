@@ -24,63 +24,7 @@ const Map = ({selectedButton}) => {
     const playContext = useContext(PlayGroundContext); // Access the AuthContext
     const {waypoint , origin , destination , setOriginCoordinates , setDestinationCoordinates , setWayPointsCoordinates, coordinate} = playContext
     const position = [9.035961873355374,38.75238418579102]; // Initial map position
-    const full_path = [
-
-        [
-            9.0289877,
-            38.7884871
-        ],
-        [
-            9.0287227,
-            38.7889391
-        ],
-        [
-            9.0285817,
-            38.7891941
-        ],
-        [
-            9.0283392,
-            38.7896191
-        ],
-        [
-            9.0290683,
-            38.7883272
-        ],
-
-        [
-            9.0287223,
-            38.7880912
-        ],
-        [
-            9.0281888,
-            38.7877698
-        ],
-
-        [
-            9.027759,
-            38.788861
-        ],
-
-        [
-            9.0270686,
-            38.7903348
-        ],
-
-        [
-            9.0269756,
-            38.79009679999999
-        ],
-        [
-            9.0268886,
-            38.78976479999999
-        ],
-        [
-            9.0267649,
-            38.789281
-        ]
-    ]
-
-    // the
+    const full_path = []
 
     function getRandomColor() {
         var letters = "0123456789ABCDEF";
