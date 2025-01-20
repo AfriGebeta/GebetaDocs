@@ -39,7 +39,7 @@ const SideBarForm = ({
             `${BASE_URL}/api/v1/route/revgeocoding?lat=${origin.lat == null ? "" : origin.lat}&lon=${origin.lng == null ? "" : origin.lng}&apiKey=${token.token}`,
 
             
-        direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat == null ? "{}" :  + origin.lat + "," + origin.lng}&destination=${destination.lat + "," + destination.lng}&la2=${destination.lat == null ? "{}" : destination.lat}&lo2=${destination.lat == null ? "{}" : destination.lng}&apiKey=${token.token}` + waypointsString,
+        direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat + "," + origin.lng}&destination=${destination.lat + "," + destination.lng}&apiKey=${token.token}` + waypointsString,
 
         tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
         onm: `${BASE_URL}/api/route/onm?origin=${origin.lat == null ? "{}" : `{${origin.lat},${origin.lng}}`}${waypointsString}&apiKey=${token.token}`,
