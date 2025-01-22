@@ -39,6 +39,12 @@ const TssObject = {
     ]
 }
 
+const OptimizedTrip = {
+    type : "optimizedTrip",
+    reuqestSampleUrl : "https://api.mapbox.com/search/geocode/v6/forward?q={search_text}",
+    optionalParameter : []
+}
+
 
 const onmObject = {
     type : "onm", 
@@ -56,4 +62,5 @@ export const returnPlaygroundObject = (type) => {
     else if (type == "direction") return DirectionObject
     else if (type == "geocoding") return GeocodingObject
     else if (type == "tss") return TssObject
+    else if (type == "optimizedTrip") return OptimizedTrip
 }
