@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Hero from "@/layout/home/hero";
 import { cn } from "@/lib/utils";
-import { ArrowRight, BringToFront, MapPin, Route, Waypoints, Webhook } from "lucide-react";
+import { ArrowRight, BringToFront, Map, MapPin, Route, Waypoints, Webhook } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ReactElement } from "react";
@@ -53,6 +53,13 @@ export default function HomePage() {
       icon: <BringToFront />,
       link: "/docs/geocoding/geocoding",
     },
+    {
+      name: "Tiles",
+      description:
+        "A tile API provides map tiles for displaying maps in your application.",
+      icon: <Map />,
+      link: "/docs/tiles",
+    }
   ];
 
   const router = useRouter();
@@ -132,7 +139,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="flex flex-wrap xl:mx-auto justify-center w-full gap-6 items-center place-content-center">
-          {features.slice(3, 5).map((feature) => (
+          {features.slice(3, 6).map((feature) => (
             <Card
               onClick={() => router.push(feature.link)}
               className="py-6 px-4 bg-zinc-50 dark:bg-stone-900/50 shadow-none border border-zinc-200 dark:border-stone-900 w-96 xl:w-96 h-44 backdrop-blur-xl cursor-pointer hover:border-primary dark:hover:border-amber-500 transition-all duration-200"
