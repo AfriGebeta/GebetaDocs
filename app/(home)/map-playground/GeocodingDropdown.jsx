@@ -110,6 +110,13 @@ function GeocodingDropdown( ) {
                            TSS
                        </a>
                        <a
+
+                        href="https://playground.tiles.gebeta.app/"
+                            className="block px-4 py-2 text-sm text-gray-500 rounded-lg hover:bg-[#FFA500]/15 cursor-pointer"
+                        >
+                            Tiles
+                        </a>
+
                            onClick={()=>{
                                dispatch(changeTopicPlayGround("optimizedTrip"))
                                playContext.clearEveryThing();
@@ -118,6 +125,7 @@ function GeocodingDropdown( ) {
                        >
                            Optimized Trip
                        </a>
+
                    </div>
                 </div>
             )}
