@@ -37,7 +37,7 @@ const SideBarForm = ({
 
     //url function
     const urlMap = {
-        geocoding: selectedGeocoding == "forward" ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}` :
+        geocoding: selectedGeocoding == "forward" ? `${BASEp_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}` :
             `${BASE_URL}/api/v1/route/revgeocoding?lat=${origin.lat == null ? "" : origin.lat}&lon=${origin.lng == null ? "" : origin.lng}&apiKey=${token.token}`,
 
 
@@ -46,7 +46,7 @@ const SideBarForm = ({
         tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
         onm: `${BASE_URL}/api/route/onm?origin=${origin.lat == null ? "{}" : `{${origin.lat},${origin.lng}}`}${waypointsString}&apiKey=${token.token}`,
         matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token.token}`,
-        optimizedTrip: `${TEST_URL}/api/optimized-trip?apiKey=${token.token}`,
+        optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=${token.token}`,
     }
 
     // helper function
