@@ -37,7 +37,7 @@ const SideBarForm = ({
 
     //url function
     const urlMap = {
-        geocoding: selectedGeocoding == "forward" ? `${BASEp_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}` :
+        geocoding: selectedGeocoding == "forward" ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}` :
             `${BASE_URL}/api/v1/route/revgeocoding?lat=${origin.lat == null ? "" : origin.lat}&lon=${origin.lng == null ? "" : origin.lng}&apiKey=${token.token}`,
 
 
