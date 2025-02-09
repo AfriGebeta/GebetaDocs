@@ -44,7 +44,7 @@ The Directions API enables users to find the optimal route between two locations
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1,lon1}&destination={lat2,lat2}&waypoints=[{lat,lng}]&instruction=1&apiKey={apiKey}
+curl https://mapapi.gebeta.app/api/route/direction/?origin={${origin.lat},${origin.lng}}&destination={${destination.lat},${destination.lng}}${waypointsString}&apiKey=${token.token}
 ```
 
 ## Parameter
@@ -76,7 +76,7 @@ curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1,lon1}&destinati
 To get directions from one location to another using the Directions API, you can use the following `curl` command:
 
 ```bash
-curl "curl https://mapapi.gebeta.app/api/route/direction/?origin={lat1,lon1}&destination={lat2,lat2}&waypoints=[{lat,lng}]&instruction=1&apiKey={apiKey}"
+curl "curl https://mapapi.gebeta.app/api/route/direction/?origin={${origin.lat},${origin.lng}}&destination={${destination.lat},${destination.lng}}${waypointsString}&apiKey=${token.token}"
 ```
 
 ## Example

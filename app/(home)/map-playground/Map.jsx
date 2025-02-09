@@ -83,6 +83,10 @@ const Map = ({selectedButton}) => {
             }
 
             {
+                coordinate.type === "optimizedTrip" ? coordinate.coords.map((pos)=> {return <Polyline positions={pos} color="red" />}) : null
+            }
+
+            {
                 coordinate.type == "onm"  ? coordinate.coords.map((pos)=> {return <Polyline positions={pos} color={getRandomColor()} />}) : ""
             }
 
