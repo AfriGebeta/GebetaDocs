@@ -50,18 +50,18 @@ export default function Layout({children}: { children: ReactNode }) {
                                 reserved.</p>
                         </div>
                         <div className="mt-[24px] flex items-center gap-[8px]">
-                            <Link href="https://www.instagram.com/gebetamaps">
+                            <a href="https://www.instagram.com/gebetamaps">
                                 <InstagramLogoIcon/>
-                            </Link>
-                            <Link href="https://twitter.com/GebetaMaps">
+                            </a>
+                            <a href="https://twitter.com/GebetaMaps">
                                 <TwitterLogoIcon/>
-                            </Link>
-                            <Link href="https://et.linkedin.com/company/gebetamaps">
+                            </a>
+                            <a href="https://et.linkedin.com/company/gebetamaps">
                                 <LinkedInLogoIcon/>
-                            </Link>
-                            <Link href="https://www.youtube.com/@gebetamaps">
+                            </a>
+                            <a href="https://www.youtube.com/@gebetamaps">
                                 <YoutubeIcon/>
-                            </Link>
+                            </a>
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-x-[96px] gap-y-[32px]">
@@ -73,9 +73,9 @@ export default function Layout({children}: { children: ReactNode }) {
                                         {
                                             item.links.map((link, index) => (
                                                 <li>
-                                                    <Link href={link.url} key={index}>
+                                                    <a href={link.url} key={index}>
                                                         {link.text}
-                                                    </Link>
+                                                    </a>
                                                 </li>
                                             ))
                                         }
