@@ -5,7 +5,6 @@ import type {ReactNode} from 'react';
 import gebetamaps from '@/assets/icons/gebetamaps.svg';
 import Image from 'next/image';
 import {footer} from "@/constants"
-import Link from "next/link";
 import {YoutubeIcon} from "lucide-react";
 import {InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon} from "@radix-ui/react-icons";
 
@@ -24,6 +23,7 @@ export default function Layout({children}: { children: ReactNode }) {
         <html lang="en" suppressHydrationWarning>
         <head>
             <title>GebetaMaps Documentation</title>
+            <link href="maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
         </head>
         <body className="min-h-screen flex flex-col">
         <RootProvider>

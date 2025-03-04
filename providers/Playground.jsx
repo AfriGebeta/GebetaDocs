@@ -24,7 +24,13 @@ export const PlayGroundProvider = ({ children }) => {
 
     const setOriginCoordinates = (coordinates) =>  setOrigin(coordinates);
     const setDestinationCoordinates = (coordinates) =>  setDestination(coordinates);
-    const setWayPointsCoordinates = (coordinate) =>   (waypoint.length < 5) ? setWayPoint([...waypoint , coordinate]) : null;
+    const setWayPointsCoordinates = (coordinate) => {
+        if (waypoint.length < 5) {
+            setWayPoint((prevWaypoints) => [...prevWaypoints, coordinate]);
+        } else {
+            console.log("Maximum of 5 waypoints allowed.");
+        }
+    };
     const setCoordinateFunction = (coords) => {
         setCoordinate(coords)
     }
