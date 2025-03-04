@@ -19,9 +19,7 @@ const introductionObject = {
             "50 requests per second from a single API token. This means that you can only send up to 50 requests in one second using the same token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.",
             "Inter-country requests are not allowed. This means that you can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message and your request will be invalid. To get directions for inter-country travel, you can use other map services or APIs that support this feature."
         ]
-    }, 
-    pricingHeader : "Directions API pricing",
-    pricingText : "The directions API charges you based on the number of requests you make. The price per request decreases as you make more requests. For the first 100,000 requests, you pay 2$ for every 1,000 requests. For the next 400,000 requests, you pay 1.75$ for every 1,000 requests. For the next 500,000 requests, you pay 1.5$ for every 1,000 requests. For any requests above 1,000,000, you pay 1$ for every 1,000 requests. For example, if you make 2,000,000 requests, you will pay 2,000$. For more information check the pricing page" ,
+    },
     
     responseTable   : [
         {
@@ -102,9 +100,7 @@ const DirectionObject = {
             "Inter-country requests are not allowed. This means that you can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message and your request will be invalid. To get directions for inter-country travel, you can use other map services or APIs that support this feature."
         ]
     }, 
-    pricingHeader : "Directions API pricing",
-    pricingText : "The directions API charges you based on the number of requests you make. The price per request decreases as you make more requests. For the first 100,000 requests, you pay 2$ for every 1,000 requests. For the next 400,000 requests, you pay 1.75$ for every 1,000 requests. For the next 500,000 requests, you pay 1.5$ for every 1,000 requests. For any requests above 1,000,000, you pay 1$ for every 1,000 requests. For example, if you make 2,000,000 requests, you will pay 2,000$. For more information check the pricing page" ,
-   
+
     responseTable : [
         {
           "status": 200,
@@ -184,9 +180,7 @@ const TssObject  = {
                 "50 requests per second from a single API token. This means that you can only send up to 50 requests in one second using the same token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.",
                 "Inter-country requests are not allowed. This means that you can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message and your request will be invalid. To get directions for inter-country travel, you can use other map services or APIs that support this feature."
             ]
-    }, 
-    pricingHeader : "Route Optmization API pricing",
-    pricingText : "The Route Optmization API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements. For the first 1,000,000 elements, you pay 2$ for every 10,000 elements. For the next 4,000,000 elements, you pay 1.75$ for every 10,000 elements. For the next 5,000,000 elements, you pay 1.5$ for every 10,000 elements. For any elements above 10,000,000, you pay 1$ for every 10,000 elements. For example, if you request 20,000,000 elements, you will pay 20,000$. For more information check the pricing page. Note that one Route Optimization API call is considered by the number of coordinates in the json array, so you will be charged accordingly.",
+    },
     responseTable : [
         {
           "status": 200,
@@ -261,9 +255,7 @@ const matrixObject = {
             "50 requests per second from a single API token. This means that you can only send up to 50 requests in one second using the same token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.",
             "Inter-country requests are not allowed. This means that you can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message and your request will be invalid. To get directions for inter-country travel, you can use other map services or APIs that support this feature."
         ]
-    }, 
-    pricingHeader : "Matrix API pricing",
-    pricingText : "The matrix API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements. For the first 1,000,000 elements, you pay 2$ for every 10,000 elements. For the next 4,000,000 elements, you pay 1.75$ for every 10,000 elements. For the next 5,000,000 elements, you pay 1.5$ for every 10,000 elements. For any elements above 10,000,000, you pay 1$ for every 10,000 elements. For example, if you request 20,000,000 elements, you will pay 20,000$. For more information check the pricing page. Note that one matrix API call is considered by the number of coordinates in the json array, so you will be charged accordingly.",
+    },
     responseTable : [
         {
           "status": 200,
@@ -337,9 +329,7 @@ const onmObject = {
             "50 requests per second from a single API token. This means that you can only send up to 50 requests in one second using the same token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.",
             "Inter-country requests are not allowed. This means that you can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message and your request will be invalid. To get directions for inter-country travel, you can use other map services or APIs that support this feature."
         ]
-    }, 
-    pricingHeader : "ONM API pricing",
-    pricingText : "The ONM API charges you based on the number of elements you request. An element is the travel time and distance between one origin and one destination. The price per element decreases as you request more elements. For the first 1,000,000 elements, you pay 2$ for every 10,000 elements. For the next 4,000,000 elements, you pay 1.75$ for every 10,000 elements. For the next 5,000,000 elements, you pay 1.5$ for every 10,000 elements. For any elements above 10,000,000, you pay 1$ for every 10,000 elements. For example, if you request 20,000,000 elements, you will pay 20,000$. For more information check the pricing page. Note that one matrix API call is considered by the number of coordinates or number of destinations, so you will be charged accordingly.",
+    },
     responseTable : [
         {
           "status": 200,
@@ -416,10 +406,7 @@ const GeocodingObject = {
         restrictions : [
             "50 requests per second from a single API token. This means that you can only send up to 50 requests in one second using the same token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.",
         ]
-    }, 
-    pricingHeader : "Geocoding API pricing",
-    pricingText : "The Geocoding API charges you based on the number of requests you make. The price per request decreases as you make more requests. For the first 100,000 requests, you pay 2$ for every 1,000 requests. For the next 400,000 requests, you pay 1.75$ for every 1,000 requests. For the next 500,000 requests, you pay 1.5$ for every 1,000 requests. For any requests above 1,000,000, you pay 1$ for every 1,000 requests. For example, if you make 2,000,000 requests, you will pay 2,000$. For more information check the pricing page" ,
-   
+    },
     responseTable : [
         {
           "status": 200,
@@ -512,10 +499,6 @@ export const documentationSideBarLinks =  [
                 name : 'Directions API restrictions and limits',
                 href : "javascript:void(0)"
             },
-            { 
-                name : 'Directions API pricing',
-                href : "javascript:void(0)"
-            },
             
         ]
 
@@ -549,11 +532,6 @@ export const documentationSideBarLinks =  [
                 name : 'Directions API restrictions and limits',
                 href : "javascript:void(0)"
             },
-            { 
-                name : 'Directions API pricing',
-                href : "javascript:void(0)"
-            },
-            
         ]
 
     }, 
@@ -583,10 +561,6 @@ export const documentationSideBarLinks =  [
             },
             { 
                 name : 'Directions API restrictions and limits',
-                href : "javascript:void(0)"
-            },
-            { 
-                name : 'Directions API pricing',
                 href : "javascript:void(0)"
             },
             
@@ -621,11 +595,6 @@ export const documentationSideBarLinks =  [
                 name : 'Directions API restrictions and limits',
                 href : "javascript:void(0)"
             },
-            { 
-                name : 'Directions API pricing',
-                href : "javascript:void(0)"
-            },
-            
         ]
 
     }, 
@@ -656,10 +625,6 @@ export const documentationSideBarLinks =  [
             },
             { 
                 name : 'Directions API restrictions and limits',
-                href : "javascript:void(0)"
-            },
-            { 
-                name : 'Directions API pricing',
                 href : "javascript:void(0)"
             },
             
