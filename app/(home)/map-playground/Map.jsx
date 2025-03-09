@@ -1,11 +1,17 @@
 "use client"
 import React, {memo, useCallback, useContext, useEffect, useRef} from "react";
-import {GebetaMap, MapStyles} from '@gebeta/tiles';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 import {PlayGroundContext} from "@/providers/Playground";
+import {mapStyle} from "@/constants/mapStyle";
+
 
 const Map = memo(({selectedButton}) => {
     const mapRef = useRef(null);
     const selectedButtonRef = useRef(selectedButton);
+    const markersRef = useRef([]);
+    const polylineLayersRef = useRef([]);
     const playContext = useContext(PlayGroundContext);
     const {
         waypoint,
@@ -21,26 +27,13 @@ const Map = memo(({selectedButton}) => {
         selectedButtonRef.current = selectedButton;
     }, [selectedButton]);
 
-
-    useEffect(() => {
-        console.log("origin", origin)
-    }, [origin])
-
-    useEffect(() => {
-        console.log("waypoints", waypoint)
-    }, [waypoint])
-
-    useEffect(() => {
-        console.log("destination", destination)
-    }, [destination])
-
-
     const position = [9.035961873355374, 38.75238418579102];
 
     const handleMapClick = useCallback((e) => {
         e?.preventDefault();
-        e.originalEvent.cancelBubble = true;
-        console.log(e)
+        if (e.originalEvent) {
+            e.originalEvent.cancelBubble = true;
+        }
 
         if (!e.lngLat) return;
 
@@ -50,6 +43,7 @@ const Map = memo(({selectedButton}) => {
         };
 
         console.log("Clicked coordinates:", coordinates);
+        console.log("Selected button:", selectedButtonRef.current);
 
         if (selectedButtonRef.current === "start") {
             setOriginCoordinates(coordinates);
@@ -69,92 +63,232 @@ const Map = memo(({selectedButton}) => {
         return color;
     };
 
-    const getAllMarkers = useCallback(() => {
-        const markers = [];
+    useEffect(() => {
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: "https://raw.githubusercontent.com/AfriGebeta/sprite/refs/heads/main/light_theme.json",
+            center: [position[1], position[0]],
+            zoom: 13,
+            attributionControl: false
+        });
+
+
+        map.addControl(new LogoControl(), 'bottom-left');
+
+
+
+        mapRef.current = map;
+
+        map.on('click', handleMapClick);
+
+        map.on('load', () => {
+            console.log("Map loaded!");
+            updateMarkers();
+            updatePolylines();
+        });
+
+        return () => {
+            map.off('click', handleMapClick);
+            map.remove();
+        };
+    }, []);
+
+    const updateMarkers = useCallback(() => {
+        if (!mapRef.current) return;
+
+        markersRef.current.forEach(marker => marker.remove());
+        markersRef.current = [];
 
         if (origin && origin.lat && origin.lng) {
-            markers.push({
-                id: 'origin',
-                lngLat: [origin.lng, origin.lat],
-                imageUrl: 'green.png',
-                imageSize: {width: 25, height: 25},
-                markerOptions: {anchor: 'bottom'},
-            });
+            const el = document.createElement('div');
+            el.className = 'marker';
+            el.style.backgroundImage = 'url(green.png)';
+            el.style.width = '25px';
+            el.style.height = '25px';
+            el.style.backgroundSize = 'cover';
+
+            const marker = new maplibregl.Marker(el)
+                .setLngLat([origin.lng, origin.lat])
+                .addTo(mapRef.current);
+
+            markersRef.current.push(marker);
         }
 
         if (destination && destination.lat && destination.lng) {
-            markers.push({
-                id: 'destination',
-                lngLat: [destination.lng, destination.lat],
-                imageUrl: 'red.png',
-                imageSize: {width: 25, height: 25},
-                markerOptions: {anchor: 'bottom'},
-            });
+            const el = document.createElement('div');
+            el.className = 'marker';
+            el.style.backgroundImage = 'url(red.png)';
+            el.style.width = '25px';
+            el.style.height = '25px';
+            el.style.backgroundSize = 'cover';
+
+            const marker = new maplibregl.Marker(el)
+                .setLngLat([destination.lng, destination.lat])
+                .addTo(mapRef.current);
+
+            markersRef.current.push(marker);
         }
 
         if (Array.isArray(waypoint)) {
             waypoint.forEach((point, index) => {
                 if (point && point.lat && point.lng) {
-                    markers.push({
-                        id: `waypoint-${index}`,
-                        lngLat: [point.lng, point.lat],
-                        imageUrl: 'black.png',
-                        imageSize: {width: 25, height: 25},
-                        markerOptions: {anchor: 'bottom'},
-                    });
+                    const el = document.createElement('div');
+                    el.className = 'marker';
+                    el.style.backgroundImage = 'url(black.png)';
+                    el.style.width = '25px';
+                    el.style.height = '25px';
+                    el.style.backgroundSize = 'cover';
+
+                    const marker = new maplibregl.Marker(el)
+                        .setLngLat([point.lng, point.lat])
+                        .addTo(mapRef.current);
+
+                    markersRef.current.push(marker);
                 }
             });
         }
-
-        return markers;
     }, [origin, destination, waypoint]);
 
-    const getPolylines = useCallback(() => {
-        const polylines = [];
+    const updatePolylines = useCallback(() => {
+        if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
 
-        console.log("polyline", polylines)
-        if (coordinate) {
-            if ((coordinate.type === "direction" || coordinate.type === "tss") && coordinate.coords) {
-                polylines.push({
-                    id: 'route',
-                    coordinates: coordinate.coords,
-                    color: 'red',
-                    width: 3,
-                    opacity: 0.8
+        const map = mapRef.current;
+
+        polylineLayersRef.current.forEach(layerId => {
+            if (map.getLayer(layerId)) {
+                map.removeLayer(layerId);
+            }
+            if (map.getSource(layerId)) {
+                map.removeSource(layerId);
+            }
+        });
+        polylineLayersRef.current = [];
+
+        if (coordinate && coordinate.coords) {
+            if (coordinate.type === 'direction' || coordinate.type === 'tss') {
+                const lineId = `polyline-${coordinate.type}`;
+
+                let coordinates;
+                if (Array.isArray(coordinate.coords[0]) && typeof coordinate.coords[0][0] === 'number') {
+                    coordinates = coordinate.coords.map(coord => [coord[1], coord[0]]);
+                } else {
+                    coordinates = coordinate.coords.map(coord => [coord.lng, coord.lat]);
+                }
+
+                map.addSource(lineId, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': coordinates
+                        }
+                    }
                 });
-            } else if (coordinate.type === "onm" && coordinate.coords) {
+
+                map.addLayer({
+                    'id': lineId,
+                    'type': 'line',
+                    'source': lineId,
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': 'red',
+                        'line-width': 4
+                    }
+                });
+
+                polylineLayersRef.current.push(lineId);
+            } else if (coordinate.type === 'onm') {
                 coordinate.coords.forEach((path, index) => {
-                    polylines.push({
-                        id: `onm-${index}`,
-                        coordinates: path,
-                        color: getRandomColor(),
-                        width: 3,
-                        opacity: 0.8
+                    const lineId = `polyline-onm-${index}`;
+
+                    let coordinates;
+                    if (Array.isArray(path[0]) && typeof path[0][0] === 'number') {
+                        coordinates = path.map(coord => [coord[1], coord[0]]);
+                    } else {
+                        coordinates = path.map(coord => [coord.lng, coord.lat]);
+                    }
+
+                    map.addSource(lineId, {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Feature',
+                            'properties': {},
+                            'geometry': {
+                                'type': 'LineString',
+                                'coordinates': coordinates
+                            }
+                        }
                     });
+
+                    map.addLayer({
+                        'id': lineId,
+                        'type': 'line',
+                        'source': lineId,
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': getRandomColor(),
+                            'line-width': 4
+                        }
+                    });
+
+                    polylineLayersRef.current.push(lineId);
                 });
             }
         }
-
-        return polylines;
     }, [coordinate]);
+
+    useEffect(() => {
+        if (mapRef.current && mapRef.current.isStyleLoaded()) {
+            updateMarkers();
+        }
+    }, [origin, destination, waypoint, updateMarkers]);
+
+    useEffect(() => {
+        if (mapRef.current && mapRef.current.isStyleLoaded()) {
+            updatePolylines();
+        }
+    }, [coordinate, updatePolylines]);
 
     return (
         <div className="h-full overflow-hidden">
-            <GebetaMap
-                style={MapStyles.MODERN}
-                apiKey={process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY || " "}
-                center={[position[1], position[0]]}
-                zoom={13}
-                width="100%"
-                height="100%"
-                markers={getAllMarkers()}
-                polylines={getPolylines()}
-                onClick={handleMapClick}
-                className="-z-[1000]"
-                mapRef={mapRef}
-            />
+            <div id="map" style={{width: '100%', height: '100%'}}/>
         </div>
     );
 });
 
 export default Map;
+
+class LogoControl {
+    onAdd(map) {
+        this._container = document.createElement('div');
+        this._container.className = 'maplibregl-ctrl maplibregl-ctrl-logo';
+
+        const logo = document.createElement('img');
+        logo.src = "https://github.com/AfriGebeta/GebetaDocs/blob/41ad169bdb6d7ac2757f2c553943c43522f08947/assets/icons/maplogo.png?raw=true";
+        logo.alt = "GebetaMaps";
+        logo.style.width = '3s0px';
+        logo.style.height = 'auto';
+
+        const attribution = document.createElement('div');
+        attribution.textContent = 'GebetaMaps';
+        attribution.style.fontSize = '10px';
+
+        this._container.appendChild(logo);
+        this._container.appendChild(attribution);
+
+        return this._container;
+    }
+
+    onRemove() {
+        this._container.parentNode.removeChild(this._container);
+    }
+}
+
