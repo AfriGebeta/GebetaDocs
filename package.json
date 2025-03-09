@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "NEXT_OUTPUT=standalone next build",
+    "build": "next build",
     "export": "NEXT_OUTPUT=export next build",
     "dev": "cross-env PORT=4000 next dev --turbo",
     "start": "cross-env PORT=4000 next start",
