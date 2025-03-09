@@ -1,0 +1,55 @@
+---
+title: React SDK
+description: A React wrapper for Gebeta Maps' vector tiles
+---
+
+A professional React wrapper for Gebeta Maps, providing a comprehensive interface for creating interactive maps with markers, polylines, polygons, and clustering capabilities.
+
+## Features
+
+- Multiple built-in map styles
+- Customizable markers (both color and image-based)
+- Polylines with custom styling
+- Polyfill support with fill and outline options
+- Marker clustering with customizable appearance
+- Interactive markers with click handling
+- Map click event handling
+- TypeScript support
+
+## Installation
+
+```bash
+npm install @gebeta/tiles
+# or
+yarn add @gebeta/tiles
+```
+
+## Prerequisites
+
+- A Gebeta Maps API key (get yours by registering at [Gebeta Maps](https://gebeta.app/))
+
+## Quick Start
+
+```jsx
+import { GebetaMap, MapMarker } from '@gebeta/tiles';
+
+function MyMap() {
+  return (
+    <GebetaMap
+      apiKey="YOUR_API_KEY"
+      center={[38.7578, 8.9806]}
+      zoom={12}
+      style="gebeta_basic"
+    >
+      <MapMarker
+        id="marker-1"
+        lngLat={[38.7578, 8.9806]}
+        color="#FF0000"
+        onClick={() => console.log('Marker clicked!')}
+      />
+    </GebetaMap>
+  );
+}
+```
+
+> For a more comprehensive api reference or examples of usage, go to ([Gebeta Maps React Github](https://github.com/AfriGebeta/gebeta-tiles))
