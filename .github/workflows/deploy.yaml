@@ -19,6 +19,8 @@ jobs:
     - name: Create .env file
       run: |
         echo "NEXT_PUBLIC_GEBETA_MAP_API_KEY=${{ secrets.GEBETA_MAP_API_KEY }}" >> .env
+        echo "NEXT_PUBLIC_LOCAL_TEST_URL=${{ secrets.PUBLIC_LOCAL_TEST_URL }}" >> .env
+        echo "NEXT_PUBLIC_PRODUCTION_URL=${{ secrets.PUBLIC_PRODUCTION_URL }}" >> .env
     - name: Verify .env file exists
       run: ls -la
     - name: Show .env file contents
