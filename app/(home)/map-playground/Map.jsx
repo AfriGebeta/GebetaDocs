@@ -4,8 +4,6 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import {PlayGroundContext} from "@/providers/Playground";
-import {mapStyle} from "@/constants/mapStyle";
-
 
 const Map = memo(({selectedButton}) => {
     const mapRef = useRef(null);
@@ -74,7 +72,6 @@ const Map = memo(({selectedButton}) => {
 
 
         map.addControl(new LogoControl(), 'bottom-left');
-
 
 
         mapRef.current = map;
