@@ -58,7 +58,7 @@ export default function HomePage() {
       description:
         "A tile API provides map tiles for displaying maps in your application.",
       icon: <Map />,
-      link: "/docs/tiles/_tiles",
+      link: "/docs/tiles",
     }
   ];
 
