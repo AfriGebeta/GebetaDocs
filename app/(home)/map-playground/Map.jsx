@@ -142,7 +142,7 @@ const Map = memo(({selectedButton}) => {
         <div className="h-full overflow-hidden">
             <GebetaMap
                 style={MapStyles.MODERN}
-                apiKey={process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY}
+                apiKey={process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY || " "}
                 center={[position[1], position[0]]}
                 zoom={13}
                 width="100%"
