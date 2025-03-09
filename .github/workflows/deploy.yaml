@@ -76,8 +76,10 @@ jobs:
         rsync -avz --progress --delete \
           -e "ssh -o StrictHostKeyChecking=no" \
           build/ $AZURE_SERVER_USER@$AZURE_SERVER_IP:~/gebeta-docs/releases/$NEW_VERSION/
-
         
         # Update the symlink to point to the new version
         ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ln -sfn ~/gebeta-docs/releases/$NEW_VERSION ~/gebeta-docs/current"
+
+        # Restart the server
+        ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "pm2 restart all"
 
