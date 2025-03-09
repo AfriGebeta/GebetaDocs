@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "export": "NEXT_OUTPUT=export next build",
     "dev": "cross-env PORT=4000 next dev --turbo",
-    "start": "cross-env PORT=4000 next start",
+    "start": "PORT=3000 next start",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

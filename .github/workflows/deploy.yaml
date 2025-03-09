@@ -1,54 +1,83 @@
-name: Deploy Gebeta Docs
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - dev
+      - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - dev
 
 jobs:
-  build:
-    name: Build docs and deploy to VPS
+  create-dot-env:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Create .env file
+      run: |
+        echo "No envs to create"
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+  lint-and-build:
+    needs: create-dot-env
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+    - run: npm install -g pnpm@latest-10
+    - run: pnpm install --frozen-lockfile
+    - run: pnpm build
+    - name: Prepare Deployment Artifacts
+      run: |
+        mkdir -p deploy
+        cp -r .next public package.json pnpm-lock.yaml source.config.ts deploy/
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: deploy
+        include-hidden-files: true
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+  deploy:
+    needs: lint-and-build
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup SSH Key
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.AZURE_SERVER_SSH_KEY }}
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build
+        path: build
+    - name: Show directory contents
+      run: ls -la
+    - name: Deploy to Azure
+      env:
+        AZURE_SERVER_USER: ${{ secrets.AZURE_SERVER_USER }}
+        AZURE_SERVER_IP: ${{ secrets.AZURE_SERVER_IP }}
+      run: |
+        echo "Deploying to Azure"
+        echo "Downloaded artifact..."
+        ls -la
+        echo "Current working directory:"
+        pwd
+        # Create a directory for the new version
+        NEW_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
+        ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "mkdir -p ~/gebeta-docs/releases/$NEW_VERSION"
 
-      - name: Build and install
-        run: pnpm install && pnpm run build
-        working-directory: . 
+        # Copy files to the new version directory
+        rsync -avz --progress --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
+          build/ $AZURE_SERVER_USER@$AZURE_SERVER_IP:~/gebeta-docs/releases/$NEW_VERSION/
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+        
+        # Update the symlink to point to the new version
+        ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ln -sfn ~/gebeta-docs/releases/$NEW_VERSION ~/gebeta-docs/current"
 
-      - name: Clean up previous build files
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} "rm -rf ${DROPLET_PATH}/*"
-
-      - name: Upload build version to VPS
-        run: |
-          DROPLET_PATH="GebetaDocs"
-          rsync -avz --delete ./out/ ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }}:${DROPLET_PATH}/
-
-      - name: Restart application with PM2
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} << 'EOF'
-            cd ${DROPLET_PATH}  # Change to the directory where your app is located
-            pm2 stop gebeta-docs || true
-            pnpm install
-            pm2 start pnpm --name "gebeta-docs" -- start
-          EOF
