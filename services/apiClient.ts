@@ -1,9 +1,10 @@
 import axios from "axios";
-import * as process from "process";
 
-export const LOCAL_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_TEST_URL;
-export const PRODUCTION_URL = process.env.NEXT_PUBLIC_PRODUCTION_URL;
+export const BASE_URL = "https://mapapi.gebeta.app";
+export const LOCAL_BASE_URL = "http://localhost:8081/api";
+export const TEST_URL = "https://apitest.gebeta.app";
+// http://68.219.183.24:8080
 
 export const API = axios.create({
-    baseURL: PRODUCTION_URL,
+    baseURL: BASE_URL,
 });
