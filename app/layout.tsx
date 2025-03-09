@@ -1,6 +1,7 @@
 import './global.css';
 import {RootProvider} from 'fumadocs-ui/provider';
 // import {Inter} from 'next/font/google';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import type {ReactNode} from 'react';
 import gebetamaps from '@/assets/icons/gebetamaps.svg';
 import Image from 'next/image';
