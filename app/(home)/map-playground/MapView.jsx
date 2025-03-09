@@ -35,7 +35,7 @@ const MapView = () => {
                 />
             </div>
 
-            <div className="w-full lg:w-3/4 bg-red-500 h-screen mx-[2%] md:mx-[0%]">
+            <div className="w-full lg:w-3/4 h-screen mx-[2%] md:mx-[0%]">
                 <Map
                     selectedButton = {selectedButton}
                 />
