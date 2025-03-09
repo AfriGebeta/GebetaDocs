@@ -18,7 +18,17 @@ jobs:
     - uses: actions/checkout@v4
     - name: Create .env file
       run: |
-        echo "No envs to create"
+        echo "NEXT_PUBLIC_GEBETA_MAP_API_KEY=${{ secrets.GEBETA_MAP_API_KEY }}" >> .env
+    - name: Verify .env file exists
+      run: ls -la
+    - name: Show .env file contents
+      run: cat .env
+    - name: Upload .env file
+      uses: actions/upload-artifact@v4
+      with:
+        include-hidden-files: true
+        name: dot-env
+        path: .env
 
   lint-and-build:
     needs: create-dot-env
@@ -29,13 +39,18 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18.x'
+    - name: Download .env file
+      uses: actions/download-artifact@v4
+      with:
+        name: dot-env
+        path: .
     - run: npm install -g pnpm@latest-10
     - run: pnpm install --frozen-lockfile
     - run: pnpm build
     - name: Prepare Deployment Artifacts
       run: |
         mkdir -p deploy
-        cp -r .next public package.json pnpm-lock.yaml source.config.ts deploy/
+        cp -r .env .next public package.json pnpm-lock.yaml source.config.ts deploy/
     - uses: actions/upload-artifact@v4
       with:
         name: build
