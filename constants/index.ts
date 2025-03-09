@@ -9,7 +9,7 @@ export const footer: Array<FooterProps> = [
         links: [
             {
                 text: "Pricing",
-                url: "https://gebeta.app/#/pricing"
+                url: "https://gebeta.app/pricing"
             },
         ]
     },
@@ -18,7 +18,7 @@ export const footer: Array<FooterProps> = [
         links: [
             {
                 text: "Documentation",
-                url: "/docs",
+                url: "https://docs.gebeta.app/docs",
             },
             {
                 text: "Community",
@@ -31,11 +31,11 @@ export const footer: Array<FooterProps> = [
         links: [
             {
                 text: "Privacy Policy",
-                url: "https://gebeta.app/#/privacy",
+                url: "https://gebeta.app/privacy",
             },
             {
                 text: "Terms of Service",
-                url: "https://gebeta.app/#/terms",
+                url: "https://gebeta.app/terms",
             },
         ],
     }

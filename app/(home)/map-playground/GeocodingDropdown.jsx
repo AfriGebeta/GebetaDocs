@@ -115,6 +115,15 @@ function GeocodingDropdown( ) {
                         >
                             Tiles
                         </a>
+                        <a
+                           onClick={()=>{
+                               dispatch(changeTopicPlayGround("optimizedTrip"))
+                               playContext.clearEveryThing();
+                           }}
+                           className="block px-4 py-2 text-sm text-gray-500 rounded-lg hover:bg-[#FFA500]/15 cursor-pointer"
+                       >
+                           Optimized Trip
+                       </a>
                    </div>
                 </div>
             )}

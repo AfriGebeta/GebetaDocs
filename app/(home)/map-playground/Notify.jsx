@@ -13,7 +13,6 @@ function Notify({value}) {
         setTimeout(() => setShow('hidden'),value.timeout || 2000);
     },[value.visible])
 
-    console.log("log", value.msg)
 
     return (
         <div className={" fixed top-[8%] right-[50%] left-[50%] text-center ml-auto mr-auto py-3 text-white "+show}>

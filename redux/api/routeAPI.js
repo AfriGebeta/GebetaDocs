@@ -9,3 +9,16 @@ export const getRoute = async (url) => {
         return handleApiError(error);
     }
 }
+
+export const getRoutes = async (url, body) => {
+    try {
+        const {data} = await API.post(url, body, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return {error: null, data};
+    } catch (error) {
+        return handleApiError(error)
+    }
+}
