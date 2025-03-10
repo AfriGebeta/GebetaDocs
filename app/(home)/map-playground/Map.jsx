@@ -66,7 +66,16 @@ const Map = memo(({selectedButton}) => {
             style: "https://raw.githubusercontent.com/AfriGebeta/sprite/refs/heads/main/light_theme.json",
             center: [position[1], position[0]],
             zoom: 13,
-            attributionControl: false
+            attributionControl: false,
+            transformRequest: (url, resourceType) => {
+                if (resourceType === 'Tile') {
+                  return {
+                    url: url,
+                    headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY }
+                  };
+                }
+                return { url };
+              },
         });
 
 
