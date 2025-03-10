@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "cross-env PORT=4000 next dev --turbo",
-    "start": "cross-env PORT=4000 next start",
+    "start": "PORT=4000 next start",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
