@@ -49,9 +49,9 @@ export default function HomePage() {
     {
       name: "VRP",
       description:
-          "VRP api is designed to help optmize vehicle routes for delivery and fleet management tasks, where multiple depots and vehicles are involved.",
+          "VRP api is designed to help optimize vehicle routes for delivery and fleet management tasks, where multiple depots and vehicles are involved.",
       icon: <Waypoints />,
-      link: "/docs/optimized-trip",
+      link: "/docs/vrp",
     },
     {
       name: "Forward and Reverse Geocoding",
