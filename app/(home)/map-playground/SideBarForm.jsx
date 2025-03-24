@@ -8,7 +8,6 @@ import {getRoute, getRoutes} from "@/redux/api/routeAPI"
 import Notify from "./Notify"
 import {PlayGroundContext} from "@/providers/Playground"
 import {BASE_URL} from "@/services/apiClient";
-import {TEST_URL} from "@/redux/api/util";
 
 const SideBarForm = ({
 
@@ -24,6 +23,26 @@ const SideBarForm = ({
     const [searchText, setSearchText] = useState("")
     const [apiResponse, setApiResponse] = useState({})
     const [notify, setNotify] = useState({visible: false});
+    const [coordinate, setCoordinate] = useState({latitude: null, longitude: null})
+
+    const [manualCoords, setManualCoords] = useState({
+        origin: {lat: '', lng: ''},
+        destination: {lat: '', lng: ''}
+    });
+
+    const handleCoordsChange = (type, coord, value) => {
+        setManualCoords(prev => ({
+            ...prev,
+            [type]: {
+                ...prev[type],
+                [coord]: value
+            }
+        }));
+    }
+
+    console.log(manualCoords)
+
+
     //global state
     const {token} = useSelector((state) => state)
 
@@ -32,16 +51,19 @@ const SideBarForm = ({
     const optimizedTripJson = useRef(null)
 
     const {waypoint, origin, destination, setCoordinateFunction} = playContext
-    const waypointsString = waypoint.length > 0 ? `&${object.type == "direction" ? "waypoints" : "json"}=[${waypoint.map(point => `{${point.lat},${point.lng}}`).join(",")}]` : "";
-
+    const waypointsString = waypoint.length > 0 ? `&${object.type == "direction" ? "waypoints" : "json"}=[${waypoint.map(point => `${point.lat},${point.lng}`).join(",")}]` : "";
 
     //url function
     const urlMap = {
         geocoding: selectedGeocoding == "forward" ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}` :
-            `${BASE_URL}/api/v1/route/revgeocoding?lat=${origin.lat == null ? "" : origin.lat}&lon=${origin.lng == null ? "" : origin.lng}&apiKey=${token.token}`,
+            `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude == null ? "" : coordinate.latitude}&lon=${coordinate.longitude == null ? "" : coordinate.longitude}&apiKey=${token.token}`,
 
 
-        direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat + "," + origin.lng}&destination=${destination.lat + "," + destination.lng}&apiKey=${token.token}` + waypointsString,
+        direction: `${BASE_URL}/api/route/direction/?origin=${
+            origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
+        }&destination=${
+            destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
+        }&apiKey=${token.token}${waypointsString}`,
 
         tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
         onm: `${BASE_URL}/api/route/onm?origin=${origin.lat == null ? "{}" : `{${origin.lat},${origin.lng}}`}${waypointsString}&apiKey=${token.token}`,
@@ -72,7 +94,7 @@ const SideBarForm = ({
             case "start":
                 return (
                     <button
-                        className={`  bg-[#FFA500] mx-[2%] md:mx-[0%] w-[96%] p-2.5 rounded-[4px] ${selectedButton === "start" ? "bg-[#FFA50]" : "bg-gray-300"} focus:text-white outline-none mt-[1%]`}
+                        className={`  bg-[#FFA500] mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px] ${selectedButton === "start" ? "bg-[#FFA50]" : "bg-gray-300"} focus:text-white outline-none mt-[1%]`}
                         onClick={(e) => {
                             e.preventDefault();
                             setSelectedButtonFunction("start");
@@ -85,7 +107,7 @@ const SideBarForm = ({
                 if (request !== "geocoding")
                     return (
                         <button
-                            className={`  mx-[2%] md:mx-[0%] w-[96%] p-2.5 rounded-[4px] ${selectedButton === "waypoint" ? "bg-[#FFA500]" : "bg-gray-300"} focus:text-white outline-none mt-[4%]`}
+                            className={`  mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px] ${selectedButton === "waypoint" ? "bg-[#FFA500]" : "bg-gray-300"} focus:text-white outline-none mt-[4%]`}
                             onClick={(e) => {
                                 e.preventDefault();
                                 setSelectedButtonFunction("waypoint");
@@ -98,7 +120,7 @@ const SideBarForm = ({
             case "destination":
                 return (
                     <button
-                        className={`  mx-[2%] md:mx-[0%] w-[96%] p-2.5 rounded-[4px] ${selectedButton === "destination" ? "bg-[#FFA500]" : "bg-gray-300"} focus:text-white outline-none mt-[4%]`}
+                        className={`  mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px] ${selectedButton === "destination" ? "bg-[#FFA500]" : "bg-gray-300"} focus:text-white outline-none mt-[4%]`}
                         onClick={(e) => {
                             e.preventDefault();
                             setSelectedButtonFunction("destination");
@@ -114,7 +136,9 @@ const SideBarForm = ({
 
     const shouldContinue = () => {
         if (object.type == "direction") {
-            if (origin.lat == null || origin.lng == null || destination.lat == null || destination.lng == null) {
+            if (manualCoords.origin.lat !== "" && manualCoords.origin.lng !== "" && manualCoords.destination.lat !== "" && manualCoords.destination.lng !== "") {
+                return {error: false}
+            } else if (origin.lat == null || origin.lng == null || destination.lat == null || destination.lng == null) {
                 return {error: true, message: "check parameters"}
             } else {
                 return {error: false}
@@ -152,7 +176,7 @@ const SideBarForm = ({
                     return {error: false}
                 }
             } else if (selectedGeocoding == "reverse") {
-                if (origin.lat == null || origin.lng == null) {
+                if (coordinate.latitude == null || coordinate.longitude == null) {
                     return {error: true, message: "check parameters"}
                 } else {
                     return {error: false}
@@ -189,10 +213,8 @@ const SideBarForm = ({
         } else if (object.type == "geocoding") {
             console.log(data.data)
         } else if (object.type === "optimizedTrip") {
-            console.log("zuzu",data.routes)
             const polylineData = getPolylineCoordinates(data.routes);
-            console.log(polylineData)
-            setCoordinateFunction({ type: "direction", coords: polylineData });
+            setCoordinateFunction({type: "direction", coords: polylineData});
         }
 
     }
@@ -264,14 +286,102 @@ const SideBarForm = ({
                                             setSearchText(e.target.value)
                                         }}
                                     />
-                                </div> : ""
+                                </div> : (
+                                    <div className="mt-4">
+                                        <lable className="text-sm">Latitude</lable>
+                                        <input
+                                            placeholder="Enter latitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                setCoordinate((prevState) => ({...prevState, latitude: e.target.value}))
+                                            }}
+                                        />
+
+                                        <lable className="text-sm">Longitude</lable>
+                                        <input
+                                            placeholder="Enter longitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                setCoordinate((prevState) => ({...prevState, longitude: e.target.value}))
+                                            }}
+                                        />
+                                    </div>
+                                )
                         ) : ""
                 }
                 <Notify value={notify}/>
                 {/* Render buttons based on type */}
-                {(object.type === "direction" || object.type === "onm") ? renderButton("start", object.type) : null}
+                {(object.type === "direction" || object.type === "onm") ? (
+                    <>
+                        {renderButton("start", object.type)}
+                    </>
+                ) : null}
                 {object.type === "direction" ? (startWayPoint ? renderButton("waypoint", object.type) : null) : object.type !== "optimizedTrip" ? renderButton("waypoint", object.type) : null}
-                {object.type === "direction" ? renderButton("destination", object.type) : null}
+                {object.type === "direction" ? (
+                    <>
+                        {renderButton("destination", object.type)}
+
+                        <div className="mt-4 relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="bg-white px-2 text-gray-500">or</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <div className="flex flex-col gap-4">
+                                <div className="space-y-2">
+                                    <h4>Origin</h4>
+                                    <div>
+                                        <input
+                                            placeholder="Enter latitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                handleCoordsChange("origin", "lat", e.target.value)
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <input
+                                            placeholder="Enter longitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                handleCoordsChange("origin", "lng", e.target.value)
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <h4>Destination</h4>
+                                    <div>
+                                        <input
+                                            placeholder="Enter latitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                handleCoordsChange("destination", "lat", e.target.value)
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <input
+                                            placeholder="Enter longitude"
+                                            className="w-full p-2.5 text-sm bg-zinc-100 text-zinc-800 outline-none border border-grey-500 rounded-[4px] caret-[#FFA500] focus:caret-[#FFA500"
+                                            onChange={(e) => {
+                                                handleCoordsChange("destination", "lng", e.target.value)
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </>
+                ) : null}
                 {object.type == "optimizedTrip" ? (
                     <textarea ref={optimizedTripJson} name="tripJson"
                               className="bg-white w-full text-zinc-800 rounded-[4px]" rows="10"/>
@@ -290,7 +400,7 @@ const SideBarForm = ({
 
                 </div>
                 <button
-                    className={`  mx-[2%] md:mx-[0%] w-[96%] p-2.5 rounded-[4px] bg-[#FFA500] text-white font-bold outline-none mt-[4%]`}
+                    className={`  mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px] bg-[#FFA500] text-white font-bold outline-none mt-[4%]`}
                     onClick={(e) => {
                         calculate()
                     }}> {object.type === "geocoding" ? "search" : "calculate"}</button>
