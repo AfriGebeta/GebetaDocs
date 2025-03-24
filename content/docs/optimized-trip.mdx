@@ -1,0 +1,147 @@
+---
+title: VRP API
+description: The VRP(vehicle routing problem) API is designed to help optimize vehicle routes for delivery and fleet management tasks, where multiple depots and vehicles are involved. This API efficiently calculates the best routes, considering vehicle capacities, depot locations, customer demands, and other key factors.
+---
+
+## Key Features
+
+With the VRP API, you can:
+
+- **Optimize Routes**: Find the most efficient routes for a fleet of vehicles across multiple depots, considering vehicle capacities, travel times, and depot locations.
+
+- **Comprehensive Route Details**: Access detailed information, including:
+  - **Order of Visits**: The recommended sequence for your stops.
+  - **Total Distance and Travel Time**: Clear insights into the total distance and time for each route.
+  - **Route Instructions**: Step-by-step guidance for each vehicle's journey.
+  - **Depot Assignment**: Which depot each vehicle should start from, considering the closest and most efficient options.
+
+## Use Cases
+
+<Cards>
+  <Card title="Fleet Management" description="Manage routes for a fleet of vehicles across multiple depots while optimizing for fuel consumption, time, or distance." icon="🚚">
+  </Card>
+
+  <Card title="Delivery Route Optimization" description="Find the best routes for delivery trucks or couriers based on their starting depots and customer locations." icon="📦">
+  </Card>
+
+  <Card title="Logistics and Distribution" description="Plan logistics operations that involve multiple warehouses or depots for dispatching vehicles to serve various customer locations." icon="🏢">
+  </Card>
+</Cards>
+
+## Usage
+
+To use the VRP API, send a POST request:
+
+```bash
+curl https://docs.gebeta.app/api/optimized-trip?apiKey={your-api-key}
+```
+
+### Request Parameters
+
+| **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
+|----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
+| `vehicles`             | `Array`  | A list of vehicles with details such as current location, capacity, and max distance.                                 | `yes`        |
+| `customers`               | `Array`  | A list of customer locations along with their demand (e.g., number of packages or items to deliver). | `yes`        |
+| `depots`             | `Array`  | A list of depots with their location.                                                                      | `yes`        |
+
+### Request Example (POST)
+
+<Tabs items={['curl']}>
+  <Tab value="curl">
+  ```bash
+  curl --request POST \
+  --url 'https://docs.gebeta.app/api/optimized-trip?apiKey={your-api-key}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "vehicles": [
+      {
+        "vehicle_id": 1,
+        "current_location": [8.989022, 38.79036],
+        "capacity": 10,
+        "max_distance": 100
+      },
+      {
+        "vehicle_id": 2,
+        "current_location": [9.03045, 38.76530],
+        "capacity": 8,
+        "max_distance": 120
+      }
+    ],
+    "depots": [
+      {
+        "depot_id": 1,
+        "location": [8.989022, 38.79036]
+      },
+      {
+        "depot_id": 2,
+        "location": [9.05000, 38.78000]
+      }
+    ],
+    "customers": [
+      {
+        "customer_id": 1,
+        "location": [9.02000, 38.77000],
+        "demand": 3
+      },
+      {
+        "customer_id": 2,
+        "location": [9.03500, 38.75000],
+        "demand": 4
+      },
+      {
+        "customer_id": 3,
+        "location": [9.01000, 38.76000],
+        "demand": 5
+      }
+    ]
+  }'
+  ```
+  </Tab>
+ </Tabs>
+
+## Response Codes for ONM API
+
+| Status Code | Message                         | Description                                                                                       |
+|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
+| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
+| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               |
+
+## Success Response Example
+
+```bash
+{
+  "status": "OK",
+  "routes": [
+    {
+      "vehicle_id": 1,
+      "route": [
+        {"depot": [8.989022, 38.79036], "customer_id": 1, "distance": 15, "time": "08:10"},
+        {"customer_id": 2, "location": [9.02000, 38.77000], "distance": 10, "time": "08:35"},
+        {"depot": [8.989022, 38.79036], "distance": 25, "time": "09:00"}
+      ],
+      "total_distance": 50,
+      "total_time": "01:30"
+    },
+    {
+      "vehicle_id": 2,
+      "route": [
+        {"depot": [9.05000, 38.78000], "customer_id": 3, "distance": 12, "time": "08:15"},
+        {"customer_id": 2, "location": [9.03500, 38.75000], "distance": 8, "time": "08:35"},
+        {"depot": [9.05000, 38.78000], "distance": 18, "time": "09:00"}
+      ],
+      "total_distance": 38,
+      "total_time": "01:15"
+    }
+  ]
+}
+
+```
+
+## API Limits and Restrictions
+
+- **Rate Limit**: 50 requests per second from a single API token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.
+- **Inter-Country Requests**: Not allowed. You can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message, and your request will be invalid. For inter-country travel, consider using other map services or APIs that support this feature.
+- **Coordinates Waypoints**: Should only be less than or equal to 10.
