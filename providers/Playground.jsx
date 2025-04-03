@@ -2,48 +2,105 @@
 import React, {createContext, useState} from 'react';
 
 export const PlayGroundContext = createContext({
-    waypoint: [],
+    waypoints: [],
     origin: { lat: null, lng: null },
     destination: { lat: null, lng: null },
-    coordinate : {type : null, coords : []},
+    coordinate: {type: null, coords: []},
     setOriginCoordinates: (coordinates) => {},
     setDestinationCoordinates: (coordinates) => {},
-    setWayPointsCoordinates: (coordinates) => {},
+    setWaypointsCoordinates: (coordinates, index = null) => {}, // Added index parameter
+    updateWaypoint: (index, coordinates) => {}, // New function
+    removeWaypoint: (index) => {}, // New function
     setCoordinateFunction: (coords) => {},
-    clearEveryThing: () => {}
+    clearWaypoints: () => {},
+    clearEverything: () => {}
 });
 
 export const PlayGroundProvider = ({ children }) => {
-
-
-
-    const [waypoint, setWayPoint] = useState([]);
+    const [waypoints, setWaypoints] = useState([]);
     const [origin, setOrigin] = useState({ lat: null, lng: null });
     const [destination, setDestination] = useState({ lat: null, lng: null });
-    const [coordinate , setCoordinate] = useState({type : null, coords : []})
+    const [coordinate, setCoordinate] = useState({type: null, coords: []});
 
-    const setOriginCoordinates = (coordinates) =>  setOrigin(coordinates);
-    const setDestinationCoordinates = (coordinates) =>  setDestination(coordinates);
-    const setWayPointsCoordinates = (coordinate) => {
-        if (waypoint.length < 5) {
-            setWayPoint((prevWaypoints) => [...prevWaypoints, coordinate]);
+    const setOriginCoordinates = (coordinates) => {
+        setOrigin(coordinates);
+    };
+
+    const setDestinationCoordinates = (coordinates) => {
+        setDestination(coordinates);
+    };
+
+    const clearWaypoints = () => {
+        setWaypoints([]);
+    };
+
+    // Updated to handle both adding and updating waypoints
+    const setWaypointsCoordinates = (coordinates, index = null) => {
+        if (index !== null) {
+            // Update existing waypoint
+            setWaypoints(prev => {
+                const newWaypoints = [...prev];
+                newWaypoints[index] = coordinates;
+                return newWaypoints;
+            });
         } else {
-            console.log("Maximum of 5 waypoints allowed.");
+            // Add new waypoint (max 10)
+            if (waypoints.length < 10) {
+                setWaypoints(prev => [...prev, coordinates]);
+            } else {
+                console.log("Maximum of 10 waypoints allowed.");
+            }
         }
     };
+
+    // Specific function to update a waypoint by index
+    const updateWaypoint = (index, coordinates) => {
+        if (index >= 0 && index < waypoints.length) {
+            setWaypoints(prev => {
+                const newWaypoints = [...prev];
+                newWaypoints[index] = coordinates;
+                return newWaypoints;
+            });
+        }
+    };
+
+    // Specific function to remove a waypoint by index
+    const removeWaypoint = (index) => {
+        if (index >= 0 && index < waypoints.length) {
+            setWaypoints(prev => {
+                const newWaypoints = [...prev];
+                newWaypoints.splice(index, 1);
+                return newWaypoints;
+            });
+        }
+    };
+
     const setCoordinateFunction = (coords) => {
-        setCoordinate(coords)
-    }
-    const clearEveryThing = () => {
-        setWayPoint([])
-        setCoordinate({type : null, coords : []})
+        setCoordinate(coords);
+    };
+
+    const clearEverything = () => {
+        setWaypoints([]);
+        setCoordinate({type: null, coords: []});
         setDestination({ lat: null, lng: null });
         setOrigin({ lat: null, lng: null });
-    }
-
+    };
 
     return (
-        <PlayGroundContext.Provider value={{ waypoint,origin,destination,coordinate,setOriginCoordinates,setDestinationCoordinates,setWayPointsCoordinates,setCoordinateFunction,clearEveryThing}}>
+        <PlayGroundContext.Provider value={{
+            waypoints,
+            origin,
+            destination,
+            coordinate,
+            setOriginCoordinates,
+            setDestinationCoordinates,
+            setWaypointsCoordinates,
+            updateWaypoint,
+            removeWaypoint,
+            setCoordinateFunction,
+            clearWaypoints,
+            clearEverything
+        }}>
             {children}
         </PlayGroundContext.Provider>
     );
