@@ -8,7 +8,7 @@ import Image from 'next/image';
 import {footer} from "@/constants"
 import {YoutubeIcon} from "lucide-react";
 import {InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon} from "@radix-ui/react-icons";
-
+import {ToastProvider} from "@/providers/ToastProvider";
 // import {Inter} from 'next/font/google';
 //
 // const inter = Inter({
@@ -24,69 +24,71 @@ export default function Layout({children}: { children: ReactNode }) {
         <html lang="en" suppressHydrationWarning>
         <head>
             <title>GebetaMaps Documentation</title>
-            <link href="maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
+            <link href="maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet"/>
         </head>
         <body className="min-h-screen flex flex-col">
         <RootProvider>
-            <>
+            <ToastProvider>
+                <>
 
-                <div className="flex-1">
-                    {children}
-                </div>
-
-                <footer
-                    className="relative flex flex-col md:flex-row justify-between md:items-center gap-y-[32px] h-[250px] px-[80px] py-[40px] ">
-                    <div>
-                        <div className="space-y-4">
-                            <div className="flex gap-[4px] items-center">
-                                <Image
-                                    src={gebetamaps}
-                                    width={40}
-                                    height={40}
-                                    alt="Gebeta Maps logo"
-                                />
-                                <h3 className="text-lg font-bold">GebetaMaps</h3>
-                            </div>
-                            <p className="mt-[24px] text-[12px] text-[#a0a0a0]">© 2024 GebetaMaps, Inc. All rights
-                                reserved.</p>
-                        </div>
-                        <div className="mt-[24px] flex items-center gap-[8px]">
-                            <a href="https://www.instagram.com/gebetamaps">
-                                <InstagramLogoIcon/>
-                            </a>
-                            <a href="https://twitter.com/GebetaMaps">
-                                <TwitterLogoIcon/>
-                            </a>
-                            <a href="https://et.linkedin.com/company/gebetamaps">
-                                <LinkedInLogoIcon/>
-                            </a>
-                            <a href="https://www.youtube.com/@gebetamaps">
-                                <YoutubeIcon/>
-                            </a>
-                        </div>
+                    <div className="flex-1">
+                        {children}
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-x-[96px] gap-y-[32px]">
-                        {
-                            footer.map((item, index) => (
-                                <div key={index}>
-                                    <h6 className="text-[14px] font-medium">{item.title}</h6>
-                                    <ul className="mt-[8px] space-y-[8px] text-[#a0a0a0] text-[14px]">
-                                        {
-                                            item.links.map((link, index) => (
-                                                <li>
-                                                    <a href={link.url} key={index}>
-                                                        {link.text}
-                                                    </a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
+
+                    <footer
+                        className="relative flex flex-col md:flex-row justify-between md:items-center gap-y-[32px] h-[250px] px-[80px] py-[40px] ">
+                        <div>
+                            <div className="space-y-4">
+                                <div className="flex gap-[4px] items-center">
+                                    <Image
+                                        src={gebetamaps}
+                                        width={40}
+                                        height={40}
+                                        alt="Gebeta Maps logo"
+                                    />
+                                    <h3 className="text-lg font-bold">GebetaMaps</h3>
                                 </div>
-                            ))
-                        }
-                    </div>
-                </footer>
-            </>
+                                <p className="mt-[24px] text-[12px] text-[#a0a0a0]">© 2024 GebetaMaps, Inc. All rights
+                                    reserved.</p>
+                            </div>
+                            <div className="mt-[24px] flex items-center gap-[8px]">
+                                <a href="https://www.instagram.com/gebetamaps">
+                                    <InstagramLogoIcon/>
+                                </a>
+                                <a href="https://twitter.com/GebetaMaps">
+                                    <TwitterLogoIcon/>
+                                </a>
+                                <a href="https://et.linkedin.com/company/gebetamaps">
+                                    <LinkedInLogoIcon/>
+                                </a>
+                                <a href="https://www.youtube.com/@gebetamaps">
+                                    <YoutubeIcon/>
+                                </a>
+                            </div>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-x-[96px] gap-y-[32px]">
+                            {
+                                footer.map((item, index) => (
+                                    <div key={index}>
+                                        <h6 className="text-[14px] font-medium">{item.title}</h6>
+                                        <ul className="mt-[8px] space-y-[8px] text-[#a0a0a0] text-[14px]">
+                                            {
+                                                item.links.map((link, index) => (
+                                                    <li>
+                                                        <a href={link.url} key={index}>
+                                                            {link.text}
+                                                        </a>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </footer>
+                </>
+            </ToastProvider>
         </RootProvider>
         </body>
         </html>
