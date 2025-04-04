@@ -4,8 +4,8 @@ import maplibregl from 'maplibre-gl';
 
 import {PlayGroundContext} from "@/providers/Playground";
 
-const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, instructions, showInstructions}) => {
-    const mapRef = useRef(null);
+const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, instructions, showInstructions,mapRef}) => {
+    // const mapRef = useRef(null);
     const instructionMarkersRef = useRef([]);
     const animationRef = useRef(null);
     const selectedButtonRef = useRef(selectedButton);
@@ -121,11 +121,9 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
         }
     }, []);
 
-    // Animate the polyline
     const animatePolyline = useCallback((lineId, coordinates, duration = 2000) => {
         if (!mapRef.current || !coordinates || coordinates.length === 0) return;
 
-        // Cancel any existing animation
         if (animationRef.current) {
             cancelAnimationFrame(animationRef.current);
         }
@@ -138,7 +136,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
             const progress = Math.min(elapsed / duration, 1);
             const currentIndex = Math.floor(progress * (lineLength - 1));
 
-            // Update the line geometry to show only up to the current point
             const partialCoords = coordinates.slice(0, currentIndex + 1);
 
             if (mapRef.current.getSource(lineId)) {
@@ -378,7 +375,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                     coordinates = coordinate.coords.map(coord => [coord.lng, coord.lat]);
                 }
 
-                // Add the main line
                 map.addSource(lineId, {
                     'type': 'geojson',
                     'data': {
@@ -391,7 +387,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                     }
                 });
 
-                // Add outline first (so main line appears on top)
                 map.addSource(outlineId, {
                     'type': 'geojson',
                     'data': {
@@ -419,7 +414,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                     }
                 });
 
-                // Add the main colored line
                 map.addLayer({
                     'id': lineId,
                     'type': 'line',
@@ -431,14 +425,13 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                     'paint': {
                         'line-color': '#3F51B5',
                         'line-width': 8,
-                        'line-dasharray': [0.0001, 0.0001], // Creates a dashed line effect
+                        'line-dasharray': [0.0001, 0.0001],
                         'line-opacity': 0.8
                     }
                 });
 
                 polylineLayersRef.current.push(lineId, outlineId);
 
-                // Animate the polyline
                 animatePolyline(lineId, coordinates);
                 fitMapToCoordinates(coordinate.coords);
             } else if (coordinate.type === 'onm') {
@@ -453,7 +446,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                         coordinates = path.map(coord => [coord.lng, coord.lat]);
                     }
 
-                    // Add outline
                     map.addSource(outlineId, {
                         'type': 'geojson',
                         'data': {
@@ -481,7 +473,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                         }
                     });
 
-                    // Add main line
                     map.addSource(lineId, {
                         'type': 'geojson',
                         'data': {
@@ -517,6 +508,70 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
 
                 const allCoords = coordinate.coords.flat();
                 fitMapToCoordinates(allCoords);
+            }
+            else if (coordinate.type === 'matrix') {
+                markersRef.current.forEach(marker => marker.remove());
+                markersRef.current = [];
+
+                const points = coordinate.coords.map(point =>
+                    Array.isArray(point) ? [point[1], point[0]] : [point.lng, point.lat]
+                );
+
+                points.forEach((point, index) => {
+                    const marker = new maplibregl.Marker({
+                        element: createMarkerIcon('waypoint')
+                    })
+                        .setLngLat(point)
+                        .addTo(mapRef.current);
+                    markersRef.current.push(marker);
+                });
+
+                for (let i = 0; i < points.length; i++) {
+                    for (let j = i + 1; j < points.length; j++) {
+                        const lineId = `matrix-line-${i}-${j}`;
+                        const coordinates = [points[i], points[j]];
+
+                        map.addSource(lineId, {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': {
+                                    'type': 'LineString',
+                                    'coordinates': coordinates
+                                }
+                            }
+                        });
+
+                        map.addLayer({
+                            'id': lineId,
+                            'type': 'line',
+                            'source': lineId,
+                            'layout': {
+                                'line-join': 'round',
+                                'line-cap': 'round'
+                            },
+                            'paint': {
+                                'line-color': '#3F51B5',
+                                'line-width': 2,
+                                'line-opacity': 0.6
+                            }
+                        });
+
+                        polylineLayersRef.current.push(lineId);
+                    }
+                }
+
+                if (points.length > 0) {
+                    const bounds = points.reduce((bounds, coord) => {
+                        return bounds.extend(coord);
+                    }, new maplibregl.LngLatBounds(points[0], points[0]));
+
+                    mapRef.current.fitBounds(bounds, {
+                        padding: 50,
+                        duration: 1000
+                    });
+                }
             }
         }
     }, [coordinate, fitMapToCoordinates, animatePolyline]);

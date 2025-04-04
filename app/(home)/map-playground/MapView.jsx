@@ -1,19 +1,18 @@
 "use client"
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useRef, useState} from "react"
 import Map from "./Map";
 import SideBarForm from "./SideBarForm";
 import {returnPlaygroundObject} from "data/playground"
 import {useSelector} from "react-redux"
 
 const MapView = () => {
+    const mapRef = useRef(null);
 
     const [showInstructions, setShowInstructions] = useState(false)
     const [instructions, setInstructions] = React.useState([]);
     const [activeInstruction, setActiveInstruction] = React.useState(null);
-
     const [selectedButton, setSelectedButton] = useState("");
     const { playground } = useSelector((state) => state)
-
 
     const setSelectedButtonFunction = (text) => {
         if(text == selectedButton)
@@ -44,6 +43,7 @@ const MapView = () => {
                     setActiveInstruction={setActiveInstruction}
                     setShowInstructions={setShowInstructions}
                     showInstructions={showInstructions}
+                    mapRef={mapRef}
                 />
             </div>
 
@@ -55,6 +55,7 @@ const MapView = () => {
                     setActiveInstruction={setActiveInstruction}
                     setShowInstructions={setShowInstructions}
                     showInstructions={showInstructions}
+                    mapRef={mapRef}
                 />
             </div>
         </main>
