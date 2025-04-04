@@ -83,7 +83,8 @@ const SideBarForm = ({
                          setInstructions,
                          setActiveInstruction,
                          setShowInstructions,
-                         showInstructions
+                         showInstructions,
+    mapRef
                      }) => {
     const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
     const [startWayPoint, setStartWayPoint] = useState(false);
@@ -720,12 +721,23 @@ const SideBarForm = ({
                     </>
                 )}
 
-                {object.type === "geocoding" &&
+                {object.type === "geocoding" && selectedGeocoding !== "reverse" &&
                     <div className="border border-gray-200 rounded-bl-lg rounded-br-lg shadow-sm overflow-hidden">
                         {apiResponse.data?.map((n, i) => (
                             <div
                                 key={i}
                                 className="px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
+                                onClick={() => {
+                                    if (!mapRef.current) return;
+
+                                    mapRef.current.flyTo({
+                                        center: [n?.longitude, n?.latitude],
+                                        zoom: 20,
+                                        essential: true,
+                                        speed: 2,
+                                        curve: 1
+                                    });
+                                }}
                             >
                                 <div className="flex items-start">
                                     <div className="mr-3 mt-0.5 text-gray-400">
