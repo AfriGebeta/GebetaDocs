@@ -450,7 +450,7 @@ const SideBarForm = ({
                             </h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined)
                                         ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
@@ -465,7 +465,7 @@ const SideBarForm = ({
                             <h4 className="text-sm font-medium text-gray-700 mb-1">Destination Coordinates</h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.destination.lat !== undefined && manualCoords.destination.lng !== undefined)
                                         ? `${manualCoords.destination.lat},${manualCoords.destination.lng}`
@@ -486,7 +486,7 @@ const SideBarForm = ({
                             <h4 className="text-sm font-medium text-gray-700 mb-1">Origin Coordinates</h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined)
                                         ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
@@ -519,7 +519,7 @@ const SideBarForm = ({
                 <div key={index} className="flex items-center space-x-2">
                     <input
                         placeholder={`Waypoint ${index + 1} (lat,lng)`}
-                        className="flex-1 p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                        className="flex-1 p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                         value={input}
                         onChange={(e) => handleWaypointChange(index, e.target.value)}
                     />
@@ -579,7 +579,7 @@ const SideBarForm = ({
                             <input
                                 type="text"
                                 placeholder="bole"
-                                className="w-full p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                                 onChange={(e) => setSearchText(e.target.value)}
                             />
                         </div>
@@ -588,7 +588,7 @@ const SideBarForm = ({
                             <label className="text-sm font-medium text-gray-700 mb-1">Coordinates (lat, lng)</label>
                             <input
                                 placeholder="Enter latitude,longitude"
-                                className="w-full p-2.5 text-sm bg-zinc-100 rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
                                 onChange={(e) => {
                                     const [lat, lng] = e.target.value.split(',').map(coord => coord.trim());
                                     setCoordinate({latitude: lat, longitude: lng});
@@ -636,7 +636,7 @@ const SideBarForm = ({
                         <textarea
                             ref={optimizedTripJson}
                             name="tripJson"
-                            className="w-full p-3 text-sm font-mono bg-white border border-gray-300"
+                            className="w-full p-3 text-sm font-mono bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none border border-gray-300"
                             rows={10}
                             placeholder={`Example:\n{\n  "vehicles": [...],\n  "depots": [...],\n  "customers": [...]\n}`}
                             spellCheck="false"
