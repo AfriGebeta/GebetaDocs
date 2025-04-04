@@ -53,7 +53,6 @@ body {
     }
 }
 
-/* Marker Styles */
 .map-marker {
     position: relative;
     display: flex;
@@ -73,7 +72,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Marker Shapes */
 .marker-start {
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
@@ -107,7 +105,6 @@ body {
     border-radius: 50%;
 }
 
-/* Pulse Animation */
 .marker-pulse {
     position: absolute;
     width: 40px;
@@ -126,7 +123,6 @@ body {
 }
 
 
-/* Instruction Markers */
 .instruction-marker-circle {
     width: 24px;
     height: 24px;
@@ -179,7 +175,6 @@ body {
     border-color: white transparent transparent transparent;
 }
 
-/* Scrollbar */
 .instruction-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
@@ -194,20 +189,19 @@ body {
     background: rgba(0,0,0,0.2);
 }
 
-/* Replace your current input/textarea styles with these */
 input, textarea {
     outline: none;
     border-radius: 4px;
-    background-color: var(--input-bg, #f1f1f1);
-    color: var(--input-text, #333);
-    border: 1px solid var(--input-border, #ddd);
+    background-color: white;
+    color: #333333;
+    border: 1px solid #ddd;
 }
 
 @media (prefers-color-scheme: dark) {
     input, textarea {
-        --input-bg: #2d3748;
-        --input-text: #f8f9fa;
-        --input-border: #4a5568;
+        background-color: #2d3748;
+        color: #ffffff;
+        border-color: #4a5568;
     }
 }
 
