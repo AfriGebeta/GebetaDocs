@@ -11,9 +11,9 @@ export const API = axios.create({
 
 export const handleApiError = async (error) => {
     try {
+        console.log("original error", error?.response?.data?.error)
         const errorMessage =
-            error.response?.data?.message ||
-            error.response?.data?.msg ||
+            error?.response?.data?.error ||
             "An unexpected error occurred.";
         const data = null;
         return { error: errorMessage, data };
