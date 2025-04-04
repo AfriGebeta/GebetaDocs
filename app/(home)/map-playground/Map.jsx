@@ -610,7 +610,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
 
         mapRef.current.flyTo({
             center: [instruction.turning_longitude, instruction.turning_latitude],
-            zoom: 18,
+            zoom: 20,
             essential: true,
             speed: 1.5,
             curve: 1
