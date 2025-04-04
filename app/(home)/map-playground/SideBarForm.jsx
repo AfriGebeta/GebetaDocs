@@ -9,6 +9,7 @@ import Notify from "./Notify";
 import {PlayGroundContext} from "@/providers/Playground";
 import {BASE_URL} from "@/services/apiClient";
 import {useToast} from "@/providers/ToastProvider";
+import maplibregl from "maplibre-gl";
 
 const exampleOptimizedTripJson = JSON.stringify({
     "vehicles": [
@@ -726,21 +727,38 @@ const SideBarForm = ({
                         {apiResponse.data?.map((n, i) => (
                             <div
                                 key={i}
-                                className="px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
-                                onClick={() => {
+                                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"                                onClick={() => {
                                     if (!mapRef.current) return;
+
+                                    const marker = document.createElement('div');
+                                    marker.innerHTML = `
+            <div class="relative">
+                <div class="absolute -top-8 -left-4">
+                    <MapPin className="w-8 h-8 text-red-500 filter drop-shadow-lg animate-bounce" />
+                </div>
+            </div>
+        `;
+
+                                    const existingMarkers = document.getElementsByClassName('map-marker');
+                                    Array.from(existingMarkers).forEach(marker => marker.remove());
+
+                                    marker.className = 'map-marker';
 
                                     mapRef.current.flyTo({
                                         center: [n?.longitude, n?.latitude],
-                                        zoom: 20,
+                                        zoom: 17,
                                         essential: true,
                                         speed: 2,
                                         curve: 1
                                     });
+
+                                    new maplibregl.Marker(marker)
+                                        .setLngLat([n?.longitude, n?.latitude])
+                                        .addTo(mapRef.current);
                                 }}
                             >
                                 <div className="flex items-start">
-                                    <div className="mr-3 mt-0.5 text-gray-400">
+                                    <div className="mr-3 mt-0.5 text-gray-400 dark:text-gray-300">
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd"
                                                   d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
@@ -749,12 +767,12 @@ const SideBarForm = ({
                                     </div>
 
                                     <div className="flex-1">
-                                        <div className="font-medium text-gray-900">{n.name}</div>
+                                        <div className="font-medium text-gray-900 dark:text-gray-100">{n.name}</div>
                                         {n.address && (
-                                            <div className="text-sm text-gray-500 mt-1">{n.address}</div>
+                                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{n.address}</div>
                                         )}
                                         {n.type && (
-                                            <div className="text-xs text-gray-400 mt-1">{n.type}</div>
+                                            <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{n.type}</div>
                                         )}
                                     </div>
                                 </div>
