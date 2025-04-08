@@ -9,8 +9,9 @@ const MapView = () => {
     const mapRef = useRef(null);
 
     const [showInstructions, setShowInstructions] = useState(false)
-    const [instructions, setInstructions] = React.useState([]);
-    const [activeInstruction, setActiveInstruction] = React.useState(null);
+    const [instructions, setInstructions] = useState([]);
+    const [showAlternatives, setShowAlternatives] = useState(false)
+    const [activeInstruction, setActiveInstruction] = useState(null);
     const [selectedButton, setSelectedButton] = useState("");
     const { playground } = useSelector((state) => state)
 
@@ -44,6 +45,8 @@ const MapView = () => {
                     setShowInstructions={setShowInstructions}
                     showInstructions={showInstructions}
                     mapRef={mapRef}
+                    showAlternatives={showAlternatives}
+                    setShowAlternatives={setShowAlternatives}
                 />
             </div>
 
@@ -56,6 +59,8 @@ const MapView = () => {
                     setShowInstructions={setShowInstructions}
                     showInstructions={showInstructions}
                     mapRef={mapRef}
+                    showAlternatives={showAlternatives}
+                    setShowAlternatives={setShowAlternatives}
                 />
             </div>
         </main>

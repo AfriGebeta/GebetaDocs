@@ -85,7 +85,9 @@ const SideBarForm = ({
                          setActiveInstruction,
                          setShowInstructions,
                          showInstructions,
-    mapRef
+    mapRef,
+    showAlternatives,
+    setShowAlternatives
                      }) => {
     const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
     const [startWayPoint, setStartWayPoint] = useState(false);
@@ -241,7 +243,7 @@ const SideBarForm = ({
             origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
         }&destination=${
             destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-        }&apiKey=${token.token}${waypointsString}`,
+        }&apiKey=${token.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
 
         tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
         onm: `${BASE_URL}/api/route/onm?origin=${
@@ -678,7 +680,23 @@ const SideBarForm = ({
                                 />
                                 <div
                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FFA500]"></div>
-                                <span className="ml-3 text-sm font-medium text-gray-700">Show Instructions</span>
+                                <span className="ml-3 text-sm font-medium text-gray-700">Instructions</span>
+                            </label>
+                        </div>
+
+                        <div className="flex items-center space-x-2 mt-2">
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={showAlternatives}
+                                    onChange={() => {
+                                        setShowAlternatives(!showAlternatives);
+                                    }}
+                                />
+                                <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FFA500]"></div>
+                                <span className="ml-3 text-sm font-medium text-gray-700">Alternatives</span>
                             </label>
                         </div>
 
