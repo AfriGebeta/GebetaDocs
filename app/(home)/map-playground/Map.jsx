@@ -4,7 +4,7 @@ import maplibregl from 'maplibre-gl';
 
 import {PlayGroundContext} from "@/providers/Playground";
 
-const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, instructions, showInstructions,mapRef}) => {
+const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, instructions, showInstructions,mapRef, alternatives}) => {
     // const mapRef = useRef(null);
     const instructionMarkersRef = useRef([]);
     const animationRef = useRef(null);
@@ -241,6 +241,72 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
         }
     }, [origin, destination, waypoints]);
 
+    const addToMap = (map, coordinates, outlineId, lineId, isAlternative=false) => {
+
+        console.log("real coordinates", coordinates);
+        console.log("real alternative", alternatives);
+
+        map.addSource(lineId, {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': coordinates
+                }
+            }
+        });
+
+        map.addSource(outlineId, {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': coordinates
+                }
+            }
+        });
+
+        map.addLayer({
+            'id': outlineId,
+            'type': 'line',
+            'source': outlineId,
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#ffffff',
+                'line-width': 6,
+                'line-opacity': 0.7
+            }
+        });
+
+        map.addLayer({
+            'id': lineId,
+            'type': 'line',
+            'source': lineId,
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': isAlternative ? "#3367D6" : '#3F51B5',
+                'line-width': 8,
+                'line-dasharray': [0.0001, 0.0001],
+                'line-opacity': 0.8
+            }
+        });
+
+        polylineLayersRef.current.push(lineId, outlineId);
+
+        animatePolyline(lineId, coordinates);
+        fitMapToCoordinates(coordinate.coords);
+    }
+
     const updatePolylines = useCallback(() => {
         if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
 
@@ -256,113 +322,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
         });
         polylineLayersRef.current = [];
 
-        // if (coordinate.type === 'optimizedTrip' && coordinate.data?.routes) {
-        //     const allCoords = [];
-        //     let hasValidRoutes = false;
-        //
-        //     coordinate.data.routes.forEach((route, driverIndex) => {
-        //         // Validate route structure
-        //         if (!route.depot || !route.customers) {
-        //             console.warn("Invalid route structure:", route);
-        //             return;
-        //         }
-        //
-        //         const driverColor = getDriverColor(driverIndex);
-        //         const routeCoords = [];
-        //         let hasValidPoints = false;
-        //
-        //         // Process depot (start point)
-        //         if (route.depot[0]?.location) {
-        //             const [lng, lat] = Array.isArray(route.depot[0].location)
-        //                 ? route.depot[0].location
-        //                 : [route.depot[0].location.lng, route.depot[0].location.lat];
-        //
-        //             if (!isNaN(lng) && !isNaN(lat)) {
-        //                 new maplibregl.Marker({
-        //                     element: createMarkerIcon('start')
-        //                 }).setLngLat([lng, lat]).addTo(mapRef.current);
-        //
-        //                 routeCoords.push([lng, lat]);
-        //                 allCoords.push([lng, lat]);
-        //                 hasValidPoints = true;
-        //             }
-        //         }
-        //
-        //         // Process customers
-        //         route.customers.forEach((customer, customerIndex) => {
-        //             if (customer?.location) {
-        //                 const [lng, lat] = Array.isArray(customer.location)
-        //                     ? customer.location
-        //                     : [customer.location.lng, customer.location.lat];
-        //
-        //                 if (!isNaN(lng) && !isNaN(lat)) {
-        //                     new maplibregl.Marker({
-        //                         element: createCustomerMarkerIcon(driverIndex, customerIndex)
-        //                     }).setLngLat([lng, lat]).addTo(mapRef.current);
-        //
-        //                     routeCoords.push([lng, lat]);
-        //                     allCoords.push([lng, lat]);
-        //                     hasValidPoints = true;
-        //                 }
-        //             }
-        //         });
-        //
-        //         // Return to depot if specified
-        //         if (route.depot[0]?.location && routeCoords.length > 0) {
-        //             const [lng, lat] = Array.isArray(route.depot[0].location)
-        //                 ? route.depot[0].location
-        //                 : [route.depot[0].location.lng, route.depot[0].location.lat];
-        //
-        //             if (!isNaN(lng) && !isNaN(lat)) {
-        //                 routeCoords.push([lng, lat]);
-        //             }
-        //         }
-        //
-        //         // Only create polyline if we have valid points
-        //         if (hasValidPoints && routeCoords.length > 1) {
-        //             const lineId = `route-${driverIndex}`;
-        //
-        //             mapRef.current.addSource(lineId, {
-        //                 type: 'geojson',
-        //                 data: {
-        //                     type: 'Feature',
-        //                     geometry: {
-        //                         type: 'LineString',
-        //                         coordinates: routeCoords
-        //                     }
-        //                 }
-        //             });
-        //
-        //             mapRef.current.addLayer({
-        //                 id: lineId,
-        //                 type: 'line',
-        //                 source: lineId,
-        //                 paint: {
-        //                     'line-color': driverColor,
-        //                     'line-width': 4
-        //                 }
-        //             });
-        //
-        //             polylineLayersRef.current.push(lineId);
-        //             animatePolyline(lineId, routeCoords);
-        //             hasValidRoutes = true;
-        //         }
-        //     });
-        //
-        //     // Fit bounds only if we have valid routes
-        //     if (hasValidRoutes && allCoords.length > 0) {
-        //         const bounds = allCoords.reduce((bounds, coord) => {
-        //             return bounds.extend(coord);
-        //         }, new maplibregl.LngLatBounds(allCoords[0], allCoords[0]));
-        //
-        //         mapRef.current.fitBounds(bounds, {
-        //             padding: 50,
-        //             duration: 1000
-        //         });
-        //     }
-        //
-        // }
-
         if (coordinate && coordinate.coords) {
             if (coordinate.type === 'direction' || coordinate.type === 'tss') {
                 const lineId = `polyline-${coordinate.type}`;
@@ -375,65 +334,24 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                     coordinates = coordinate.coords.map(coord => [coord.lng, coord.lat]);
                 }
 
-                map.addSource(lineId, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': coordinates
+                addToMap(map, coordinates, outlineId, lineId);
+
+                if(alternatives) {
+                    alternatives.forEach((item, index) => {
+                        let alternative;
+                        if (Array.isArray(item.direction[0]) && typeof item.direction[0][0] === 'number') {
+                            alternative = item.direction.map(coord => [coord[1], coord[0]]);
+                        } else {
+                            alternative = item.direction.map(coord => [coord.lng, coord.lat]);
                         }
-                    }
-                });
 
-                map.addSource(outlineId, {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': coordinates
-                        }
-                    }
-                });
-
-                map.addLayer({
-                    'id': outlineId,
-                    'type': 'line',
-                    'source': outlineId,
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    'paint': {
-                        'line-color': '#ffffff',
-                        'line-width': 6,
-                        'line-opacity': 0.7
-                    }
-                });
-
-                map.addLayer({
-                    'id': lineId,
-                    'type': 'line',
-                    'source': lineId,
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    'paint': {
-                        'line-color': '#3F51B5',
-                        'line-width': 8,
-                        'line-dasharray': [0.0001, 0.0001],
-                        'line-opacity': 0.8
-                    }
-                });
-
-                polylineLayersRef.current.push(lineId, outlineId);
-
-                animatePolyline(lineId, coordinates);
-                fitMapToCoordinates(coordinate.coords);
+                        const altLineId = `polyline-alternative-${index}`;
+                        const altOutlineId = `${altLineId}-outline`;
+                        const altColor = "#4285F4"
+                        const isAlternative = true
+                        addToMap(map, alternative, altOutlineId, altLineId, isAlternative, altColor);
+                    });
+                }
             } else if (coordinate.type === 'onm') {
                 coordinate.coords.forEach((path, index) => {
                     const lineId = `polyline-onm-${index}`;

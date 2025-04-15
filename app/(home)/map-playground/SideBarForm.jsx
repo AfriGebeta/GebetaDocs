@@ -87,7 +87,8 @@ const SideBarForm = ({
                          showInstructions,
     mapRef,
     showAlternatives,
-    setShowAlternatives
+    setShowAlternatives,
+    setAlternatives
                      }) => {
     const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
     const [startWayPoint, setStartWayPoint] = useState(false);
@@ -262,7 +263,9 @@ const SideBarForm = ({
     };
 
     const setForDrawing = (data) => {
+        console.log("alternatives", data.data?.alternative)
         if (object.type === "direction") {
+            setAlternatives(data?.data?.alternative);
             setCoordinateFunction({type: "direction", coords: data.data.direction});
         } else if (object.type === "onm") {
             const array = data.data.directions.map(dir => dir.direction);
@@ -344,6 +347,7 @@ const SideBarForm = ({
                 .then((data) => {
                     if (!data.error) {
                         setApiResponse(data.data);
+                        console.log("response", data.data)
                         setForDrawing(data);
 
                         console.log("response", data.data?.instruction)
