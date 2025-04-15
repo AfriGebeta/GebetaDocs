@@ -6,7 +6,7 @@ export const TEST_URL = "https://apitest.gebeta.app";
 // http://68.219.183.24:8080
 
 export const API = axios.create({
-    baseURL: BASE_URL,
+    baseURL: TEST_URL,
 });
 
 export const handleApiError = async (error) => {
