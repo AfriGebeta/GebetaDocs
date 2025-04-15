@@ -12,6 +12,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
     const markersRef = useRef([]);
     const polylineLayersRef = useRef([]);
     const playContext = useContext(PlayGroundContext);
+    const {token} = useSelector((state) => state);
     const {
         waypoints,
         origin,
@@ -629,7 +630,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                 if (resourceType === 'Tile') {
                     return {
                         url: url,
-                        headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY }
+                        headers: { 'Authorization': 'Bearer ' + token.token }
                     };
                 }
                 return { url };
