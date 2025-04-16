@@ -242,10 +242,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
     }, [origin, destination, waypoints]);
 
     const addToMap = (map, coordinates, outlineId, lineId, isAlternative=false) => {
-
-        console.log("real coordinates", coordinates);
-        console.log("real alternative", alternatives);
-
         map.addSource(lineId, {
             'type': 'geojson',
             'data': {
@@ -294,10 +290,9 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                 'line-cap': 'round'
             },
             'paint': {
-                'line-color': isAlternative ? "#3367D6" : '#3F51B5',
+                'line-color': isAlternative ? "#AAB8E4" : '#0056B3',
                 'line-width': 8,
                 'line-dasharray': [0.0001, 0.0001],
-                'line-opacity': 0.8
             }
         });
 
