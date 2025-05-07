@@ -4,7 +4,15 @@ import maplibregl from 'maplibre-gl';
 
 import {PlayGroundContext} from "@/providers/Playground";
 
-const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, instructions, showInstructions,mapRef, alternatives}) => {
+const Map = memo(({
+                      selectedButton,
+                      activeInstruction,
+                      setActiveInstruction,
+                      instructions,
+                      showInstructions,
+                      mapRef,
+                      alternatives
+                  }) => {
     // const mapRef = useRef(null);
     const instructionMarkersRef = useRef([]);
     const animationRef = useRef(null);
@@ -241,7 +249,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
         }
     }, [origin, destination, waypoints]);
 
-    const addToMap = (map, coordinates, outlineId, lineId, isAlternative=false) => {
+    const addToMap = (map, coordinates, outlineId, lineId, isAlternative = false) => {
         map.addSource(lineId, {
             'type': 'geojson',
             'data': {
@@ -331,7 +339,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
 
                 addToMap(map, coordinates, outlineId, lineId);
 
-                if(alternatives) {
+                if (alternatives) {
                     alternatives.forEach((item, index) => {
                         let alternative;
                         if (Array.isArray(item.direction[0]) && typeof item.direction[0][0] === 'number') {
@@ -421,8 +429,7 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
 
                 const allCoords = coordinate.coords.flat();
                 fitMapToCoordinates(allCoords);
-            }
-            else if (coordinate.type === 'matrix') {
+            } else if (coordinate.type === 'matrix') {
                 markersRef.current.forEach(marker => marker.remove());
                 markersRef.current = [];
 
@@ -538,15 +545,6 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
             center: [position[1], position[0]],
             zoom: 13,
             attributionControl: false,
-            transformRequest: (url, resourceType) => {
-                if (resourceType === 'Tile') {
-                    return {
-                        url: url,
-                        headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_GEBETA_MAP_API_KEY }
-                    };
-                }
-                return { url };
-            },
         });
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
@@ -623,7 +621,8 @@ const Map = memo(({selectedButton, activeInstruction, setActiveInstruction, inst
                                     onClick={() => setActiveInstruction(index)}
                                 >
                                     <div className="flex items-start">
-                                        <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 mt-0.5 ${activeInstruction === index ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-600'}`}>
+                                        <div
+                                            className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 mt-0.5 ${activeInstruction === index ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-600'}`}>
                                             <span className="text-xs font-medium">{index + 1}</span>
                                         </div>
                                         <div className="flex-1 min-w-0">
