@@ -142,7 +142,7 @@ export default function Stats() {
                             <div className="flex items-end w-full gap-2 mt-4 text-gray-400">
                                 <Link
                                     className="w-full"
-                                    href="https://reddit.com/r/gebetamaps"
+                                    href="https://www.reddit.com/r/GebetaMaps"
                                     target="_blank"
                                 >
                                     <Button
