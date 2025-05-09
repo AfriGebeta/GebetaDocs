@@ -37,24 +37,44 @@ export const Icons = {
             xmlns="http://www.w3.org/2000/svg"
             width="1.2em"
             height="1.2em"
-            viewBox="0 0 128 128"
+            viewBox="-30.5 0 317 317"
+            preserveAspectRatio="xMidYMid"
         >
-            <path
-                className="fill-foreground"
-                d="M12.3 64.2L76.3 0h39.4L32.1 83.6z"
-            />
-            <path
-                className="fill-foreground opacity-70"
-                d="M76.3 128h39.4L81.6 93.9l34.1-34.8H76.3L42.2 93.5z"
-            />
-            <path
-                className="fill-muted-foreground"
-                d="M81.6 93.9L76.3 128H12.3l58.5-60.9z"
-            />
-            <path
-                className="fill-background"
-                d="M65.5 109.2l-10.4-10.4-4.2 4.2 10.4 10.4z"
-            />
+            <defs>
+                <linearGradient
+                    id="linearGradient-1"
+                    x1="3.9517088%"
+                    y1="26.9930287%"
+                    x2="75.8970734%"
+                    y2="52.9192657%"
+                >
+                    <stop stopColor="#000000" offset="0%"/>
+                    <stop stopColor="#000000" stopOpacity="0" offset="100%"/>
+                </linearGradient>
+            </defs>
+            <g>
+                <polygon
+                    fill="currentColor"
+                    points="157.665785 0.000549356223 0.000549356223 157.665785 48.8009614 206.466197 255.267708 0.000549356223"
+                />
+                <polygon
+                    fill="currentColor"
+                    points="156.567183 145.396793 72.1487107 229.815265 121.132608 279.530905 169.842925 230.820587 255.267818 145.396793"
+                />
+                <polygon
+                    fill="currentColor"
+                    points="121.133047 279.531124 158.214592 316.61267 255.267159 316.61267 169.842266 230.820807"
+                />
+                <polygon
+                    fill="currentColor"
+                    points="71.5995742 230.364072 120.401085 181.562561 169.842046 230.821136 121.132827 279.531454"
+                />
+                <polygon
+                    fill="currentColor"
+                    fillOpacity="0.8"
+                    points="121.132827 279.531454 161.692896 266.072227 165.721875 234.941308"
+                />
+            </g>
         </svg>
     ),
     x: (props?: SVGProps<any>) => (

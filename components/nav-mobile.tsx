@@ -153,10 +153,14 @@ export const navMenu: {
         name: "docs",
         path: "/docs",
     },
-    // {
-    //     name: "changelogs",
-    //     path: "/changelogs",
-    // },
+    {
+        name: "api playground",
+        path: "/api-playground",
+    },
+    {
+        name: "map playground",
+        path: "/map-playground",
+    },
     {
         name: "community",
         path: "/community",

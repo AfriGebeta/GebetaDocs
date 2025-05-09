@@ -11,16 +11,4 @@ export const baseOptions: HomeLayoutProps = {
     nav: {
         enabled: false
     },
-    links: [
-        {
-            text: 'Map Playground',
-            url: '/map-playground',
-            active: 'nested-url',
-        },
-        {
-            text: 'API Playground',
-            url: '/api-playground',
-            active: 'nested-url',
-        },
-    ],
 };

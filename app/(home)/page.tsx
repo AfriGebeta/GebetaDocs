@@ -133,7 +133,7 @@ export default function HomePage() {
                                             </div>
                                             <div className="flex gap-2 items-center">
                                                 <Link
-                                                    href="https://www.npmjs.com/package/gebetamaps"
+                                                    href="https://www.npmjs.com/package/@gebeta/tiles"
                                                     target="_blank"
                                                 >
                                                     <svg
