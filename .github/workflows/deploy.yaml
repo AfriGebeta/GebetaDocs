@@ -52,7 +52,8 @@ jobs:
     - name: Prepare Deployment Artifacts
       run: |
         mkdir -p deploy
-        cp -r .env .next public package.json pnpm-lock.yaml source.config.ts deploy/
+        cp -r .env .next public package.json pnpm-lock.yaml source.config.ts start-docs.sh deploy/
+        chmod +x deploy/start-docs.sh
     - uses: actions/upload-artifact@v4
       with:
         name: build
@@ -85,6 +86,9 @@ jobs:
         ls -la
         echo "Current working directory:"
         pwd
+        # Clean up old releases (keep last 5 versions)
+        ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ls -t ~/gebeta-docs/releases | tail -n +6 | xargs -I {} rm -rf ~/gebeta-docs/releases/{}"
+
         # Create a directory for the new version
         NEW_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
         ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "mkdir -p ~/gebeta-docs/releases/$NEW_VERSION"
