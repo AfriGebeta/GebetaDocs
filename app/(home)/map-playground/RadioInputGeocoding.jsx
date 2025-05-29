@@ -25,7 +25,7 @@ const RadioInputGeocoding = ({selectedGeocoding,setGeocoding,setSelectedButtonFu
                                         }
                                         setGeocoding(n.name)}} />
 
-                                      <label className="text-sm font-medium text-gray-700 mb-1 capitalize"> {n.name}</label>
+                                      <label className="text-sm font-medium mb-1 capitalize"> {n.name}</label>
                                   </div>
                                   )
                           })

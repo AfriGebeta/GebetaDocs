@@ -372,12 +372,12 @@ const SideBarForm = ({
                 return (
                     <button
                         className={`
-    mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px]
+     w-full p-2.5 rounded-[4px]
     ${selectedButton === "start"
                             ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
                             : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                         }
-    text-white dark:text-gray-100
+    text-white
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
     transition-colors duration-200
@@ -396,12 +396,12 @@ const SideBarForm = ({
                 return request !== "geocoding" && (
                     <button
                         className={`
-    mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px]
+     w-full p-2.5 rounded-[4px]
     ${selectedButton === "waypoint"
                             ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
                             : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                         }
-    text-white dark:text-gray-100
+    text-white 
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
     transition-colors duration-200
@@ -420,12 +420,12 @@ const SideBarForm = ({
                 return (
                     <button
                         className={`
-    mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px]
+     w-full p-2.5 rounded-[4px]
     ${selectedButton === "destination"
                             ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
                             : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                         }
-    text-white dark:text-gray-100
+    text-white 
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
     transition-colors duration-200
@@ -451,12 +451,12 @@ const SideBarForm = ({
                 return (
                     <>
                         <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-gray-700 mb-1">
+                            <h4 className="text-sm font-medium -700 mb-1">
                                 Origin Coordinates
                             </h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined)
                                         ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
@@ -468,10 +468,10 @@ const SideBarForm = ({
 
                         {/* Destination Input */}
                         <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-gray-700 mb-1">Destination Coordinates</h4>
+                            <h4 className="text-sm font-medium -700 mb-1">Destination Coordinates</h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.destination.lat !== undefined && manualCoords.destination.lng !== undefined)
                                         ? `${manualCoords.destination.lat},${manualCoords.destination.lng}`
@@ -489,10 +489,10 @@ const SideBarForm = ({
                 return (
                     <>
                         <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-gray-700 mb-1">Origin Coordinates</h4>
+                            <h4 className="text-sm font-medium -700 mb-1">Origin Coordinates</h4>
                             <input
                                 placeholder="latitude,longitude (e.g., 9.03596,38.75238)"
-                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                                 value={
                                     (manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined)
                                         ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
@@ -518,14 +518,14 @@ const SideBarForm = ({
     const renderWaypointInputs = () => (
         <div className="space-y-2">
             <div className="flex justify-between items-center">
-                <h4 className="text-sm font-medium text-gray-700 mb-1">Waypoints</h4>
+                <h4 className="text-sm font-medium -700 mb-1">Waypoints</h4>
             </div>
 
             {waypointInputs.map((input, index) => (
                 <div key={index} className="flex items-center space-x-2">
                     <input
                         placeholder={`Waypoint ${index + 1} (lat,lng)`}
-                        className="flex-1 p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                        className="flex-1 p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                         value={input}
                         onChange={(e) => handleWaypointChange(index, e.target.value)}
                     />
@@ -542,7 +542,7 @@ const SideBarForm = ({
                 </div>
             ))}
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs -500">
                 {waypoints.length}/10 waypoints added
             </p>
 
@@ -570,7 +570,7 @@ const SideBarForm = ({
     );
 
     return (
-        <div className="w-full lg:mr-[5%]">
+        <div className="max-w-[1200px] w-full mx-auto px-8 md:px-10 overflow-hidden">
             <div className="relative w-full">
                 {object.type === "geocoding" && React.cloneElement(object.radioInput, {
                     setSelectedButtonFunction,
@@ -580,21 +580,21 @@ const SideBarForm = ({
 
                 {object.type === "geocoding" ? (
                     selectedGeocoding === "forward" ? (
-                        <div className="mt-[4%] flex flex-col mx-[2%] md:mx-[0%]">
-                            <label className="text-sm font-medium text-gray-700 mb-1">Search</label>
+                        <div className="mt-[4%] flex flex-col ">
+                            <label className="text-sm font-medium -700 mb-1">Search</label>
                             <input
                                 type="text"
                                 placeholder="bole"
-                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                                className="w-full p-3 pr-12 text-sm font-medium bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none border border-gray-300 dark:border-gray-600 rounded-lg caret-[#FFA500] transition-all duration-200"
                                 onChange={(e) => setSearchText(e.target.value)}
                             />
                         </div>
                     ) : (
                         <div className="mt-4">
-                            <label className="text-sm font-medium text-gray-700 mb-1">Coordinates (lat, lng)</label>
+                            <label className="text-sm font-medium -700 mb-1">Coordinates (lat, lng)</label>
                             <input
                                 placeholder="Enter latitude,longitude"
-                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none rounded-[4px] border border-gray-300"
+                                className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                                 onChange={(e) => {
                                     const [lat, lng] = e.target.value.split(',').map(coord => coord.trim());
                                     setCoordinate({latitude: lat, longitude: lng});
@@ -623,7 +623,7 @@ const SideBarForm = ({
                                 <div className="w-full border-t border-gray-300"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-white dark:bg-black px-2 text-gray-500">or</span>
+                                <span className="bg-white dark:bg-black px-2 -500">or</span>
                             </div>
                         </div>
 
@@ -635,19 +635,19 @@ const SideBarForm = ({
 
                 {object.type === "optimizedTrip" && (
                     <div className="mt-4 space-y-2">
-                        <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                        <label className="text-sm font-medium -700 whitespace-nowrap">
                             Trip Configuration JSON
                         </label>
-                        <span className="block text-xs text-gray-500">(Paste your optimized trip JSON)</span>
+                        <span className="block text-xs -500">(Paste your optimized trip JSON)</span>
                         <textarea
                             ref={optimizedTripJson}
                             name="tripJson"
-                            className="w-full p-3 text-sm font-mono bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 outline-none border border-gray-300"
+                            className="w-full p-3 text-sm font-mono bg-white dark:bg-gray-800 -900  outline-none border border-gray-300"
                             rows={10}
                             placeholder={`Example:\n{\n  "vehicles": [...],\n  "depots": [...],\n  "customers": [...]\n}`}
                             spellCheck="false"
                         />
-                        <div className="flex justify-between items-center text-xs text-gray-500">
+                        <div className="flex justify-between items-center text-xs -500">
                             <span>Supports full VRP JSON specification</span>
                             <button
                                 onClick={() => {
@@ -668,7 +668,7 @@ const SideBarForm = ({
 
                 {object.type === "direction" && (
                     <>
-                        <h4 className="mt-6 text-sm font-medium text-gray-700 mb-1">
+                        <h4 className="mt-6 text-sm font-medium -700 mb-1">
                             Optional parameters
                         </h4>
 
@@ -684,7 +684,7 @@ const SideBarForm = ({
                                 />
                                 <div
                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FFA500]"></div>
-                                <span className="ml-3 text-sm font-medium text-gray-700">Instructions</span>
+                                <span className="ml-3 text-sm font-medium -700">Instructions</span>
                             </label>
                         </div>
 
@@ -700,7 +700,7 @@ const SideBarForm = ({
                                 />
                                 <div
                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FFA500]"></div>
-                                <span className="ml-3 text-sm font-medium text-gray-700">Alternatives</span>
+                                <span className="ml-3 text-sm font-medium -700">Alternatives</span>
                             </label>
                         </div>
 
@@ -735,7 +735,7 @@ const SideBarForm = ({
       peer-checked:bg-[#FFA500]
       dark:peer-checked:bg-[#E59400]
     "></div>
-                                    <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    <span className="ml-3 text-sm font-medium -700 dark:-300">
       Waypoints
     </span>
                                 </label>
@@ -745,7 +745,7 @@ const SideBarForm = ({
                 )}
 
                 {object.type === "geocoding" && selectedGeocoding !== "reverse" &&
-                    <div className="border border-gray-200 rounded-bl-lg rounded-br-lg shadow-sm overflow-hidden">
+                    <div className="border border-t-0 rounded-lg overflow-hidden">
                         {apiResponse.data?.map((n, i) => (
                             <div
                                 key={i}
@@ -780,7 +780,7 @@ const SideBarForm = ({
                                 }}
                             >
                                 <div className="flex items-start">
-                                    <div className="mr-3 mt-0.5 text-gray-400 dark:text-gray-300">
+                                    <div className="mr-3 mt-0.5 -400 dark:-300">
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd"
                                                   d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
@@ -789,12 +789,12 @@ const SideBarForm = ({
                                     </div>
 
                                     <div className="flex-1">
-                                        <div className="font-medium text-gray-900 dark:text-gray-100">{n.name}</div>
+                                        <div className="font-medium -900 ">{n.name}</div>
                                         {n.address && (
-                                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{n.address}</div>
+                                            <div className="text-sm -500 dark:-400 mt-1">{n.address}</div>
                                         )}
                                         {n.type && (
-                                            <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{n.type}</div>
+                                            <div className="text-xs -400 dark:-500 mt-1">{n.type}</div>
                                         )}
                                     </div>
                                 </div>
@@ -804,10 +804,10 @@ const SideBarForm = ({
 
                 <button
                     className={`
-    mx-[2%] md:mx-[0%] w-full p-2.5 rounded-[4px]
+    w-full p-2.5 rounded-[4px]
     bg-[#FFA500] dark:bg-[#E59400]
     hover:bg-[#E59400] dark:hover:bg-[#CC8400]
-    text-white dark:text-gray-100
+    text-white 
     font-bold
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
     transition-all duration-200
