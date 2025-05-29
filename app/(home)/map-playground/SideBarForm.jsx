@@ -570,7 +570,7 @@ const SideBarForm = ({
     );
 
     return (
-        <div className="max-w-[1200px] w-full mx-auto px-8 md:px-10 overflow-hidden">
+        <div className="w-full px-8 md:px-0 overflow-hidden">
             <div className="relative w-full">
                 {object.type === "geocoding" && React.cloneElement(object.radioInput, {
                     setSelectedButtonFunction,
