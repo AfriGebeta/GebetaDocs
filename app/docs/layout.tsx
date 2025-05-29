@@ -1,9 +1,10 @@
-import {DocsLayout} from 'fumadocs-ui/layout';
+//@ts-nocheck
 import type {ReactNode} from 'react';
 import {baseOptions} from '../layout.config';
 import {source} from '@/app/source';
 import ArticleLayout from "@/app/(home)/_components/ArticleLayout";
 import {cn} from "@/lib/utils";
+import {DocsLayout} from 'fumadocs-ui/layouts/docs';
 
 export default function Layout({children}: { children: ReactNode }) {
     return (

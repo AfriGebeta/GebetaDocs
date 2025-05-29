@@ -107,6 +107,14 @@ export const navMenu = [
         name: "docs",
         path: "/docs",
     },
+    {
+        name: "api playground",
+        path: "/api-playground",
+    },
+    {
+        name: "map playground",
+        path: "/map-playground",
+    },
 
     // {
     //     name: "changelogs",

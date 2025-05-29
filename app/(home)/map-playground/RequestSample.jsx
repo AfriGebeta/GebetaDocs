@@ -27,7 +27,7 @@ const RequestSample = ({curl, js = [], className = ''}) => {
     return (
         <div className={`mt-6 ${className}`}>
             <div className="flex items-center justify-between mb-3">
-                <h3 className="mt-4 text-md font-semibold text-gray-800 mb-3">Request Samples</h3>
+                <h3 className="mt-4 text-md font-semibold mb-3">Request Samples</h3>
                 {hasJs && (
                     <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
                         {languages.map((lang, i) => (
@@ -47,10 +47,10 @@ const RequestSample = ({curl, js = [], className = ''}) => {
                 )}
             </div>
 
-            <div className="relative bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+            <div className="relative rounded-lg overflow-hidden border border-gray-200">
                 <div className="p-5 overflow-auto max-h-96">
                     {activeTab === 0 ? (
-                        <pre className="text-sm text-gray-800 font-mono whitespace-pre-wrap break-words">
+                        <pre className="text-sm font-mono whitespace-pre-wrap break-words">
                             <code>{curl}</code>
                         </pre>
                     ) : (
@@ -65,7 +65,7 @@ const RequestSample = ({curl, js = [], className = ''}) => {
                         variant="outline"
                         size="icon"
                         onClick={() => handleCopy(activeTab === 0 ? curl : js.join('\n'))}
-                        className="absolute w-5 border-none bg-transparent h-5 top-2 right-2"
+                        className="absolute w-5 border-none h-5 top-2 right-2"
                     >
                         {copyState ? (
                             <Check className="h-3 w-3"/>

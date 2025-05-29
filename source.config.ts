@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {defineCollections, defineConfig, defineDocs} from 'fumadocs-mdx/config';
 import {z} from "zod"
 

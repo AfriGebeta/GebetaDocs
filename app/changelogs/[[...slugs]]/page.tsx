@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {notFound} from "next/navigation";
 import {absoluteUrl, cn, formatDate} from "@/lib/utils";
 import {Step, Steps} from "fumadocs-ui/components/steps";

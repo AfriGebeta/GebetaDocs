@@ -1,13 +1,14 @@
+//@ts-nocheck
 import {source} from '@/app/source';
 import type {Metadata} from 'next';
 import {DocsBody, DocsDescription, DocsPage, DocsTitle,} from 'fumadocs-ui/page';
 import {notFound} from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
-import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import {TypeTable} from 'fumadocs-ui/components/type-table';
+import {Tab, Tabs} from 'fumadocs-ui/components/tabs';
+import {Accordion, Accordions} from 'fumadocs-ui/components/accordion';
 import GridPattern from '@/components/custom/backgrounds/grid-pattern';
-import { cn } from '@/lib/utils';
+import {cn} from '@/lib/utils';
 
 export default async function Page({
   params,

@@ -1,4 +1,3 @@
-import {createPreset} from 'fumadocs-ui/tailwind-plugin';
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 import svgToDataUri from "mini-svg-data-uri";
 
@@ -13,7 +12,6 @@ export default {
         './mdx-components.{ts,tsx}',
         './node_modules/fumadocs-ui/dist/**/*.js',
     ],
-    presets: [createPreset()],
     theme: {
         extend: {
             fontFamily: {

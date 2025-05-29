@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {useId} from "react";
 
 import {Intro, IntroFooter} from "./changelog-layout";

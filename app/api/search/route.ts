@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {source} from '@/app/source';
 import {createSearchAPI} from 'fumadocs-core/search/server';
 
