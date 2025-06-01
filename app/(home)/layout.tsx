@@ -10,7 +10,7 @@ export default function Layout({
   children: ReactNode;
 }): React.ReactElement {
   return (
-        <HomeLayout {...baseOptions}>
+        <HomeLayout {...baseOptions} className="pt-0">
             {children}
         </HomeLayout>
       )
