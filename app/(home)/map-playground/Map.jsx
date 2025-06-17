@@ -541,7 +541,7 @@ const Map = memo(({
     useEffect(() => {
         const map = new maplibregl.Map({
             container: 'map',
-            style: "https://raw.githubusercontent.com/AfriGebeta/sprite/refs/heads/main/light_theme.json",
+            style: "https://tiles.gebeta.app/styles/standard/style.json",
             center: [position[1], position[0]],
             zoom: 13,
             attributionControl: false,
