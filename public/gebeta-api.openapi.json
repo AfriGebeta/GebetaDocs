@@ -9,15 +9,15 @@
     "paths": {
       "/api/route/onm/": {
         "get": {
-          "summary": "onm",
+          "summary": "Find Nearest Destination and Compare Routes",
+          "description": "Calculates routes from a single origin to multiple destinations, returning travel times, distances, and paths. Helps determine which destination is nearest in terms of actual travel cost.",
+          "tags": ["ONM"],
           "deprecated": false,
-          "description": "Find the Nearest Location and Compare Distances Across Multiple Destinations",
-          "tags": [],
           "parameters": [
             {
               "name": "origin",
               "in": "query",
-              "description": "",
+              "description": "A single origin coordinate pair in the format `{lat,lon}`. Example: `{8.457685259188599,38.764792722654455}`",
               "required": true,
               "example": "{8.457685259188599,38.764792722654455}",
               "schema": {
@@ -27,7 +27,7 @@
             {
               "name": "json",
               "in": "query",
-              "description": "",
+              "description": "An array of destination coordinate pairs in the format `[{lat1,lon1},{lat2,lon2},...]`.",
               "required": true,
               "example": "[{8.987685259188599,38.764792722654455},{9.087685259188599,38.764792722654455}]",
               "schema": {
@@ -37,9 +37,9 @@
             {
               "name": "apiKey",
               "in": "query",
-              "description": "",
+              "description": "API key used for authentication and usage control.",
               "required": true,
-              "example": "api key",
+              "example": "your-api-key-here",
               "schema": {
                 "type": "string"
               }
@@ -47,31 +47,37 @@
           ],
           "responses": {
             "200": {
-              "description": "",
+              "description": "Returns the computed travel times, distances, and path coordinates for each destination route from the origin.",
               "content": {
                 "application/json": {
                   "schema": {
                     "type": "object",
                     "properties": {
                       "msg": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Status message (e.g., 'Ok')"
                       },
                       "directions": {
                         "type": "array",
+                        "description": "Array of route summaries from origin to each destination.",
                         "items": {
                           "type": "object",
                           "properties": {
                             "msg": {
-                              "type": "string"
+                              "type": "string",
+                              "description": "Route computation status (e.g., 'Ok')"
                             },
                             "timetaken": {
-                              "type": "number"
+                              "type": "number",
+                              "description": "Time taken in seconds to reach the destination"
                             },
                             "totalDistance": {
-                              "type": "number"
+                              "type": "number",
+                              "description": "Total distance in meters to reach the destination"
                             },
                             "direction": {
                               "type": "array",
+                              "description": "Path geometry as an array of [longitude, latitude] coordinate pairs",
                               "items": {
                                 "type": "array",
                                 "items": {
@@ -79,18 +85,16 @@
                                 }
                               }
                             }
-                          }
+                          },
+                          "required": ["msg", "timetaken", "totalDistance", "direction"]
                         }
                       }
                     },
-                    "required": [
-                      "msg",
-                      "directions"
-                    ]
+                    "required": ["msg", "directions"]
                   },
                   "examples": {
-                    "1": {
-                      "summary": "Success",
+                    "Success": {
+                      "summary": "Successful Route Computation",
                       "value": {
                         "msg": "Ok",
                         "directions": [
@@ -99,26 +103,11 @@
                             "timetaken": 27145.13,
                             "totalDistance": 81435.39,
                             "direction": [
-                              [
-                                9.067654609680176,
-                                38.75811004638672
-                              ],
-                              [
-                                9.067713737487793,
-                                38.75811767578125
-                              ],
-                              [
-                                9.068061828613281,
-                                38.758182525634766
-                              ],
-                              [
-                                9.068098068237305,
-                                38.75818634033203
-                              ],
-                              [
-                                9.068119049072266,
-                                38.758174896240234
-                              ]
+                              [9.067654609680176, 38.75811004638672],
+                              [9.067713737487793, 38.75811767578125],
+                              [9.068061828613281, 38.758182525634766],
+                              [9.068098068237305, 38.75818634033203],
+                              [9.068119049072266, 38.758174896240234]
                             ]
                           }
                         ]
@@ -126,26 +115,601 @@
                     }
                   }
                 }
-              },
-              "headers": {}
+              }
             }
           },
           "security": []
         }
+      },      
+
+        "comment8" : "Matrix",
+        "comment7" : "Matrix",
+        "/api/route/matrix/": {
+          "get": {
+            "summary": "Compute Distance and Duration Matrix",
+            "description": "Calculates a matrix of travel times and distances between multiple geographic points. This is useful for logistics, delivery optimization, or any application requiring pairwise route calculations between several origins and destinations.",
+            "tags": ["Matrix"],
+            "deprecated": false,
+            "parameters": [
+              {
+                "name": "json",
+                "in": "query",
+                "description": "A list of coordinate pairs in the format `[{lat1,lon1},{lat2,lon2},...]`. These coordinates are used as both origins and destinations to compute the matrix.",
+                "required": true,
+                "example": "[{8.987685259188599,38.764792722654455},{8.9879443,38.7651287},{9.087685259188599,38.764792722654455}]",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "API key used for authentication and access control.",
+                "required": true,
+                "example": "your-api-key-here",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "A matrix containing pairwise travel durations and distances between the provided coordinates.",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msg": {
+                          "type": "string",
+                          "description": "Response status message (e.g., 'Ok')."
+                        },
+                        "durations": {
+                          "type": "array",
+                          "description": "2D array where each item represents travel durations (in seconds) from one origin to each destination.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "duration": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    { "type": "number" },
+                                    { "type": "integer" }
+                                  ]
+                                }
+                              }
+                            },
+                            "required": ["duration"]
+                          }
+                        },
+                        "distances": {
+                          "type": "array",
+                          "description": "2D array where each item represents travel distances (in meters) from one origin to each destination.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "duration": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    { "type": "number" },
+                                    { "type": "integer" }
+                                  ]
+                                }
+                              }
+                            },
+                            "required": ["duration"]
+                          }
+                        },
+                        "destinations": {
+                          "type": "array",
+                          "description": "List of destination points used in the matrix.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "lat": { "type": "number" },
+                                  "lng": { "type": "number" }
+                                },
+                                "required": ["lat", "lng"]
+                              }
+                            },
+                            "required": ["location"]
+                          }
+                        },
+                        "origins": {
+                          "type": "array",
+                          "description": "List of origin points used in the matrix.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "lat": { "type": "number" },
+                                  "lng": { "type": "number" }
+                                },
+                                "required": ["lat", "lng"]
+                              }
+                            },
+                            "required": ["location"]
+                          }
+                        }
+                      },
+                      "required": ["msg", "durations", "distances", "destinations", "origins"]
+                    },
+                    "examples": {
+                      "Success": {
+                        "summary": "Example matrix response",
+                        "value": {
+                          "msg": "Ok",
+                          "durations": [
+                            { "duration": [0, 20.87] },
+                            { "duration": [61.39, 0] }
+                          ],
+                          "distances": [
+                            { "duration": [0, 62.62] },
+                            { "duration": [184.17, 0] }
+                          ],
+                          "destinations": [
+                            { "location": { "lat": 8.987685, "lng": 38.764793 } },
+                            { "location": { "lat": 8.987945, "lng": 38.76513 } }
+                          ],
+                          "origins": [
+                            { "location": { "lat": 8.987685, "lng": 38.764793 } },
+                            { "location": { "lat": 8.987945, "lng": 38.76513 } }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "security": []
+          }
+        }, 
+        "comment3" : "Optimized Trip",
+        "comment4" : "Optimized Trip",
+        "/api/optimized-trip": {
+          "post": {
+            "summary": "Get Optimized Delivery Routes for Multiple Drivers",
+            "deprecated": false,
+            "description": "Calculates the most efficient delivery routes for multiple drivers based on depot, customer locations, and vehicle capacities. Useful for logistics, courier services, or any multi-stop delivery scenario.",
+            "tags": ["Optimization"],
+            "parameters": [
+              {
+                "name": "apiKey",
+                "in": "query",
+                "required": true,
+                "description": "Your API key to authorize the request",
+                "example": "token.token",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "vehicles": {
+                        "type": "array",
+                        "description": "List of available drivers/vehicles with their current locations and capacity limits",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Driver or vehicle name"
+                            },
+                            "current_location": {
+                              "type": "array",
+                              "description": "Current location of the driver [longitude, latitude]",
+                              "items": { "type": "number" },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            "capacities": {
+                              "type": "object",
+                              "description": "Maximum load the vehicle can carry",
+                              "properties": {
+                                "boxes": {
+                                  "type": "number",
+                                  "description": "Number of boxes the vehicle can carry"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "customers": {
+                        "type": "array",
+                        "description": "List of customer locations with delivery demand",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Customer name"
+                            },
+                            "location": {
+                              "type": "array",
+                              "description": "Location of the customer [longitude, latitude]",
+                              "items": { "type": "number" },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            "demand": {
+                              "type": "number",
+                              "description": "Number of boxes requested"
+                            },
+                            "requested_from_depot": {
+                              "type": "string",
+                              "description": "Name of the depot the customer expects the delivery from"
+                            }
+                          }
+                        }
+                      },
+                      "depots": {
+                        "type": "array",
+                        "description": "List of depot locations where deliveries originate",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "Depot name"
+                            },
+                            "location": {
+                              "type": "array",
+                              "description": "Depot location [longitude, latitude]",
+                              "items": { "type": "number" },
+                              "minItems": 2,
+                              "maxItems": 2
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "required": ["vehicles", "customers", "depots"]
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Returns optimized routes with assigned customers and their respective depots for each driver",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "routes": {
+                          "type": "array",
+                          "description": "List of optimized delivery routes for each driver",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "driver": {
+                                "type": "string",
+                                "description": "Driver or vehicle name"
+                              },
+                              "customers": {
+                                "type": "array",
+                                "description": "List of customers assigned to this driver",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "description": "Customer name"
+                                    },
+                                    "location": {
+                                      "type": "array",
+                                      "description": "Customer location [longitude, latitude]",
+                                      "items": { "type": "number" },
+                                      "minItems": 2,
+                                      "maxItems": 2
+                                    },
+                                    "requestedFromDepot": {
+                                      "type": "string",
+                                      "description": "Depot from which the delivery was requested"
+                                    }
+                                  }
+                                }
+                              },
+                              "depot": {
+                                "type": "object",
+                                "description": "Depot assigned to this route",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Depot name"
+                                  },
+                                  "location": {
+                                    "type": "array",
+                                    "description": "Depot location [longitude, latitude]",
+                                    "items": { "type": "number" },
+                                    "minItems": 2,
+                                    "maxItems": 2
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": ["routes"]
+                    }
+                  }
+                }
+              }
+            },
+            "security": []
+          }
+        },
+        "/api/route/tss": {
+          "get": {
+            "summary": "TSS",
+            "deprecated": false,
+            "description": "Solves a Traveling Salesman Problem (TSP) using the coordinates provided and returns the most optimal visiting order, original order, route geometry, and total distance and time taken. The route starts and ends at the first coordinate.",
+            "tags": ["Optimization"],
+            "parameters": [
+              {
+                "name": "json",
+                "in": "query",
+                "description": "A JSON-formatted string representing a list of geographic coordinates (longitude, latitude). The first coordinate is considered the start and end point of the round trip. e.g [[8.987685259188599, 38.764792722654455], [8.9879443, 38.7651287], [9.087685259188599, 38.764792722654455]]",
+                "required": true,
+                "example": "[[8.987685259188599, 38.764792722654455], [8.9879443, 38.7651287], [9.087685259188599, 38.764792722654455]]",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "A valid API key for authentication and access control.",
+                "required": true,
+                "example": "your_api_key_here",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "A successful response containing the optimized route information.",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msg": {
+                          "type": "string",
+                          "description": "A status or informational message."
+                        },
+                        "bestorder": {
+                          "type": "array",
+                          "description": "The optimal visiting order of the input coordinates including the return to the starting point.",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "timetaken": {
+                          "type": "number",
+                          "description": "Total estimated travel time (in seconds) for the optimized route."
+                        },
+                        "totalDistance": {
+                          "type": "number",
+                          "description": "Total estimated travel distance (in meters) for the optimized route."
+                        },
+                        "originalorder": {
+                          "type": "array",
+                          "description": "The original order indices of the input coordinates.",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "direction": {
+                          "type": "array",
+                          "description": "The geographical path (route geometry) of the optimized trip. Each element is a [longitude, latitude] pair.",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "msg",
+                        "bestorder",
+                        "timetaken",
+                        "totalDistance",
+                        "originalorder",
+                        "direction"
+                      ]
+                    },
+                    "examples": {
+                      "success": {
+                        "summary": "Successful Optimization",
+                        "value": {
+                          "msg": "Optimization completed successfully",
+                          "bestorder": [0, 2, 1, 0],
+                          "timetaken": 10840.284,
+                          "totalDistance": 32520.854,
+                          "originalorder": [0, 1, 2],
+                          "direction": [
+                            [8.98755168914795, 38.764892578125],
+                            [8.987594604492188, 38.76495361328125],
+                            [8.987668991088867, 38.76502990722656]
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "security": []
+          }
+        },
+        
+      "comment5" : "direction",
+      "comment6" : "direction",
+        
+      "/api/route/direction/": {
+          "get": {
+            "summary": "Get Route Directions",
+            "description": "Calculates the optimal route between two geographic points, with optional waypoints, and returns essential routing details including travel time, total distance, and a series of geographic coordinates representing the route. Turn-by-turn instructions can also be requested.",
+            "tags": ["Direction"],
+            "deprecated": false,
+            "parameters": [
+              {
+                "name": "origin",
+                "in": "query",
+                "description": "Starting point of the route in the format `{latitude,longitude}`.",
+                "required": true,
+                "example": "{8.987685259188599,38.764792722654455}",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "destination",
+                "in": "query",
+                "description": "Ending point of the route in the format `{latitude,longitude}`.",
+                "required": true,
+                "example": "{9.087685259188599,38.764792722654455}",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "instruction",
+                "in": "query",
+                "description": "If set to `1`, turn-by-turn navigation instructions will be included in the response. Default is `0` (no instructions).",
+                "required": false,
+                "example": "0",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "API key used to authenticate the request.",
+                "required": true,
+                "example": "your-api-key-here",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "waypoints",
+                "in": "query",
+                "description": "An optional list of intermediate points the route must pass through, formatted as an array of `{latitude,longitude}` pairs.",
+                "required": false,
+                "example": "[{8.9879443, 38.7651287}]",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful response containing routing information.",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msg": {
+                          "type": "string",
+                          "description": "Response message, e.g., 'Ok' if successful."
+                        },
+                        "timetaken": {
+                          "type": "number",
+                          "description": "Estimated travel time in seconds."
+                        },
+                        "totalDistance": {
+                          "type": "number",
+                          "description": "Total distance of the route in meters."
+                        },
+                        "direction": {
+                          "type": "array",
+                          "description": "List of geographic coordinates (latitude, longitude) forming the route geometry.",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "msg",
+                        "timetaken",
+                        "totalDistance",
+                        "direction"
+                      ]
+                    },
+                    "examples": {
+                      "Success": {
+                        "summary": "Example of a successful route response",
+                        "value": {
+                          "msg": "Ok",
+                          "timetaken": 5102.905,
+                          "totalDistance": 15308.715,
+                          "direction": [
+                            [9.18759536743164, 38.763946533203125],
+                            [9.187566757202148, 38.763954162597656],
+                            [9.1875581741333, 38.763362884521484],
+                            [9.1875581741333, 38.763362884521484],
+                            [9.1875581741333, 38.763362884521484],
+                            [9.187539100646973, 38.76198959350586],
+                            [9.187505722045898, 38.76165771484375],
+                            [9.187505722045898, 38.76165771484375],
+                            [9.187505722045898, 38.76165771484375],
+                            [9.1871976852417, 38.76167678833008],
+                            [9.187050819396973, 38.76163101196289],
+                            [9.187050819396973, 38.76163101196289]
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "security": []
+          }
       },
-      "/api/route/matrix/": {
+        
+      "comment" : "Geocoding",
+      "comment2" : "Geocoding",
+        
+      "/api/v1/route/geocoding": {
         "get": {
-          "summary": "matrix",
+          "summary": "Find Place by Name",
+          "operationId": "findPlace",
           "deprecated": false,
-          "description": "Calculate optimal routes tailored to various scenarios. Provides travel times and distances between multiple origins and destinations.",
-          "tags": [],
+          "description": "Search for a place by name. The endpoint returns a list of matching places with details such as location (latitude and longitude), city, country, and type (e.g., neighborhood, landmark).",
+          "tags": ["Places"],
           "parameters": [
             {
-              "name": "json",
+              "name": "name",
               "in": "query",
-              "description": "",
+              "description": "The name of the place to search for. Can be a full or partial name (e.g., 'meskel').",
               "required": true,
-              "example": "[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]",
+              "example": "meskel",
               "schema": {
                 "type": "string"
               }
@@ -153,7 +717,7 @@
             {
               "name": "apiKey",
               "in": "query",
-              "description": "",
+              "description": "API key used for authenticating the request.",
               "required": true,
               "example": "api key",
               "schema": {
@@ -163,293 +727,122 @@
           ],
           "responses": {
             "200": {
-              "description": "",
+              "description": "Successful response containing a list of matching places.",
               "content": {
                 "application/json": {
                   "schema": {
                     "type": "object",
+                    "required": ["data", "msg"],
                     "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["city", "country", "lat", "lng", "name", "type"],
+                          "properties": {
+                            "city": {
+                              "type": "string",
+                              "description": "City where the place is located."
+                            },
+                            "country": {
+                              "type": "string",
+                              "description": "Country where the place is located."
+                            },
+                            "lat": {
+                              "type": "number",
+                              "description": "Latitude coordinate of the place."
+                            },
+                            "lng": {
+                              "type": "number",
+                              "description": "Longitude coordinate of the place."
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Name of the place."
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Type of place (e.g., neighborhood, landmark)."
+                            }
+                          }
+                        }
+                      },
                       "msg": {
-                        "type": "string"
-                      },
-                      "durations": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "duration": {
-                              "type": "array",
-                              "items": {
-                                "oneOf": [
-                                  {
-                                    "type": "number"
-                                  },
-                                  {
-                                    "type": "integer"
-                                  }
-                                ]
-                              }
-                            }
-                          },
-                          "required": [
-                            "duration"
-                          ]
-                        }
-                      },
-                      "distances": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "duration": {
-                              "type": "array",
-                              "items": {
-                                "oneOf": [
-                                  {
-                                    "type": "number"
-                                  },
-                                  {
-                                    "type": "integer"
-                                  }
-                                ]
-                              }
-                            }
-                          },
-                          "required": [
-                            "duration"
-                          ]
-                        }
-                      },
-                      "destinations": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "location": {
-                              "type": "object",
-                              "properties": {
-                                "lat": {
-                                  "type": "number"
-                                },
-                                "lng": {
-                                  "type": "number"
-                                }
-                              },
-                              "required": [
-                                "lat",
-                                "lng"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "location"
-                          ]
-                        }
-                      },
-                      "origins": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "location": {
-                              "type": "object",
-                              "properties": {
-                                "lat": {
-                                  "type": "number"
-                                },
-                                "lng": {
-                                  "type": "number"
-                                }
-                              },
-                              "required": [
-                                "lat",
-                                "lng"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "location"
-                          ]
-                        }
+                        "type": "string",
+                        "description": "Status message describing the result (e.g., 'ok')."
                       }
-                    },
-                    "required": [
-                      "msg",
-                      "durations",
-                      "distances",
-                      "destinations",
-                      "origins"
-                    ]
+                    }
                   },
                   "examples": {
                     "1": {
                       "summary": "Success",
                       "value": {
-                        "msg": "Ok",
-                        "durations": [
+                        "data": [
                           {
-                            "duration": [
-                              0,
-                              20.873835
-                            ]
+                            "city": "Addis Ababa",
+                            "country": "Ethiopia",
+                            "lat": 8.978027,
+                            "lng": 38.884797,
+                            "name": "bole arabsa",
+                            "type": "neighborhood"
                           },
                           {
-                            "duration": [
-                              61.390656,
-                              0
-                            ]
+                            "city": "Addis Ababa",
+                            "country": "Ethiopia",
+                            "lat": 8.99797,
+                            "lng": 38.786733,
+                            "name": "bole medhane alem",
+                            "type": "neighborhood"
+                          },
+                          {
+                            "city": "Addis Ababa",
+                            "country": "Ethiopia",
+                            "lat": 8.975327,
+                            "lng": 38.772218,
+                            "name": "bole bulbula",
+                            "type": "neighborhood"
                           }
                         ],
-                        "distances": [
-                          {
-                            "duration": [
-                              0,
-                              62.621502
-                            ]
-                          },
-                          {
-                            "duration": [
-                              184.17197,
-                              0
-                            ]
-                          }
-                        ],
-                        "destinations": [
-                          {
-                            "location": {
-                              "lat": 8.987685,
-                              "lng": 38.764793
-                            }
-                          },
-                          {
-                            "location": {
-                              "lat": 8.987945,
-                              "lng": 38.76513
-                            }
-                          }
-                        ],
-                        "origins": [
-                          {
-                            "location": {
-                              "lat": 8.987685,
-                              "lng": 38.764793
-                            }
-                          },
-                          {
-                            "location": {
-                              "lat": 8.987945,
-                              "lng": 38.76513
-                            }
-                          }
-                        ]
+                        "msg": "ok"
                       }
                     }
                   }
                 }
-              },
-              "headers": {}
+              }
             }
           },
           "security": []
         }
+        
       },
-      "/api/route/tss": {
+      "/api/v1/route/geocoding{?bound}": {
         "get": {
-          "summary": "tss",
+          "operationId": "findPlacesByBound",
+          "summary": "Find Places Within Geographic Bounds",
           "deprecated": false,
-          "description": "",
-          "tags": [],
+          "tags": ["Places"],
+          "description": "Retrieves a list of places that match a specified name and are located within a defined geographic bounding box. Useful for limiting results to a specific area on a map.",
           "parameters": [
             {
-              "name": "json",
+              "name": "name",
               "in": "query",
-              "description": "",
               "required": true,
-              "example": "[{8.987685259188599,38.764792722654455},{8.9879443, 38.7651287},{9.087685259188599,38.764792722654455}]",
+              "example": "edna mall",
               "schema": {
                 "type": "string"
-              }
+              },
+              "description": "The name of the place to search for. Can be a full or partial name (e.g., 'edna mall')."
             },
             {
-              "name": "apiKey",
+              "name": "bound",
               "in": "query",
-              "description": "",
               "required": true,
-              "example": "api key",
+              "example": "38.734,9.015,38.788,9.082",
               "schema": {
                 "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "msg": {
-                        "type": "string"
-                      },
-                      "bestorder": {
-                        "type": "array",
-                        "items": {
-                          "type": "integer"
-                        }
-                      },
-                      "timetaken": {
-                        "type": "number"
-                      },
-                      "totalDistance": {
-                        "type": "number"
-                      },
-                      "originalorder": {
-                        "type": "array",
-                        "items": {
-                          "type": "integer"
-                        }
-                      },
-                      "direction": {
-                        "type": "array",
-                        "items": {
-                          "type": "array",
-                          "items": {
-                            "type": "number"
-                          }
-                        }
-                      }
-                    },
-                    "required": [
-                      "msg",
-                      "bestorder",
-                      "timetaken",
-                      "totalDistance",
-                      "originalorder",
-                      "direction"
-                    ]
-                  },
-                  "examples": {
-                    "1": {
-                      "summary": "Success",
-                      "value": "{\n    \"msg\": \"msg\",\n    \"bestorder\": [\n        0,\n        1,\n        2,\n        0\n    ],\n    \"timetaken\": 10840.284,\n    \"totalDistance\": 32520.854,\n    \"originalorder\": [\n        0,\n        1,\n        2\n    ],\n    \"direction\": [\n        [\n            8.98755168914795,\n            38.764892578125\n        ],\n        [\n            8.987594604492188,\n            38.76495361328125\n        ],\n        [\n            8.987668991088867,\n            38.76502990722656\n        ],\n        \n    ]\n}"
-                    }
-                  }
-                }
               },
-              "headers": {}
-            }
-          },
-          "security": []
-        }
-      },
-      "/api/optimized-trip": {
-        "post": {
-          "summary": "optimizedTrip",
-          "deprecated": false,
-          "description": "Find the optimal route between two locations for multiple drivers",
-          "tags": [],
-          "parameters": [
+              "description": "A comma-separated string defining the bounding box coordinates in the format `minLng,minLat,maxLng,maxLat`. This restricts the search to places within this rectangular area.\n\nExample:\n- `38.734,9.015,38.788,9.082` corresponds to a box in Addis Ababa.\n\nEnsure coordinates are in WGS84 format (latitude and longitude)."
+            },
             {
               "name": "apiKey",
               "in": "query",
@@ -457,806 +850,384 @@
               "example": "token.token",
               "schema": {
                 "type": "string"
-              }
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "vehicles": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": { "type": "string" },
-                          "current_location": {
-                            "type": "array",
-                            "items": { "type": "number" },
-                            "minItems": 2,
-                            "maxItems": 2
-                          },
-                          "capacities": {
-                            "type": "object",
-                            "properties": {
-                              "boxes": { "type": "number" }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "customers": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": { "type": "string" },
-                          "location": {
-                            "type": "array",
-                            "items": { "type": "number" },
-                            "minItems": 2,
-                            "maxItems": 2
-                          },
-                          "demand": { "type": "number" },
-                          "requested_from_depot": { "type": "string" }
-                        }
-                      }
-                    },
-                    "depots": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "name": { "type": "string" },
-                          "location": {
-                            "type": "array",
-                            "items": { "type": "number" },
-                            "minItems": 2,
-                            "maxItems": 2
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Successful optimization of routes",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "routes": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "driver": { "type": "string" },
-                            "customers": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "name": { "type": "string" },
-                                  "location": {
-                                    "type": "array",
-                                    "items": { "type": "number" },
-                                    "minItems": 2,
-                                    "maxItems": 2
-                                  },
-                                  "requestedFromDepot": { "type": "string" }
-                                }
-                              }
-                            },
-                            "depot": {
-                              "type": "object",
-                              "properties": {
-                                "name": { "type": "string" },
-                                "location": {
-                                  "type": "array",
-                                  "items": { "type": "number" },
-                                  "minItems": 2,
-                                  "maxItems": 2
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
               },
-              "headers": {}
+              "description": "API key required for authenticating the request."
             }
-          },
-          "security": []
+          ]
         }
+        
       },
-      "/api/route/direction/": {
+      "/api/v1/route/geocoding{?filter}": {
         "get": {
-          "summary": "direction",
+          "operationId": "filterPlaces",
+          "summary": "Filter Places by Location",
           "deprecated": false,
-          "description": "Find the optimal route between two locations, providing essential information such as travel time, distance, traffic conditions, and detailed turn-by-turn instructions.",
-          "tags": [],
-          "parameters": [
-            {
-              "name": "origin",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "{8.987685259188599,38.764792722654455}",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "destination",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "{9.087685259188599,38.764792722654455}",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "instruction",
-              "in": "query",
-              "description": "",
-              "required": false,
-              "example": "0",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "apiKey",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "api key",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "waypoints",
-              "in": "query",
-              "description": "",
-              "required": false,
-              "example": "[{8.9879443, 38.7651287}]",
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "msg": {
-                        "type": "string"
-                      },
-                      "timetaken": {
-                        "type": "number"
-                      },
-                      "totalDistance": {
-                        "type": "number"
-                      },
-                      "direction": {
-                        "type": "array",
-                        "items": {
-                          "type": "array",
-                          "items": {
-                            "type": "number"
-                          }
-                        }
-                      }
-                    },
-                    "required": [
-                      "msg",
-                      "timetaken",
-                      "totalDistance",
-                      "direction"
-                    ]
-                  },
-                  "examples": {
-                    "1": {
-                      "summary": "Success",
-                      "value": {
-                        "msg": "Ok",
-                        "timetaken": 5102.905,
-                        "totalDistance": 15308.715,
-                        "direction": [
-                          [
-                            9.18759536743164,
-                            38.763946533203125
-                          ],
-                          [
-                            9.187566757202148,
-                            38.763954162597656
-                          ],
-                          [
-                            9.1875581741333,
-                            38.763362884521484
-                          ],
-                          [
-                            9.1875581741333,
-                            38.763362884521484
-                          ],
-                          [
-                            9.1875581741333,
-                            38.763362884521484
-                          ],
-                          [
-                            9.187539100646973,
-                            38.76198959350586
-                          ],
-                          [
-                            9.187505722045898,
-                            38.76165771484375
-                          ],
-                          [
-                            9.187505722045898,
-                            38.76165771484375
-                          ],
-                          [
-                            9.187505722045898,
-                            38.76165771484375
-                          ],
-                          [
-                            9.1871976852417,
-                            38.76167678833008
-                          ],
-                          [
-                            9.187050819396973,
-                            38.76163101196289
-                          ],
-                          [
-                            9.187050819396973,
-                            38.76163101196289
-                          ]
-                        ]
-                      }
-                    }
-                  }
-                }
-              },
-              "headers": {}
-            }
-          },
-          "security": []
-        }
-      },
-    "/api/v1/route/geocoding": {
-      "get": {
-        "summary": "findPlace",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "",
-            "required": true,
-            "example": "meskel",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "apiKey",
-            "in": "query",
-            "description": "",
-            "required": true,
-            "example": "api key",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "city": {
-                            "type": "string"
-                          },
-                          "country": {
-                            "type": "string"
-                          },
-                          "lat": {
-                            "type": "number"
-                          },
-                          "lng": {
-                            "type": "number"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "city",
-                          "country",
-                          "lat",
-                          "lng",
-                          "name",
-                          "type"
-                        ]
-                      }
-                    },
-                    "msg": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "data",
-                    "msg"
-                  ]
-                },
-                "examples": {
-                  "1": {
-                    "summary": "Success",
-                    "value": {
-                      "data": [
-                        {
-                          "city": "Addis Ababa",
-                          "country": "Ethiopia",
-                          "lat": 8.978027,
-                          "lng": 38.884797,
-                          "name": "bole arabsa",
-                          "type": "neighborhood"
-                        },
-                        {
-                          "city": "Addis Ababa",
-                          "country": "Ethiopia",
-                          "lat": 8.99797,
-                          "lng": 38.786733,
-                          "name": "bole medhane alem",
-                          "type": "neighborhood"
-                        },
-                        {
-                          "city": "Addis Ababa",
-                          "country": "Ethiopia",
-                          "lat": 8.975327,
-                          "lng": 38.772218,
-                          "name": "bole bulbula",
-                          "type": "neighborhood"
-                        }
-                      ],
-                      "msg": "ok"
-                    }
-                  }
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/api/v1/route/geocoding{?bound}": {
-      "get": {
-        "operationId": "findPlacesByBound",
-        "summary": "Find Places By Bound",
-        "deprecated": false,
-        "description": "Get places based on bound",
-        "parameters": [
-          {
-            "name": "name",
-            "required": true,
-            "example": "edna mall",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "bound",
-            "required": true,
-            "example": "38.234,9.234,38.234,9.234",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "apiKey",
-            "required": true,
-            "example": "token.token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v1/route/geocoding{?filter}": {
-      "get": {
-        "operationId": "filterPlaces",
-        "summary": "Filter Places",
-        "deprecated": false,
-        "description": "Filter places based on location attributes like country and city",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "example": "edna mall",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filter",
-            "in": "query",
-            "required": true,
-            "example": "country:ethiopia|city:addisababa",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "apiKey",
-            "required": true,
-            "example": "token.token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-      "/api/v1/route/findowned": {
-        "get": {
-          "summary": "findowned",
-          "deprecated": false,
-          "description": "Look up addresses you have stored in the gebeta database",
-          "tags": [],
+          "tags": ["Places"],
+          "description": "Retrieves a list of places that match a specified name and are located within a specified country and city. This endpoint allows clients to filter places using location-based attributes.",
           "parameters": [
             {
               "name": "name",
               "in": "query",
-              "description": "",
               "required": true,
-              "example": "welkite",
+              "example": "edna mall",
               "schema": {
                 "type": "string"
-              }
+              },
+              "description": "The name of the place to search for. This can be a full or partial name (e.g., 'edna mall')."
+            },
+            {
+              "name": "filter",
+              "in": "query",
+              "required": true,
+              "example": "country:ethiopia|city:addisababa",
+              "schema": {
+                "type": "string"
+              },
+              "description": "A filter string used to narrow down search results based on location. The format must be `country:<countryName>|city:<cityName>`. Both fields are required. Use lowercase values with no spaces. For example:\n- `country:ethiopia|city:addisababa`\n- `country:ethiopia|city:diredewa`"
             },
             {
               "name": "apiKey",
               "in": "query",
-              "description": "",
               "required": true,
-              "example": "api key",
+              "example": "token.token",
               "schema": {
                 "type": "string"
-              }
-            },
-            {
-              "name": "type",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "city",
-              "schema": {
-                "type": "string"
-              }
+              },
+              "description": "API key for authenticating the request. This must be included in all requests to authorize access to the API."
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "msg": {
-                        "type": "string"
-                      },
-                      "data": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "latitude": {
-                              "type": "number"
-                            },
-                            "longitude": {
-                              "type": "number"
-                            },
-                            "Country": {
-                              "type": "string"
-                            },
-                            "City": {
-                              "type": "string"
-                            },
-                            "type": {
-                              "type": "string"
-                            },
-                            "details": {
-                              "type": "string"
+          ]
+        }
+        
+      },
+      "/api/v1/route/findowned": {
+          "get": {
+            "summary": "Find Owned Places",
+            "operationId": "findOwned",
+            "deprecated": false,
+            "description": "Retrieve stored addresses from the Gebeta database that match a specific name and type. This endpoint allows users to query places they own or have registered.",
+            "tags": ["Places"],
+            "parameters": [
+              {
+                "name": "name",
+                "in": "query",
+                "description": "The name of the stored place you are searching for. Can be a full or partial match (e.g., 'welkite').",
+                "required": true,
+                "example": "welkite",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "type",
+                "in": "query",
+                "description": "The type of place you are looking for (e.g., 'city', 'neighborhood', 'landmark'). Used to refine the search.",
+                "required": true,
+                "example": "city",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "API key used to authenticate and authorize access to the stored data.",
+                "required": true,
+                "example": "api key",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful response containing a list of owned or stored places.",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["msg", "data"],
+                      "properties": {
+                        "msg": {
+                          "type": "string",
+                          "description": "Status message (e.g., 'ok')."
+                        },
+                        "data": {
+                          "type": "array",
+                          "description": "A list of places matching the query.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "description": "Unique identifier for the place."
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Name of the place."
+                              },
+                              "latitude": {
+                                "type": "number",
+                                "description": "Latitude of the place."
+                              },
+                              "longitude": {
+                                "type": "number",
+                                "description": "Longitude of the place."
+                              },
+                              "Country": {
+                                "type": "string",
+                                "description": "Country where the place is located."
+                              },
+                              "City": {
+                                "type": "string",
+                                "description": "City where the place is located."
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "Type of the place (e.g., 'city', 'neighborhood')."
+                              },
+                              "details": {
+                                "type": "string",
+                                "description": "Additional details stored for the place, typically in JSON format."
+                              }
                             }
                           }
                         }
                       }
                     },
-                    "required": [
-                      "msg",
-                      "data"
-                    ]
-                  },
-                  "examples": {
-                    "1": {
-                      "summary": "Success",
-                      "value": {
-                        "msg": "ok",
-                        "data": [
-                          {
-                            "id": 103566,
-                            "name": "Welkite",
-                            "latitude": 8.992,
-                            "longitude": 38.774,
-                            "Country": "ethiopia",
-                            "City": "addis ababa",
-                            "type": "city",
-                            "details": "{}"
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
-              },
-              "headers": {}
-            }
-          },
-          "security": []
-        }
-      },
-      "/api/v1/route/revgeocoding": {
-        "get": {
-          "summary": "rev",
-          "deprecated": false,
-          "description": "",
-          "tags": [],
-          "parameters": [
-            {
-              "name": "lat",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "9.02152",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "lon",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "38.80131",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "apiKey",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "api key",
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "msg": {
-                        "type": "string"
-                      },
-                      "data": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "name": {
-                              "type": "string"
-                            },
-                            "latitude": {
-                              "type": "integer"
-                            },
-                            "longitude": {
-                              "type": "integer"
-                            },
-                            "Country": {
-                              "type": "string"
-                            },
-                            "City": {
-                              "type": "string"
-                            },
-                            "type": {
-                              "type": "string"
+                    "examples": {
+                      "1": {
+                        "summary": "Success",
+                        "value": {
+                          "msg": "ok",
+                          "data": [
+                            {
+                              "id": 103566,
+                              "name": "Welkite",
+                              "latitude": 8.992,
+                              "longitude": 38.774,
+                              "Country": "ethiopia",
+                              "City": "addis ababa",
+                              "type": "city",
+                              "details": "{}"
                             }
-                          },
-                          "required": [
-                            "name",
-                            "latitude",
-                            "longitude",
-                            "Country",
-                            "City",
-                            "type"
                           ]
                         }
                       }
-                    },
-                    "required": [
-                      "msg",
-                      "data"
-                    ]
-                  },
-                  "examples": {
-                    "1": {
-                      "summary": "Success",
-                      "value": {
-                        "msg": "ok",
-                        "data": [
-                          {
-                            "name": "test",
-                            "latitude": 10,
-                            "longitude": 10,
-                            "Country": "test",
-                            "City": "test",
-                            "type": "test"
-                          },
-                          {
-                            "name": "test",
-                            "latitude": 10.1,
-                            "longitude": 10.1,
-                            "Country": "test",
-                            "City": "test",
-                            "type": "test"
+                    }
+                  }
+                }
+              }
+            },
+            "security": []
+          }
+          
+      },
+      "/api/v1/route/revgeocoding": {
+          "get": {
+            "summary": "Reverse Geocodes",
+            "operationId": "reverseGeocode",
+            "deprecated": false,
+            "description": "Retrieve place information based on latitude and longitude coordinates. This endpoint returns details such as place name, location, country, city, and type.",
+            "tags": ["Places"],
+            "parameters": [
+              {
+                "name": "lat",
+                "in": "query",
+                "description": "Latitude coordinate in decimal degrees (e.g., 9.02152).",
+                "required": true,
+                "example": "9.02152",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "lon",
+                "in": "query",
+                "description": "Longitude coordinate in decimal degrees (e.g., 38.80131).",
+                "required": true,
+                "example": "38.80131",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "API key for authenticating the request.",
+                "required": true,
+                "example": "api key",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful response containing place information for the given coordinates.",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["msg", "data"],
+                      "properties": {
+                        "msg": {
+                          "type": "string",
+                          "description": "Status message (e.g., 'ok')."
+                        },
+                        "data": {
+                          "type": "array",
+                          "description": "List of places corresponding to the provided coordinates.",
+                          "items": {
+                            "type": "object",
+                            "required": ["name", "latitude", "longitude", "Country", "City", "type"],
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "Name of the place."
+                              },
+                              "latitude": {
+                                "type": "number",
+                                "description": "Latitude of the place."
+                              },
+                              "longitude": {
+                                "type": "number",
+                                "description": "Longitude of the place."
+                              },
+                              "Country": {
+                                "type": "string",
+                                "description": "Country where the place is located."
+                              },
+                              "City": {
+                                "type": "string",
+                                "description": "City where the place is located."
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "Type of the place (e.g., neighborhood, landmark)."
+                              }
+                            }
                           }
-                        ]
+                        }
+                      }
+                    },
+                    "examples": {
+                      "1": {
+                        "summary": "Success",
+                        "value": {
+                          "msg": "ok",
+                          "data": [
+                            {
+                              "name": "test",
+                              "latitude": 10,
+                              "longitude": 10,
+                              "Country": "test",
+                              "City": "test",
+                              "type": "test"
+                            },
+                            {
+                              "name": "test",
+                              "latitude": 10.1,
+                              "longitude": 10.1,
+                              "Country": "test",
+                              "City": "test",
+                              "type": "test"
+                            }
+                          ]
+                        }
                       }
                     }
                   }
                 }
-              },
-              "headers": {}
-            }
-          },
-          "security": []
-        }
+              }
+            },
+            "security": []
+          }
+          
       },
       "/api/v1/route/getOwnedNearby": {
-        "get": {
-          "summary": "ownedrev",
-          "deprecated": false,
-          "description": "",
-          "tags": [],
-          "parameters": [
-            {
-              "name": "lat",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "8.98421",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "lon",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "38.80243",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "apiKey",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "api key",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "type",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "terminal",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "detailLevel",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "1",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "limit",
-              "in": "query",
-              "description": "",
-              "required": true,
-              "example": "2",
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {}
-                  }
+          "get": {
+            "summary": "Owned Reverse Geocoding",
+            "description": "Performs reverse geocoding to retrieve nearby locations owned or managed by the service provider, based on geographic coordinates. Supports filtering by place type and level of detail.",
+            "deprecated": false,
+            "tags": ["Places"],
+            "parameters": [
+              {
+                "name": "lat",
+                "in": "query",
+                "description": "Latitude of the location to reverse geocode.",
+                "required": true,
+                "example": "8.98421",
+                "schema": {
+                  "type": "string"
                 }
               },
-              "headers": {}
-            }
-          },
-          "security": []
-        }
+              {
+                "name": "lon",
+                "in": "query",
+                "description": "Longitude of the location to reverse geocode.",
+                "required": true,
+                "example": "38.80243",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "apiKey",
+                "in": "query",
+                "description": "API key used for authenticating requests.",
+                "required": true,
+                "example": "your-api-key-here",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "type",
+                "in": "query",
+                "description": "The type of place to retrieve (e.g., 'terminal', 'warehouse', 'office').",
+                "required": true,
+                "example": "terminal",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "detailLevel",
+                "in": "query",
+                "description": "Level of detail for the response. Higher values may include more granular information.",
+                "required": true,
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "limit",
+                "in": "query",
+                "description": "Maximum number of nearby locations to return.",
+                "required": true,
+                "example": "2",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                "headers": {}
+              }
+            },
+            "security": []
+          }
       }
     },
     "components": {
