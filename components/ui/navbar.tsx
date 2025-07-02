@@ -54,7 +54,7 @@ export const Navbar = () => {
             <nav className="md:grid grid-cols-12 md:border-b top-0 flex items-center justify-between ">
                 <Link
                     href="/"
-                    className="md:border-r md:px-5 px-2.5 py-4 text-foreground md:col-span-2 shrink-0 transition-colors md:w-[268px] lg:w-[286px]"
+                    className="md:px-5 px-2.5 py-4 text-foreground md:col-span-2 shrink-0 transition-colors md:w-[268px] lg:w-[286px]"
                 >
                     <div className="flex flex-col gap-2 w-full">
 
@@ -65,7 +65,7 @@ export const Navbar = () => {
                     </div>
                 </Link>
                 <div className="md:col-span-10 flex items-center justify-end relative">
-                    <ul className="md:flex items-center divide-x w-max hidden shrink-0">
+                    <ul className="md:flex items-center w-max hidden shrink-0">
                         {navMenu.map((menu, i) => (
                             <NavLink key={menu.name} href={menu.path}>
                                 {menu.name}
@@ -100,7 +100,7 @@ export const Navbar = () => {
 
 export const navMenu = [
     {
-        name: "halo_",
+        name: "home",
         path: "/",
     },
     {

@@ -145,7 +145,7 @@ export const navMenu: {
     }[];
 }[] = [
     {
-        name: "_halo",
+        name: "home",
         path: "/",
     },
 

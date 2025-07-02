@@ -7,7 +7,6 @@ import CodePreview from "@/components/code-preview";
 import {GradientBG} from "@/components/gradient-bg";
 import {Spotlight} from "@/components/spotlight";
 import Features from "@/app/(home)/_components/feature";
-import Section from "@/app/(home)/_components/section";
 
 export default function HomePage() {
     const features: {
@@ -71,13 +70,7 @@ export default function HomePage() {
 
     return (
         <main className="flex flex-col min-h-screen overflow-x-hidden">
-            <Section
-                className="mb-1 overflow-y-clip"
-                crosses
-                crossesOffset="lg:translate-y-[5.25rem]"
-                customPaddings
-                id="hero"
-            >
+
                 <section
                     className="max-h-[40rem] relative w-full flex md:items-center md:justify-center dark:bg-black/[0.96] antialiased bg-grid-white/[0.02] overflow-hidden px-8 md:min-h-[40rem]">
                     <Spotlight/>
@@ -125,7 +118,7 @@ export default function HomePage() {
                                                 <p className=" relative inline tracking-tight opacity-90 md:text-sm text-xs dark:text-white font-mono text-black">
                                                     npm install{" "}
                                                     <span className="relative dark:text-fuchsia-100 text-fuchsia-950">
-												gebeta
+												@gebeta
 												<span
                                                     className="absolute h-2 bg-gradient-to-tr from-white via-stone-200 to-stone-300 blur-3xl w-full top-0 left-2"></span>
 											</span>
@@ -209,7 +202,6 @@ export default function HomePage() {
                 </section>
                 <Features/>
                 <hr className="h-px bg-gray-200"/>
-            </Section>
         </main>
     );
 }

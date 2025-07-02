@@ -1,17 +1,7 @@
 "use client";
 
-import {
-    BringToFrontIcon,
-    Globe2Icon,
-    MapIcon,
-    MapPinIcon,
-    Plus,
-    RouteIcon,
-    WaypointsIcon,
-    WebhookIcon,
-} from "lucide-react";
+import {BringToFrontIcon, Globe2Icon, MapIcon, MapPinIcon, RouteIcon, WaypointsIcon, WebhookIcon,} from "lucide-react";
 import {cn} from "@/lib/utils";
-import Ripple from "@/components/custom/backgrounds/ripple";
 import {TechStackDisplay} from "@/components/techstack-display";
 
 const features = [
@@ -69,21 +59,14 @@ const features = [
 export default function Features() {
     return (
         <div
-            className="md:w-10/12 mt-10 mx-auto font-geist relative md:border-l-0 md:border-b-0 md:border-[1.2px] rounded-none -pr-2 dark:bg-black/[0.95]">
+            className="md:w-10/12 mt-10 mx-auto relative md:border-x-0 md:border-b-0 md:border-[1.2px] rounded-none -pr-2 dark:bg-black/[0.95]">
             <div className="w-full md:mx-0">
                 <div className="grid grid-cols-1 relative md:grid-rows-2 md:grid-cols-3 border-b-[1.2px]">
-                    <div
-                        className="hidden md:grid top-1/2 left-0 -translate-y-1/2 w-full grid-cols-3 z-10 pointer-events-none select-none absolute">
-                        <Plus
-                            className="w-8 h-8 text-neutral-300 translate-x-[16.5px] translate-y-[.5px] ml-auto dark:text-neutral-600"/>
-                        <Plus
-                            className="w-8 h-8 text-neutral-300 ml-auto translate-x-[16.5px] translate-y-[.5px] dark:text-neutral-600"/>
-                    </div>
                     {features.map((feature, index) => (
                         <div
                             key={feature.id}
                             className={cn(
-                                "justify-center border-l-[1.2px] md:min-h-[240px] border-t-[1.2px] md:border-t-0 transform-gpu flex flex-col p-10",
+                                "justify-center border-x-[1.2px] md:min-h-[240px] border-t-[1.2px] md:border-t-0 transform-gpu flex flex-col p-10",
                                 index >= 3 && "md:border-t-[1.2px]",
                             )}
                         >
@@ -115,7 +98,7 @@ export default function Features() {
                     ))}
                 </div>
                 <div
-                    className="relative col-span-3 border-t-[1.2px] border-l-[1.2px] md:border-b-[1.2px] dark:border-b-0  h-full py-20">
+                    className="relative col-span-3 h-full py-20">
                     <div className="w-full h-full p-16 pt-10 md:px-10">
                         <div className="flex flex-col items-center justify-center w-full h-full gap-3">
                             <div className="flex items-center gap-2">
@@ -136,10 +119,6 @@ export default function Features() {
                                     ]}
                                 />
                             </div>
-                            {/*<div className="flex items-center gap-2">*/}
-                            {/*    <GithubStat stars={stars} />*/}
-                            {/*</div>*/}
-                            <Ripple/>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,6 @@
 //@ts-nocheck
 import './global.css';
 import {RootProvider} from 'fumadocs-ui/provider';
-// import {Inter} from 'next/font/google';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type {ReactNode} from 'react';
 import {ToastProvider} from "@/providers/ToastProvider";
@@ -9,11 +8,11 @@ import {NavbarProvider} from "@/components/nav-mobile";
 import {Navbar} from "@/components/ui/navbar";
 import {ThemeProvider} from "@/components/theme-provider";
 import {baseUrl, createMetadata} from "@/lib/metadata";
-// import {Inter} from 'next/font/google';
-//
-// const inter = Inter({
-//     subsets: ['latin'],
-// });
+import {Plus_Jakarta_Sans} from "next/font/google";
+
+const plusJakarta = Plus_Jakarta_Sans({
+    subsets: ["latin"],
+});
 
 export const metadata = createMetadata({
     title: {
@@ -31,7 +30,7 @@ export default function Layout({children}: { children: ReactNode }) {
             <title>GebetaMaps Documentation</title>
             <link href="maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet"/>
         </head>
-        <body className="antialiased">
+        <body className={`${plusJakarta.className} antialiased`}>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"

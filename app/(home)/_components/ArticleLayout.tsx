@@ -121,7 +121,7 @@ function NewBadge({isSelected}: { isSelected?: boolean }) {
         <div className="flex items-center justify-end w-full">
             <Badge
                 className={cn(
-                    " pointer-events-none !no-underline border-dashed !decoration-transparent",
+                    "pointer-events-none no-underline border-dashed !decoration-transparent bg-[#FFA500] text-white",
                     isSelected && "!border-solid",
                 )}
                 variant={isSelected ? "default" : "outline"}
