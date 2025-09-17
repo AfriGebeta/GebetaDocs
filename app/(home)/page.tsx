@@ -4,7 +4,6 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {ReactElement} from "react";
 import CodePreview from "@/components/code-preview";
-import {Spotlight} from "@/components/spotlight";
 import Features from "@/app/(home)/_components/feature";
 
 export default function HomePage() {
@@ -72,34 +71,12 @@ export default function HomePage() {
 
                 <section
                     className="max-h-[40rem] relative w-full flex md:items-center md:justify-center dark:bg-black/[0.96] antialiased bg-grid-white/[0.02] overflow-hidden px-8 md:min-h-[40rem]">
-                    <Spotlight/>
                     <div
                         className="overflow-hidden bg-transparent md:px-10 dark:-mb-32 dark:mt-[-4.75rem] dark:pb-32 dark:pt-[4.75rem]">
                         <div
                             className="lg:max-w-8xl mx-auto grid max-w-full grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-2 lg:grid-cols-2 lg:px-8 lg:py-4 xl:gap-x-16 xl:px-12">
                             <div className="relative z-10 md:text-center lg:text-left">
                                 <div className="relative">
-                                    <div className="flex flex-col items-start gap-2">
-                                        <div className="flex items-end gap-1 mt-2 ">
-                                            <div className="flex items-center gap-1">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="0.8em"
-                                                    height="0.8em"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path
-                                                        fill="currentColor"
-                                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                                                    />
-                                                </svg>
-                                                <span className="text-xs text-opacity-75">
-											Let us find your way
-										</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <p className="text-zinc-800 dark:text-zinc-300 mt-3 tracking-tight text-2xl md:text-3xl">
                                         The Complete Map API for Africa.
                                     </p>
