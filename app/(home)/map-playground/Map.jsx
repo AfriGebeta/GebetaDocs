@@ -1,8 +1,26 @@
 "use client"
-import React, {memo, useCallback, useContext, useEffect, useRef} from "react";
+import React, {memo, useCallback, useContext, useEffect, useRef, useState} from "react";
 import maplibregl from 'maplibre-gl';
 
 import {PlayGroundContext} from "@/providers/Playground";
+
+const styles = [
+    {
+        type: "vector",
+        url: "https://tiles.gebeta.app/styles/standard/style.json",
+        image: "/vector.png"
+    },
+    {
+        type: "raster",
+        url: "https://tiles.gebeta.app/styles/raster/raster.json",
+        image: "/raster.png"
+    },
+    {
+        type: "terrain",
+        url: "https://tiles.gebeta.app/styles/standard/terrain/terrain.json",
+        image: "/terrain.png"
+    },
+]
 
 const Map = memo(({
                       selectedButton,
@@ -29,6 +47,9 @@ const Map = memo(({
         setWaypointsCoordinates,
         coordinate
     } = playContext;
+
+
+    const [currentStyleIndex, setCurrentStyleIndex] = useState(0);
 
     useEffect(() => {
         selectedButtonRef.current = selectedButton;
@@ -545,10 +566,21 @@ const Map = memo(({
             center: [position[1], position[0]],
             zoom: 13,
             attributionControl: false,
+            transformRequest: (url, resourceType) => {
+                if (resourceType === 'Tile') {
+                    return {
+                        url: url,
+                        headers: {'Authorization': 'Bearer ' + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55bmFtZSI6ImdlYmV0YTEiLCJkZXNjcmlwdGlvbiI6ImMzZWZhNTRjLWU2ODctNGIyMS1iYjY1LWZkY2Y4ZTMxNzMwMCIsImlkIjoiZDIyOWU3YWQtMTkxYS00ODU0LWE4MmEtNmM3NWI1Zjk2MzkwIiwidXNlcm5hbWUiOiJnZWJldGExIn0.zs9Za-EqN5R_I2NZUxrJJOwFug3jN9AUp6xkDvfyRS4"}
+                    };
+                }
+                return {url};
+            },
         });
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
         map.addControl(new LogoControl(), 'bottom-left');
+
+        map.addControl(new LayerControl(styles), "top-right")
 
         mapRef.current = map;
 
@@ -663,5 +695,76 @@ class LogoControl {
 
     onRemove() {
         this._container.parentNode.removeChild(this._container);
+    }
+}
+
+class LayerControl {
+    constructor(styles) {
+        this.styles = styles;
+        this._onDocClick = this._onDocClick.bind(this);
+    }
+
+    onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.className = 'group maplibregl-ctrl relative px-2 py-1 rounded-sm bg-white hover:bg-white/95';
+
+        const button = document.createElement('button');
+        button.className = '!p-0 bg-white rounded-md shadow bg-white flex items-center';
+        button.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers-icon lucide-layers group-hover:text-[#ffa500] transition-all duration-150">
+        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+        <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+        <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+      </svg>
+    `;
+
+        this._menu = document.createElement('div');
+        this._menu.className = 'absolute right-0 mt-2 w-40 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden';
+
+        this.styles?.forEach((style) => {
+            const item = document.createElement('button');
+            item.className = 'flex items-center w-full px-4 py-2 text-sm text-left hover:bg-gray-100';
+
+            if (style.image) {
+                const img = document.createElement('img');
+                img.src = style.image;
+                img.className = 'w-5 h-5 mr-2';
+                item.appendChild(img);
+            }
+
+            const text = document.createElement('span');
+            text.textContent = style.type;
+            item.appendChild(text);
+
+            item.onclick = () => {
+                map.setStyle(style.url);
+                this._menu.classList.add('hidden');
+            };
+            this._menu.appendChild(item);
+        });
+
+        button.onclick = (e) => {
+            e.stopPropagation();
+            this._menu.classList.toggle('hidden');
+        };
+
+        document.addEventListener('click', this._onDocClick);
+
+        this._container.appendChild(button);
+        this._container.appendChild(this._menu);
+        return this._container;
+    }
+
+    _onDocClick(e) {
+        if (this._container && !this._container.contains(e.target)) {
+            this._menu.classList.add('hidden');
+        }
+    }
+
+    onRemove() {
+        document.removeEventListener('click', this._onDocClick);
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
     }
 }
