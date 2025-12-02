@@ -1,6 +1,6 @@
 ---
-title: Reverse Geocoding  
-description: Retrieve accurate location coordinates by entering a place name, returning an array of potential matches with their corresponding details.  
+title: Reverse Geocoding
+description: Retrieve accurate location coordinates by entering a place name, returning an array of potential matches with their corresponding details.
 ---
 
 
@@ -8,24 +8,87 @@ description: Retrieve accurate location coordinates by entering a place name, re
 ```bash
 curl https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}
 ```
+## Parameters
 
-### Parameters
+<table style={{ borderCollapse: 'collapse', width: '100%' ,  marginBottom: '10px' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Parameter</th>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Type</th>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Description</th>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>lat</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Latitude of the location you want to reverse-geocode.</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>lon</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Longitude of the location you want to reverse-geocode.</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>format</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Response format for reverse geocoding. Currently only <strong>osm</strong> is supported.</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>No</td>
+    </tr>
+    <tr>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>apiKey</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Your Gebeta Maps API key.</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
+    </tr>
+  </tbody>
+</table>
 
-| **Parameter** | **Type**  | **Description**                                                   | **Required** |
-|---------------|-----------|-------------------------------------------------------------------|--------------|
-| `lat`         | `string`  | Specifies the latitude of the location you want to query.         | `yes`        |
-| `lon`         | `string`  | Specifies the longitude of the location you want to query.        | `yes`        |
-| `apiKey`      | `string`  | Your API key for accessing Gebeta Maps.                           | `yes`        |
 
 ## Response Codes for Reverse Geocoding API
+<table style={{ borderCollapse: 'collapse', width: '100%' ,  marginBottom: '10px' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Status Code</th>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Message</th>
+      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Description</th>
 
-| **Status Code** | **Message**                         | **Description**                                                                                       |
-|------------------|-------------------------------------|-------------------------------------------------------------------------------------------------------|
-| `200`            | `OK`                                | The request was successful. The system found the matching location coordinates and returned the data. |
-| `404`            | `Not Found`                         | No matching location exists for the provided coordinates. Check the values and try again.             |
-| `401`            | `Not Authorized - No Token`         | Authentication failed. A valid API key must be provided.                                            |
-| `401`            | `Not Authorized - Invalid Token`     | The API key provided is either invalid or expired. Please use a current, valid API key.               |
-| `422`            | `Invalid Input`                    | The request parameters are incorrect. Review and correct the input values as needed.                  |
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>200</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}>OK</td>
+      <td style={{ border: '1px solid #ccc', padding: '8px' }}> Request successful. Matching location information was found and returned.</td>
+    </tr>
+
+     <tr>
+          <td style={{ border: '1px solid #ccc', padding: '8px' }}>404</td>
+          <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Found</td>
+          <td style={{ border: '1px solid #ccc', padding: '8px' }}>No matching location exists for the provided coordinates.</td>
+        </tr>
+
+        <tr>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>401</td>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Authorized – No Token</td>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Authentication failed. A valid API key was not provided</td>
+         </tr>
+        <tr>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>401</td>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Authorized – Invalid Token</td>
+           <td style={{ border: '1px solid #ccc', padding: '8px' }}>The provided API key is invalid or expired.</td>
+         </tr>
+         <tr>
+            <td style={{ border: '1px solid #ccc', padding: '8px' }}>422</td>
+            <td style={{ border: '1px solid #ccc', padding: '8px' }}>Invalid Input</td>
+            <td style={{ border: '1px solid #ccc', padding: '8px' }}>One or more request parameters are incorrect. Review and correct your input.</td>
+          </tr>
+  </tbody>
+</table>
+
 
 ## Example
 
@@ -48,18 +111,18 @@ fn main() {
     let lon = "38.79036";
     let api_key = "{your-api-key}";
     let url = format!("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={}&lon={}&apiKey={}", lat, lon, api_key);
-    
+
     let response: HashMap<String, String> = get(&url)
         .unwrap()
         .json()
         .unwrap();
-    
+
     println!("{:?}", response);
-}  
+}
   ```
   </Tab>
   <Tab value="Go">
-  ```go 
+  ```go
 package main
 
 import (
@@ -149,7 +212,7 @@ void main() async {
     print('Error: ${response.statusCode}');
   }
 }
-  ```  
+  ```
   </Tab>
 </Tabs>
 
