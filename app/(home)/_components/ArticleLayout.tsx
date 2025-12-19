@@ -75,6 +75,7 @@ export default function ArticleLayout() {
                                         <Link href={item?.url || "/docs"}
                                               className="whitespace-nowrap">{item.name}</Link>
                                         {item.name === "VRP API" && <NewBadge/>}
+                                        {item.name === "Place Validation API" && <NewBadge />}
                                         {item.type === "folder" && <motion.div
                                             animate={{rotate: currentOpen === index ? 180 : 0}}
                                         >

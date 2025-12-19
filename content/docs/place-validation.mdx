@@ -1,0 +1,183 @@
+---
+title: Place Validation API
+description: A sophisticated geographic verification service designed to validate hierarchical address data using fuzzy matching and confidence scoring.
+---
+
+## **Overview**
+
+<br/>
+
+The Place Validation API ensures that user-provided addresses—from country level down to specific districts—are geographically consistent. Because address data in certain regions can be inconsistent, our API uses a probabilistic matching engine to provide a **"Confidence Level"** for each part of the address.
+
+<br />
+
+---
+
+<br />
+
+
+## **The Probability Logic**
+
+<br/>
+
+In regions like Ethiopia, geographic data can be scarce or inconsistently mapped. Our API doesn't just return a **"Yes/No"** answer. Instead:
+
+- **Similarity Scoring**: We calculate the phonetic and string similarity between the input and our database.
+
+- **Parent-Child Validation**: We verify that a sub-location (e.g., a Borough) actually belongs to the parent location (e.g., a Municipality).
+
+- **Confidence Levels**: We return **high**, **medium**, or **low** confidence. This allows developers to handle "fuzzy" matches gracefully rather than rejecting valid but slightly misspelled inputs.
+
+<br />
+
+---
+
+<br />
+
+## **Use Cases**
+
+<br/>
+
+<Cards>
+  <Card title="Address Cleaning" description="Standardize messy user input into structured geographic data." icon="📍">
+  </Card>
+
+  <Card title="Data Accuracy" description="Verify if a specific Woreda (District) actually exists within a stated Borough or City." icon="✅">
+  </Card>
+
+  <Card title="Risk Mitigation" description="Use confidence scores (high, medium, low) to decide whether to accept an address or flag it for manual review." icon="📉">
+  </Card>
+
+  <Card title="Regional Optimization" description="Specifically tuned for data-scarce regions where official naming conventions may vary." icon="🌍">
+  </Card>
+</Cards>
+
+<br />
+
+---
+
+<br />
+
+## **Usage**
+
+<br/>
+
+To use the Place Validation API, send a POST request:
+
+```bash
+curl https://mapapi.gebeta.app/api/v1/place/validation
+```
+
+<br />
+
+---
+
+<br />
+
+
+---
+
+<br />
+
+### **Request Example (POST)**
+
+<Tabs items={['curl']}>
+  <Tab value="curl">
+  ```bash
+  curl --request POST \
+  --url 'https://mapapi.gebeta.app/api/v1/place/validation' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "country": "Ethiopia",
+    "province": "Addis Ababa",
+    "county": "Addis Ababa",
+    "municipality": "Addis Ababa",
+    "borough": "Bole",
+    "district": "woreda 14"
+  }'
+  ```
+  </Tab>
+</Tabs>
+
+<br />
+
+---
+
+<br />
+
+<Accordions>
+  <Accordion title="Success Response">
+
+  ```json
+{
+  "levels": {
+    "country": {
+      "valid": true,
+      "confidence": "high"
+    },
+    "province": {
+      "valid": true,
+      "confidence": "high"
+    },
+    "county": {
+      "valid": true,
+      "confidence": "high"
+    },
+    "municipality": {
+      "valid": true,
+      "confidence": "high"
+    },
+    "borough": {
+      "valid": true,
+      "confidence": "high"
+    },
+    "district": {
+      "valid": false,
+      "confidence": "low"
+    },
+    "village": {
+      "valid": false,
+      "confidence": ""
+    }
+  },
+  "valid": false
+}
+  ```
+  </Accordion>
+</Accordions>
+
+<br />
+
+---
+
+<br />
+
+## **Confidence Levels Explained**
+
+<br />
+
+
+
+| Confidence Level |Description                                                                                      |
+|------------------|--------------------------------------------------------------------------------------------------|
+| `high`           | Strong match found. The input closely matches our database with minimal variation                |
+| `medium`         | Probable match. There may be slight spelling differences or evolving administrative boundaries   |
+| `low`            | Weak match. The input has significant differences from our database. Manual review recommended   |
+
+<br />
+
+---
+
+<br />
+
+<br />
+
+## **API Limits and Restrictions**
+
+<br/>
+
+The Place Validation API follows the standard Gebeta Maps rate limits:
+
+Rate Limit: 50 requests per second per token.
+
+- **Data Note**: For certain districts in Ethiopia, confidence may be "Medium" even with correct spelling due to evolving administrative boundaries.
