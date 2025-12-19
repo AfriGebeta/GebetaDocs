@@ -1,0 +1,363 @@
+---
+title: Tracking API
+description: Real-Time Vehicle & Asset Location Streaming via WebSockets
+---
+
+## **Overview**
+
+<br/>
+
+The Tracking API enables real-time location streaming between drivers (or mobile agents) and offices (or control centers) using secure WebSocket connections.
+
+This API is designed for fleet tracking, delivery monitoring, dispatch systems, and live map visualization, allowing multiple roles to communicate through a single persistent connection.
+
+With support for authentication, subscriptions, and continuous location updates, the Tracking API ensures low-latency, scalable, and reliable tracking across your organization.
+
+<br />
+
+---
+
+<br />
+
+## **Key Features**
+
+<br/>
+
+- 🚗 **Real-time driver location updates**
+
+- 🏢 **Office subscriptions to specific drivers or all drivers**
+
+- 📡 **Low-latency WebSocket streaming**
+
+<br />
+
+---
+
+<br />
+
+## **Connection Endpoint**
+
+```bash
+wss://track.gebeta.app/v1/track
+```
+
+<br />
+
+---
+
+<br />
+
+## **Roles**
+
+<br/>
+
+| **Role**                                   | **Description**                        |
+|--------------------------------------------|----------------------------------------|
+| `driver`                                   | Sends live location updates            |
+| `office`                                   | Subscribes to driver locations        |
+
+<br />
+
+
+---
+
+<br />
+
+## **Use Cases**
+
+<br/>
+
+<Cards>
+  <Card title="Fleet Tracking" description="Monitor all active drivers in real time from a central office dashboard." icon="🚚">
+    - Live vehicle movement on maps
+    - Instant visibility into fleet status
+    - Improved operational awareness
+  </Card>
+
+  <Card title="Delivery Monitoring" description="Track individual delivery drivers to ensure accurate ETAs and route compliance." icon="📦">
+    - Subscribe to specific drivers
+    - Detect delays or route deviations
+    - Improve customer satisfaction
+  </Card>
+
+  <Card title="Dispatch & Control Centers" description="Allow offices to observe and manage driver activity efficiently." icon="🏢">
+    - Subscribe to all drivers or selected drivers
+    - Real-time decision making
+    - Seamless coordination between teams
+  </Card>
+
+  <Card title="Live Map Visualization" description="Integrate real-time location data into web or mobile maps." icon="🗺️">
+    - Smooth marker updates
+    - Accurate vehicle positioning
+    - Enhanced user experience
+  </Card>
+</Cards>
+
+<br />
+
+---
+
+<br />
+
+## **Authentication Flow**
+
+<br/>
+
+All clients must authenticate immediately after connection.
+
+### **Authenticate Message**
+
+<br/>
+
+```json
+{
+  "action": "authenticate",
+  "payload": {
+    "user_id": "DR_1",
+    "role": "driver",
+    "token": "<JWT_TOKEN>"
+  }
+}
+```
+
+<br />
+
+### **Parameters**
+
+<br/>
+
+| Field     | Type     | Description                    | Required |
+|-----------|----------|--------------------------------|----------|
+| `user_id` | `string` | Unique identifier of the user  | `yes`    |
+| `role`    | `string` | `driver` or `office`           | `yes`    |
+| `token`   | `string` | Valid JWT access token         | `yes`    |
+
+<br />
+
+---
+
+<br />
+
+## **Driver: Sending Location Updates**
+
+<br/>
+
+Once authenticated, a driver can continuously send location updates.
+
+### **Location Update Message**
+
+<br />
+
+```json
+{
+  "action": "driver_location",
+  "id": "DR_1",
+  "payload": {
+    "lat": 9.01234,
+    "lng": 38.70321,
+    "speed": 14.5,
+    "bearing": 90
+  }
+}
+```
+
+<br />
+
+### **Payload Fields**
+
+<br/>
+
+| Field     | Type     | Description              |
+|-----------|----------|--------------------------|
+| `lat`     | `number` | Latitude                 |
+| `lng`     | `number` | Longitude                |
+| `speed`   | `number` | Speed (km/h)             |
+| `bearing` | `number` | Direction in degrees     |
+
+<br/>
+📌 **Recommended update interval:** 2–5 seconds
+
+<br />
+
+---
+
+<br />
+
+## **Office: Subscribing to Drivers**
+
+<br/>
+
+Offices can subscribe to specific drivers or all drivers.
+
+<br/>
+
+### **Subscribe to a Specific Driver**
+
+
+```json
+{
+  "action": "subscribe",
+  "entity": "driver:DR_1"
+}
+```
+
+<br />
+
+### **Subscribe to All Drivers in the Company**
+
+```json
+{
+  "action": "subscribe",
+  "entity": "company:drivers"
+}
+```
+
+<br />
+
+---
+
+<br />
+
+## **Receiving Location Updates (Office)**
+
+<br/>
+
+Subscribed offices receive real-time updates in the following format:
+
+```json
+{
+  "type": "location_update",
+  "id": "DR_1",
+  "payload": {
+    "lat": 9.01345,
+    "lng": 38.70412,
+    "speed": 13.2,
+    "bearing": 90
+  }
+}
+```
+
+<br />
+
+---
+
+<br />
+
+## **Heartbeat (Ping / Pong)**
+
+<br/>
+
+The server may send WebSocket ping frames to ensure connection health.
+
+Clients must respond with pong:
+
+```javascript
+ws.on("ping", () => {
+  ws.pong();
+});
+```
+
+<br />
+
+---
+
+<br />
+
+## **Example Implementations**
+
+<br/>
+
+<Tabs items={['JavaScript (Driver)', 'JavaScript (Office)']}>
+  <Tab value="JavaScript (Driver)">
+  ```javascript
+  const WebSocket = require("ws");
+  const ws = new WebSocket("wss://track.gebeta.app/v1/track");
+
+  ws.on("open", () => {
+    ws.send(JSON.stringify({
+      action: "authenticate",
+      payload: {
+        user_id: "DR_1",
+        role: "driver",
+        token: "<JWT_TOKEN>"
+      }
+    }));
+
+    setInterval(() => {
+      ws.send(JSON.stringify({
+        action: "driver_location",
+        id: "DR_1",
+        payload: {
+          lat: 9.01 + Math.random() * 0.01,
+          lng: 38.70 + Math.random() * 0.01,
+          speed: 12,
+          bearing: 90
+        }
+      }));
+    }, 3000);
+  });
+  ```
+  </Tab>
+
+  <Tab value="JavaScript (Office)">
+  ```javascript
+  const WebSocket = require("ws");
+  const ws = new WebSocket("wss://track.gebeta.app/v1/track");
+
+  ws.on("open", () => {
+    ws.send(JSON.stringify({
+      action: "authenticate",
+      payload: {
+        user_id: "office_1",
+        role: "office",
+        token: "<JWT_TOKEN>"
+      }
+    }));
+
+    ws.send(JSON.stringify({
+      action: "subscribe",
+      entity: "driver:DR_1"
+    }));
+  });
+
+  ws.on("message", msg => {
+    console.log("UPDATE:", JSON.parse(msg));
+  });
+  ```
+  </Tab>
+</Tabs>
+
+<br />
+
+---
+
+<br />
+
+## **Error Handling**
+
+<br/>
+
+| Error          | Description                      |
+|----------------|----------------------------------|
+| `Unauthorized` | Invalid or missing token         |
+| `InvalidAction`| Unsupported action type          |
+| `Forbidden`    | Unauthorized subscription        |
+| `BadPayload`   | Missing or malformed fields      |
+
+<br />
+
+---
+
+<br />
+
+## **Limits & Restrictions**
+
+<br/>
+
+- 🔄 **Max connections:** Configurable per company
+
+- 📡 **Location update rate:** Max 1 update per second per driver
+
+- 🔐 **Token expiration:** Connections close automatically on expiry
+
+- 🏢 **Company isolation:** Offices only receive data from their company
