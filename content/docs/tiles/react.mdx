@@ -1,22 +1,50 @@
 ---
 title: React SDK
-description: A React wrapper for Gebeta Maps' vector tiles
+description: A professional React wrapper for Gebeta Maps' vector tiles, providing a comprehensive interface for creating interactive maps.
 ---
+
+## **Overview**
+<br/>
 
 A professional React wrapper for Gebeta Maps, providing a comprehensive interface for creating interactive maps with markers, polylines, polygons, and clustering capabilities.
 
-## Features
+<br />
 
-- Multiple built-in map styles
-- Customizable markers (both color and image-based)
-- Polylines with custom styling
-- Polyfill support with fill and outline options
-- Marker clustering with customizable appearance
-- Interactive markers with click handling
-- Map click event handling
-- TypeScript support
+---
 
-## Installation
+<br />
+
+## **Key Features**
+<br/>
+
+- **Multiple Built-in Styles**: Choose from various pre-designed map styles
+
+- **Customizable Markers**: Support for both color-based and image-based markers
+
+- **Polylines**: Draw routes and paths with custom styling options
+
+- **Polyfill Support**: Display areas with fill and outline customization options
+
+- **Marker Clustering**: Intelligent clustering with customizable appearance
+
+- **Interactive Events**: Handle marker clicks and map interactions
+
+- **Map Click Event Handling**: Capture and respond to map click events
+
+- **TypeScript Support**: Full TypeScript definitions included
+
+
+<br />
+
+---
+
+<br />
+
+## **Installation**
+
+<br/>
+
+Install the package using npm or yarn:
 
 ```bash
 npm install @gebeta/tiles
@@ -24,11 +52,27 @@ npm install @gebeta/tiles
 yarn add @gebeta/tiles
 ```
 
-## Prerequisites
+<br />
 
-- A Gebeta Maps API key (get yours by registering at [Gebeta Maps](https://gebeta.app/))
+---
 
-## Quick Start
+<br />
+
+## **Prerequisites**
+
+Before you begin, you'll need:
+
+- A Gebeta Maps API key - Register at **[Gebeta Maps](https://gebeta.app/)** to get your key
+
+<br />
+
+---
+
+<br />
+
+## **Quick Start**
+
+Here's a simple example to get you started:
 
 ```jsx
 import { GebetaMap, MapMarker } from '@gebeta/tiles';
@@ -52,4 +96,59 @@ function MyMap() {
 }
 ```
 
-> For a more comprehensive api reference or examples of usage, go to ([Gebeta Maps React Github](https://github.com/AfriGebeta/gebeta-tiles))
+<br />
+
+---
+
+<br />
+
+## **Core Components**
+<br/>
+
+### **GebetaMap**
+
+The main map component that renders the interactive map.
+
+**Props:**
+- `apiKey` - Your Gebeta Maps API key
+- `center` - Initial map center coordinates `[longitude, latitude]`
+- `zoom` - Initial zoom level
+- `style` - Map style name (e.g., `"gebeta_basic"`)
+
+<br />
+
+### **MapMarker**
+
+Add markers to your map with custom styling and interactions.
+
+**Props:**
+- `id` - Unique identifier for the marker
+- `lngLat` - Marker position `[longitude, latitude]`
+- `color` - Marker color (hex code)
+- `onClick` - Click event handler
+
+<br />
+
+---
+
+<br />
+
+
+
+| **Platform**         |   **Supported** |
+|----------------------|------------------|
+| React                | Yes           |
+| Next.js              | Yes           |
+
+<br />
+
+---
+
+<br />
+
+## **Resources**
+<br/>
+
+For comprehensive API reference, advanced examples, and detailed documentation:
+
+ **[Gebeta Maps React GitHub Repository](https://github.com/AfriGebeta/gebeta-tiles)**
