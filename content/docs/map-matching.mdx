@@ -1,0 +1,173 @@
+---
+title: Map Matching API
+description: A service that snaps GPS coordinates to the road network, providing accurate route reconstruction from noisy GPS data.
+---
+
+## **Overview**
+
+<br />
+
+The Map Matching API takes a series of GPS coordinates and matches them to the most likely path on the road network. This is particularly useful for cleaning up GPS traces that may have inaccuracies due to signal interference or device limitations.
+
+<br />
+
+---
+
+<br />
+
+## **Key Features**
+
+<br />
+
+- **GPS Trace Correction**: Automatically corrects GPS drift and inaccuracies
+- **Road Network Snapping**: Matches coordinates to actual road segments
+- **Route Reconstruction**: Rebuilds the most probable path taken
+- **Configurable Radius**: Adjust the search radius for matching
+
+<br />
+
+---
+
+<br />
+
+## **Use Cases**
+
+<br />
+
+<Cards>
+  <Card title="GPS Trace Correction" description="Clean up GPS tracking data from mobile devices to remove drift and inaccuracies." icon="">
+  </Card>
+
+  <Card title="Route Reconstruction" description="Reconstruct delivery or service routes from GPS logs for accurate analysis." icon="">
+  </Card>
+
+  <Card title="Movement Analysis" description="Analyze vehicle movement patterns on road networks for optimization insights." icon="">
+  </Card>
+
+  <Card title="Location Analytics" description="Improve accuracy of location-based analytics by snapping coordinates to actual roads." icon="">
+  </Card>
+</Cards>
+
+<br />
+
+---
+
+<br />
+
+## **Usage**
+
+<br />
+
+```bash
+curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&apiKey={your-api-key}&radius=1     
+```
+
+<br />
+
+---
+
+<br />
+
+## **Request Parameters**
+
+<br />
+
+| Parameter | Type | Description | Required |
+|-----------|------|-------------|----------|
+| `path` | `array` | Array of coordinate objects in format `[{lat,lng},{lat,lng}]` | `yes` |
+| `apiKey` | `string` | Your API key for accessing Gebeta Maps | `yes` |
+| `radius` | `number` | Search radius in meters for matching coordinates to roads (default: 1) | `yes` |
+
+<br />
+
+---
+
+<br />
+
+## **Response Codes**
+
+<br />
+
+| Status Code | Message | Description |
+|-------------|---------|-------------|
+| `200` | `OK` | The request was successful. The system matched the path and returned the corrected route. |
+| `404` | `NoRoute` | No matching route found for the provided coordinates. |
+| `401` | `Not Authorized - No Token` | Authentication failed. No valid token was provided. |
+| `401` | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. |
+| `422` | `InvalidInput` | The request parameters are incorrect. Review the input values and adjust as needed. |
+
+<br />
+
+---
+
+<br />
+
+## **Request Example**
+
+<br />
+
+```bash
+curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&apiKey={your-api-key}&radius=1'
+```
+
+<br />
+
+---
+
+<br />
+
+## **Success Response Example**
+
+<br />
+
+<Accordions>
+<Accordion title="Success Response">
+
+```
+{
+  "coordinates": [
+    [9.019822, 38.74364],
+    [9.019915, 38.74369],
+    [9.020158, 38.743841],
+    [9.020444, 38.74401],
+    [9.020767, 38.743394],
+    [9.021026, 38.743539],
+    [9.020723, 38.74414],
+    [9.020915, 38.744249]
+  ],
+  "distance": 288.5191
+}
+
+```
+
+</Accordion>
+</Accordions>
+
+<br />
+
+---
+
+<br />
+
+## **Error Response Example**
+
+<br />
+
+<Accordions>
+<Accordion title="Error Response">
+
+```json
+{
+  "error": {
+    "code": "InvalidInput",
+    "message": "Invalid path format. Please provide coordinates in the correct format.",
+    "status": 422
+  }
+}
+```
+
+</Accordion>
+</Accordions>
+
+<br />
+

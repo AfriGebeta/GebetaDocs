@@ -77,6 +77,7 @@ export default function ArticleLayout() {
                                         {item.name === "VRP API" && <NewBadge/>}
                                         {item.name === "Place Validation API" && <NewBadge />}
                                         {item.name === "Tracking API" && <NewBadge />}
+                                        {item.name === "Map Matching API" && <NewBadge />}
                                         {item.type === "folder" && <motion.div
                                             animate={{rotate: currentOpen === index ? 180 : 0}}
                                         >
