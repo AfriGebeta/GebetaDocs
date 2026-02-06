@@ -78,18 +78,18 @@ const exampleOptimizedTripJson = JSON.stringify({
 }, null, 2);
 
 const SideBarForm = ({
-                         setSelectedButtonFunction,
-                         selectedButton,
-                         object,
-                         setInstructions,
-                         setActiveInstruction,
-                         setShowInstructions,
-                         showInstructions,
+    setSelectedButtonFunction,
+    selectedButton,
+    object,
+    setInstructions,
+    setActiveInstruction,
+    setShowInstructions,
+    showInstructions,
     mapRef,
     showAlternatives,
     setShowAlternatives,
     setAlternatives
-                     }) => {
+}) => {
     const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
     const [startWayPoint, setStartWayPoint] = useState(false);
     const [searchText, setSearchText] = useState("");
@@ -240,18 +240,61 @@ const SideBarForm = ({
             ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}`
             : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token.token}`,
 
-        direction: `${BASE_URL}/api/route/direction/?origin=${
-            origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
-        }&destination=${
-            destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-        }&apiKey=${token.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
+        direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
+            }&destination=${destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
+            }&apiKey=${token.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
 
         tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
-        onm: `${BASE_URL}/api/route/onm?origin=${
-            origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
-        }${waypointsString}&apiKey=${token.token}`,
+        onm: `${BASE_URL}/api/route/onm?origin=${origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
+            }${waypointsString}&apiKey=${token.token}`,
         matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token.token}`,
         optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=${token.token}`,
+    };
+
+    //for curl
+    const curlMap = {
+        geocoding: selectedGeocoding === "forward"
+            ? `curl -X GET "${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=yourapitoken"`
+            : `curl -X GET "${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=yourapitoken"`,
+
+        direction: `curl -X GET "${BASE_URL}/api/route/direction/?origin=${origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
+            }&destination=${destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
+            }&apiKey=yourapitoken${showAlternatives ? "&alternative=t" : ""}${waypointsString}"`,
+
+        tss: `curl -X GET "${BASE_URL}/api/route/tss?${waypointsString}&apiKey=yourapitoken"`,
+
+        onm: `curl -X GET "${BASE_URL}/api/route/onm?origin=${origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
+            }${waypointsString}&apiKey=yourapitoken"`,
+
+        matrix: `curl -X GET "${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=yourapitoken"`,
+
+        optimizedTrip: `curl -X POST "${BASE_URL}/api/optimized-trip?apiKey=yourapitoken" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "vehicles": [...],
+    "customers": [...],
+    "depots": [...]
+  }'`,
+    };
+
+    //http
+    const httpMap = {
+        geocoding: selectedGeocoding === "forward"
+            ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=yourapitoken`
+            : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=yourapitoken`,
+
+        direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
+            }&destination=${destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
+            }&apiKey=yourapitoken${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
+
+        tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=yourapitoken`,
+
+        onm: `${BASE_URL}/api/route/onm?origin=${origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
+            }${waypointsString}&apiKey=yourapitoken`,
+
+        matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=yourapitoken`,
+
+        optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=yourapitoken`,
     };
 
     const getPolylineCoordinates = (responseObject) => {
@@ -266,15 +309,15 @@ const SideBarForm = ({
         console.log("alternatives", data.data?.alternative)
         if (object.type === "direction") {
             setAlternatives(data?.data?.alternative);
-            setCoordinateFunction({type: "direction", coords: data.data.direction});
+            setCoordinateFunction({ type: "direction", coords: data.data.direction });
         } else if (object.type === "onm") {
             const array = data.data.directions.map(dir => dir.direction);
-            setCoordinateFunction({type: "onm", coords: array});
+            setCoordinateFunction({ type: "onm", coords: array });
         } else if (object.type === "tss") {
-            setCoordinateFunction({type: "tss", coords: data.data.direction});
+            setCoordinateFunction({ type: "tss", coords: data.data.direction });
         } else if (object.type === "matrix") {
             const locations = data?.data?.destinations?.map(dest => [dest.location.lat, dest.location.lng]) || [];
-            setCoordinateFunction({type: "matrix", coords: locations});
+            setCoordinateFunction({ type: "matrix", coords: locations });
         } else if (object.type === "optimizedTrip") {
             setCoordinateFunction({
                 type: "optimizedTrip",
@@ -374,9 +417,9 @@ const SideBarForm = ({
                         className={`
      w-full p-2.5 rounded-[4px]
     ${selectedButton === "start"
-                            ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-                            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                        }
+                                ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
+                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                            }
     text-white
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
@@ -398,9 +441,9 @@ const SideBarForm = ({
                         className={`
      w-full p-2.5 rounded-[4px]
     ${selectedButton === "waypoint"
-                            ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-                            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                        }
+                                ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
+                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                            }
     text-white 
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
@@ -422,9 +465,9 @@ const SideBarForm = ({
                         className={`
      w-full p-2.5 rounded-[4px]
     ${selectedButton === "destination"
-                            ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-                            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                        }
+                                ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
+                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                            }
     text-white 
     font-medium
     outline-none focus:ring-2 focus:ring-[#FFA500]/50
@@ -597,7 +640,7 @@ const SideBarForm = ({
                                 className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                                 onChange={(e) => {
                                     const [lat, lng] = e.target.value.split(',').map(coord => coord.trim());
-                                    setCoordinate({latitude: lat, longitude: lng});
+                                    setCoordinate({ latitude: lat, longitude: lng });
                                 }}
                             />
                         </div>
@@ -736,8 +779,8 @@ const SideBarForm = ({
       dark:peer-checked:bg-[#E59400]
     "></div>
                                     <span className="ml-3 text-sm font-medium -700 dark:-300">
-      Waypoints
-    </span>
+                                        Waypoints
+                                    </span>
                                 </label>
                             </div>
                         )}
@@ -749,7 +792,7 @@ const SideBarForm = ({
                         {apiResponse.data?.map((n, i) => (
                             <div
                                 key={i}
-                                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"                                onClick={() => {
+                                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0" onClick={() => {
                                     if (!mapRef.current) return;
 
                                     const marker = document.createElement('div');
@@ -783,8 +826,8 @@ const SideBarForm = ({
                                     <div className="mr-3 mt-0.5 -400 dark:-300">
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd"
-                                                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                  clipRule="evenodd"/>
+                                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                                clipRule="evenodd" />
                                         </svg>
                                     </div>
 
@@ -818,10 +861,10 @@ const SideBarForm = ({
                     {object.type === "geocoding" ? "Search" : "Calculate"}
                 </button>
 
-                <RequestSample className="mt-[1%]" curl={urlMap[object.type]} js={[]}/>
+                <RequestSample className="mt-[1%]" curl={curlMap[object.type]} http={httpMap[object.type]} js={[]} />
                 <ResponseSample
                     className="mt-[2%]"
-                    component={<JsonViewer data={apiResponse} alwaysExpand={true}/>}
+                    component={<JsonViewer data={apiResponse} alwaysExpand={true} />}
                 />
 
                 {/*{object.type === "direction" && renderInstructions()}*/}
