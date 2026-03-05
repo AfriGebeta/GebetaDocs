@@ -3,7 +3,7 @@ title: ONM API
 description: A comprehensive service that provides travel times and distances between multiple origins and destinations.
 ---
 
-Use the ONM API to calculate the best routes for different scenarios, such as optimizing delivery routes, planning trips, or analyzing traffic patterns. 
+Use the ONM API to calculate the best routes for different scenarios, such as optimizing delivery routes, planning trips, or analyzing traffic patterns.
 
 ## Use Cases
 
@@ -61,7 +61,7 @@ curl https://mapapi.gebeta.app/api/route/onm/?json=[]&origin={}&apiKey={}
 | `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
 | `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
 | `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
-| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
+| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               |
 
 
 ## ONM API - CURL Request
@@ -83,7 +83,7 @@ fetch('https://mapapi.gebeta.app/api/route/onm/?json=[8.989022,38.79036;9.03045,
   .catch(error => console.error('Error:', error));
   ```
   </Tab>
-  
+
   <Tab value="Rust">
   ```rust
 use reqwest::blocking::get;
@@ -107,9 +107,9 @@ fn main() {
 }
   ```
   </Tab>
-  
+
   <Tab value="Go">
-  ```go 
+  ```go
 package main
 
 import (
@@ -122,7 +122,7 @@ func main() {
     apiKey := "{your-api-key}"
     origin := "{origin-latitude,origin-longitude}"
     coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
-    
+
     url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm/?json=[%s]&origin=%s&apiKey=%s", coordinates, origin, apiKey)
 
     resp, err := http.Get(url)
@@ -137,7 +137,7 @@ func main() {
 }
   ```
   </Tab>
-  
+
   <Tab value="PHP">
   ```php
 <?php
@@ -152,7 +152,7 @@ print_r($data);
 ?>
   ```
   </Tab>
-  
+
   <Tab value="Python">
   ```python
 import requests
@@ -167,7 +167,7 @@ data = response.json()
 print(data)
   ```
   </Tab>
-  
+
   <Tab value="Ruby">
   ```ruby
 require 'net/http'
@@ -183,7 +183,7 @@ data = JSON.parse(response)
 puts data
   ```
   </Tab>
-  
+
   <Tab value="Dart">
   ```dart
 import 'dart:convert';
@@ -204,7 +204,7 @@ void main() async {
     print('Error: ${response.statusCode}');
   }
 }
-  ```  
+  ```
   </Tab>
 </Tabs>
 
@@ -245,6 +245,6 @@ void main() async {
 
 The ONM API has some restrictions and limits that you need to be aware of before using it:
 
-- **Coordinates Waypoints**: Should only be less than or equal to 10.
+- **Coordinates Waypoints**: Should only be less than or equal to 5.
 - **Rate Limit**: 50 requests per second from a single API token. If you exceed this limit, you will receive an error message and your requests will be rejected. To avoid this, you can throttle your requests or use multiple tokens for different applications or users.
 - **Inter-Country Requests**: Not allowed. You can only request directions within the same country or region. If you try to request directions across different countries or regions, you will receive an error message, and your request will be invalid. For inter-country travel, consider using other map services or APIs that support this feature.
