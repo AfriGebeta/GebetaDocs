@@ -1,0 +1,246 @@
+---
+title: React Native SDK
+description: A React Native SDK for integrating Gebeta Maps into your mobile applications with full navigation support.
+---
+
+## **Overview**
+<br/>
+
+A React Native SDK for integrating Gebeta Maps into your applications. Build interactive mobile maps with marker management, fence drawing, path visualization, clustering support, geocoding, directions, and full navigation UI.
+
+<br />
+
+---
+
+<br />
+
+## **Key Features**
+<br/>
+
+- **Interactive Maps**: Display Gebeta tiles with smooth interactions
+
+- **Marker Management**: Add and manage image markers with custom callbacks
+
+- **Fence Drawing**: Create and manage polygon fences on the map
+
+- **Path Visualization**: Display routes and paths with custom styling
+
+- **Clustering Support**: Intelligent marker clustering for better performance
+
+- **Geocoding & Reverse Geocoding**: Convert addresses to coordinates and vice versa
+
+- **Directions & Routing**: Get directions between points and display routes
+
+- **Navigation UI**: Full navigation support with route rendering and HUD
+
+- **Custom Styling**: Customize map appearance to match your design
+
+<br />
+
+---
+
+<br />
+
+## **Installation**
+
+<br/>
+
+Install the package and its required dependency:
+
+```bash
+yarn add @gebeta/tiles-react-native or npm i @gebeta/tiles-react-native
+yarn add @maplibre/maplibre-react-native
+```
+
+Note: `maplibre-react-native` is a required peer dependency.
+
+<br />
+
+---
+
+<br />
+
+## **Prerequisites**
+
+Before you begin, you'll need:
+
+- A Gebeta Maps API key - Register at **[Gebeta Maps](https://gebeta.app/)** to get your key
+
+<br />
+
+---
+
+<br />
+
+## **Basic Usage**
+
+Here's a simple example to get you started:
+
+```jsx
+import React, { useRef } from 'react';
+import { View, Alert } from 'react-native';
+import { GebetaMap, GebetaMapRef } from '@gebeta/tiles-react-native';
+
+const App = () => {
+  const mapRef = useRef<GebetaMapRef>(null);
+
+  const handleMapClick = (lngLat: [number, number], event: any) => {
+    Alert.alert(
+      'Map Clicked',
+      `Longitude: ${lngLat[0].toFixed(6)}\nLatitude: ${lngLat[1].toFixed(6)}`
+    );
+  };
+
+  const handleMapLoaded = () => {
+    // Add a marker after map loads
+    if (mapRef.current) {
+      mapRef.current.addImageMarker(
+        [38.7463, 9.0223], // Addis Ababa coordinates
+        'https://via.placeholder.com/32x32/007cbf/ffffff?text=M',
+        [32, 32],
+        (lngLat, marker, event) => {
+          Alert.alert('Marker Clicked', 'You clicked on Addis Ababa!');
+        }
+      );
+    }
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <GebetaMap
+        ref={mapRef}
+        apiKey="your-api-key-here"
+        center={[38.7463, 9.0223]} // Addis Ababa
+        zoom={12}
+        onMapClick={handleMapClick}
+        onMapLoaded={handleMapLoaded}
+      />
+    </View>
+  );
+};
+
+export default App;
+```
+
+<br />
+
+---
+
+<br />
+
+## **Fly Animation**
+
+Animate the camera to a new location:
+
+```jsx
+import React, { useRef } from 'react';
+import { Alert, View, Button, StyleSheet } from 'react-native';
+import GebetaMap, { GebetaMapRef } from '@gebeta/tiles-react-native';
+
+const App = () => {
+  const mapRef = useRef<GebetaMapRef>(null);
+
+  const handleMapClick = (lngLat: [number, number]) => {
+    Alert.alert(
+      'Map Clicked',
+      `Longitude: ${lngLat[0].toFixed(6)}\nLatitude: ${lngLat[1].toFixed(6)}`
+    );
+  };
+
+  const handleFlyToBahirDar = () => {
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [37.3895, 11.5946],
+        zoom: 14,
+        pitch: 45,
+        duration: 5000,
+      });
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <GebetaMap
+        ref={mapRef}
+        apiKey="your-api-key-here"
+        center={[38.7463, 9.0223]}
+        zoom={12}
+        onMapClick={handleMapClick}
+        style={"https://tiles.gebeta.app/styles/standard/style.json"}
+      />
+
+      <View style={styles.buttonContainer}>
+        <Button title="Fly to Bahir Dar" onPress={handleFlyToBahirDar} />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    top: 60,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+});
+export default App;
+```
+
+<br />
+
+---
+
+<br />
+
+## **API Reference**
+
+<br/>
+
+### **GebetaMap Props**
+
+| **Prop**              | **Type**                                    | **Required** | **Description**                          |
+|-----------------------|---------------------------------------------|--------------|------------------------------------------|
+| `apiKey`              | `string`                                    | Yes          | Your Gebeta Maps API key                 |
+| `center`              | `[number, number]`                          | Yes          | Initial map center `[longitude, latitude]` |
+| `zoom`                | `number`                                    | Yes          | Initial zoom level                       |
+| `onMapClick`          | `(lngLat: [number, number], event: any) => void` | No           | Callback when map is clicked             |
+| `onMapLoaded`         | `() => void`                                | No           | Callback when map finishes loading       |
+| `blockInteractions`   | `boolean`                                   | No           | Disable map interactions                 |
+| `style`               | `any`                                       | No           | Custom styles for the map container      |
+| `clusteringOptions`   | `ClusteringOptions`                         | No           | Options for marker clustering            |
+
+<br />
+
+---
+
+<br />
+
+
+---
+
+<br />
+
+| **Platform**         |   **Supported** |
+|----------------------|------------------|
+| iOS                  | Yes           |
+| Android              | Yes           |
+
+<br />
+
+---
+
+<br />
+
+## **Resources**
+<br/>
+
+For comprehensive API reference, advanced examples, and detailed documentation:
+
+ **[Gebeta Maps React Native GitHub Repository](https://github.com/AfriGebeta/gebeta-tiles-react-native)**
+ Or
+ **https://www.npmjs.com/package/@gebeta/tiles-react-native**
