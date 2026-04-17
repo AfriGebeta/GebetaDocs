@@ -13,7 +13,6 @@
     "@fontsource-variable/plus-jakarta-sans": "^5.2.5",
     "@fontsource/zen-dots": "^5.2.5",
     "@gebeta/tiles": "^1.1.4",
-    "@nkzw/copy-as-markdown": "^2.0.3",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-dialog": "^1.1.14",
