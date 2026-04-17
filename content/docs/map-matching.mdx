@@ -3,36 +3,18 @@ title: Map Matching API
 description: A service that snaps GPS coordinates to the road network, providing accurate route reconstruction from noisy GPS data.
 ---
 
-## **Overview**
-
-<br />
+## Overview
 
 The Map Matching API takes a series of GPS coordinates and matches them to the most likely path on the road network. This is particularly useful for cleaning up GPS traces that may have inaccuracies due to signal interference or device limitations.
 
-<br />
-
----
-
-<br />
-
-## **Key Features**
-
-<br />
+## Key Features
 
 - **GPS Trace Correction**: Automatically corrects GPS drift and inaccuracies
 - **Road Network Snapping**: Matches coordinates to actual road segments
 - **Route Reconstruction**: Rebuilds the most probable path taken
 - **Configurable Radius**: Adjust the search radius for matching
 
-<br />
-
----
-
-<br />
-
-## **Use Cases**
-
-<br />
+## Use Cases
 
 <Cards>
   <Card title="GPS Trace Correction" description="Clean up GPS tracking data from mobile devices to remove drift and inaccuracies." icon="">
@@ -48,29 +30,13 @@ The Map Matching API takes a series of GPS coordinates and matches them to the m
   </Card>
 </Cards>
 
-<br />
-
----
-
-<br />
-
-## **Usage**
-
-<br />
+## Usage
 
 ```bash
 curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&apiKey={your-api-key}&radius=1     
 ```
 
-<br />
-
----
-
-<br />
-
-## **Request Parameters**
-
-<br />
+## Request Parameters
 
 | Parameter | Type | Description | Required |
 |-----------|------|-------------|----------|
@@ -78,13 +44,8 @@ curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&ap
 | `apiKey` | `string` | Your API key for accessing Gebeta Maps | `yes` |
 | `radius` | `number` | Search radius in meters for matching coordinates to roads (default: 1) | `yes` |
 
-<br />
 
----
-
-<br />
-
-## **Response Codes**
+## Response Codes
 
 <br />
 
@@ -96,29 +57,12 @@ curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&ap
 | `401` | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. |
 | `422` | `InvalidInput` | The request parameters are incorrect. Review the input values and adjust as needed. |
 
-<br />
-
----
-
-<br />
-
-## **Request Example**
-
-<br />
-
+## Request Example
 ```bash
 curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&apiKey={your-api-key}&radius=1'
 ```
 
-<br />
-
----
-
-<br />
-
-## **Success Response Example**
-
-<br />
+## Success Response Example
 
 <Accordions>
 <Accordion title="Success Response">
@@ -143,13 +87,7 @@ curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?
 </Accordion>
 </Accordions>
 
-<br />
-
----
-
-<br />
-
-## **Error Response Example**
+## Error Response Example
 
 <br />
 

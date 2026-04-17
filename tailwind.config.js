@@ -1,3 +1,4 @@
+import { createPreset } from 'fumadocs-ui/tailwind-plugin';
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 import svgToDataUri from "mini-svg-data-uri";
 
@@ -12,6 +13,7 @@ export default {
         './mdx-components.{ts,tsx}',
         './node_modules/fumadocs-ui/dist/**/*.js',
     ],
+    presets: [createPreset()],
     theme: {
         extend: {
             fontFamily: {
@@ -180,7 +182,7 @@ export default {
     plugins: [
         require("tailwindcss-animate"),
         addVariablesForColors,
-        function ({matchUtilities, theme}) {
+        function ({ matchUtilities, theme }) {
             matchUtilities(
                 {
                     "bg-grid": (value) => ({
@@ -207,7 +209,7 @@ export default {
         },]
 };
 
-function addVariablesForColors({addBase, theme}) {
+function addVariablesForColors({ addBase, theme }) {
     let allColors = flattenColorPalette(theme("colors"));
     let newVars = Object.fromEntries(
         Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),

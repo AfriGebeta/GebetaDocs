@@ -1,14 +1,14 @@
 "use client"
-import {ApiReferenceReact} from '@scalar/api-reference-react'
-import {useTheme} from 'next-themes'
+import { ApiReferenceReact } from '@scalar/api-reference-react'
+import { useTheme } from 'next-themes'
 
 function ApiDocs() {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
 
   return (
     <ApiReferenceReact
       configuration={{
-        searchHotKey: '/',
+        searchHotKey: 'k',
         metaData: {
           title: 'Gebeta Maps API Playground',
         },

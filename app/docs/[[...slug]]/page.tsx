@@ -1,14 +1,15 @@
 //@ts-nocheck
-import {source} from '@/app/source';
-import type {Metadata} from 'next';
-import {DocsBody, DocsDescription, DocsPage, DocsTitle,} from 'fumadocs-ui/page';
-import {notFound} from 'next/navigation';
+import { source } from '@/app/source';
+import type { Metadata } from 'next';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle, } from 'fumadocs-ui/page';
+import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
-import {TypeTable} from 'fumadocs-ui/components/type-table';
-import {Tab, Tabs} from 'fumadocs-ui/components/tabs';
-import {Accordion, Accordions} from 'fumadocs-ui/components/accordion';
-import GridPattern from '@/components/custom/backgrounds/grid-pattern';
-import {cn} from '@/lib/utils';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import PageActions from '@/components/custom/cards/page-actions';
 
 export default async function Page({
   params,
@@ -19,31 +20,21 @@ export default async function Page({
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const markdownPath = join(process.cwd(), 'content/docs', page.file.path);
+  const markdown = await readFile(markdownPath, 'utf-8').catch(() => '');
+  const docsRepoBaseUrl = process.env.NEXT_PUBLIC_DOCS_REPO_URL?.replace(/\/$/, '');
+  const openItems = [
+    { label: 'Open this page', href: page.url },
+    ...(docsRepoBaseUrl
+      ? [{ label: 'Open source file', href: `${docsRepoBaseUrl}/blob/main/content/docs/${page.file.path}` }]
+      : []),
+  ];
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-            <GridPattern
-        squares={[
-          [4, 4],
-          [5, 1],
-          [8, 2],
-          [5, 3],
-          [5, 5],
-          [10, 10],
-          [12, 15],
-          [15, 10],
-          [10, 15],
-          [15, 10],
-          [10, 15],
-          [15, 10],
-        ]}
-        className={cn(
-          "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-          "inset-x-0 inset-y-[-30%] h-[100%] skew-y-12 z-[-1]"
-        )}
-      />
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
+      <PageActions markdown={markdown} />
       <DocsBody>
         <MDX components={{ ...defaultMdxComponents, TypeTable, Tab, Tabs, Accordion, Accordions }} />
       </DocsBody>
