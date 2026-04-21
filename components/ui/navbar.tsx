@@ -1,8 +1,8 @@
 import Link from "next/link";
-import {ThemeToggle} from "@/components/theme-toggler";
-import {NavbarMobile, NavbarMobileBtn} from "../nav-mobile";
-import {NavLink} from "./nav-link";
-import {Logo} from "./logo";
+import { ThemeToggle } from "@/components/theme-toggler";
+import { NavbarMobile, NavbarMobileBtn } from "../nav-mobile";
+import { NavLink } from "./nav-link";
+import { Logo } from "./logo";
 
 export const Navbar = () => {
     const logoAssets = {
@@ -59,7 +59,7 @@ export const Navbar = () => {
                     <div className="flex flex-col gap-2 w-full">
 
                         <div className="flex items-center gap-2">
-                            <Logo/>
+                            <Logo />
                             <p className="select-none">GEBETA MAPS</p>
                         </div>
                     </div>
@@ -89,11 +89,11 @@ export const Navbar = () => {
                             </svg>
                         </NavLink>
                     </ul>
-                    <ThemeToggle/>
-                    <NavbarMobileBtn/>
+                    <ThemeToggle />
+                    <NavbarMobileBtn />
                 </div>
             </nav>
-            <NavbarMobile/>
+            <NavbarMobile />
         </div>
     );
 };
@@ -116,10 +116,10 @@ export const navMenu = [
         path: "/map-playground",
     },
 
-    // {
-    //     name: "changelogs",
-    //     path: "/changelogs",
-    // },
+    {
+        name: "changelogs",
+        path: "/changelogs",
+    },
     {
         name: "community",
         path: "/community",

@@ -1,24 +1,24 @@
 //@ts-nocheck
 
 import Link from "next/link";
-import {useId} from "react";
-import {cn} from "@/lib/utils";
-import {IconLink} from "./changelog-layout";
-import {BookIcon, GitHubIcon, XIcon} from "./icons";
-import {DiscordLogoIcon} from "@radix-ui/react-icons";
-import {StarField} from "./stat-field";
+import { useId } from "react";
+import { cn } from "@/lib/utils";
+import { IconLink } from "./changelog-layout";
+import { BookIcon, GitHubIcon, XIcon } from "./icons";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import { StarField } from "./stat-field";
 import Markdown from "react-markdown";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import rehypeHighlight from "rehype-highlight";
-import {betterFetch} from "@better-fetch/fetch";
+import { betterFetch } from "@better-fetch/fetch";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 const ChangelogPage = async () => {
-    const {data: releases} = await betterFetch("https://api.github.com/repos/AfriGebeta/gebeta-tiles/releases");
+    const { data: releases } = await betterFetch("https://api.github.com/repos/AfriGebeta/traffic-app/releases");
 
     const messages = releases
-        ?.filter((release) => !release.prerelease)
-        .map((release) => ({
+        // ?.filter((release) => !release.prerelease)
+        ?.map((release) => ({
             tag: release.tag_name,
             title: release.name,
             content: getContent(release.body),
@@ -33,24 +33,54 @@ const ChangelogPage = async () => {
     function getContent(content: string) {
         const lines = content.split("\n");
         const newContext = lines.map((line) => {
-            if (line.startsWith("- ")) {
-                const mainContent = line.split(";")[0];
-                const context = line.split(";")[2];
-                const mentions = context
-                    ?.split(" ")
-                    .filter((word) => word.startsWith("@"))
-                    .map((mention) => {
-                        const username = mention.replace("@", "");
-                        const avatarUrl = `https://github.com/${username}.png`;
-                        return `[![${mention}](${avatarUrl})](https://github.com/${username})`;
-                    });
-                if (!mentions) {
-                    return line;
-                }
-                // Remove &nbsp
-                return mainContent.replace(/&nbsp/g, "") + " – " + mentions.join(" ");
+            const cleanedLine = line.replace(/&nbsp/g, "").trim();
+
+            if (!cleanedLine) {
+                return "";
             }
-            return line;
+
+            if (cleanedLine.startsWith("## ")) {
+                return cleanedLine;
+            }
+
+            const listLine = cleanedLine.match(/^(?:-|\*)\s+(.*)$/);
+            const normalizedLine = listLine ? listLine[1].trim() : cleanedLine;
+
+            const mentionMatches = [...normalizedLine.matchAll(/@([A-Za-z0-9-]+)/g)];
+            const mentions = mentionMatches.map((match) => {
+                const username = match[1];
+                const avatarUrl = `https://github.com/${username}.png`;
+
+                return `[![${username}](${avatarUrl})](https://github.com/${username})`;
+            });
+
+            const prUrl = normalizedLine.match(/https:\/\/github\.com\/[^\s)]+/)?.[0];
+            const prNumber = prUrl?.match(/\/pull\/(\d+)/)?.[1];
+
+            const mainContent = normalizedLine
+                .replace(/\s+by\s+@[A-Za-z0-9-]+(?=\s+in\s+https:\/\/github\.com\/[^\s)]+)/g, "")
+                .replace(/\s+in\s+https:\/\/github\.com\/[^\s)]+/g, "")
+                .trim();
+
+            if (!mentions.length && !prUrl) {
+                if (listLine) {
+                    return `- ${normalizedLine}`;
+                }
+
+                return cleanedLine;
+            }
+
+            const parts = [mainContent || normalizedLine];
+
+            if (mentions.length) {
+                parts.push(mentions.join(" "));
+            }
+
+            if (prUrl) {
+                parts.push(`[PR ${prNumber ? `#${prNumber}` : "link"}](${prUrl})`);
+            }
+
+            return `- ${parts.join(" – ")}`;
         });
         return newContext.join("\n");
     }
@@ -59,8 +89,8 @@ const ChangelogPage = async () => {
         <div className="grid md:grid-cols-2 items-start">
             <div
                 className="bg-gradient-to-tr overflow-hidden px-12 py-24 md:py-0 -mt-[100px] md:h-dvh relative md:sticky top-0 from-transparent dark:via-stone-950/5 via-stone-100/30 to-stone-200/20 dark:to-transparent/10">
-                <StarField className="top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"/>
-                <Glow/>
+                <StarField className="top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2" />
+                <Glow />
 
                 <div className="flex flex-col md:justify-center max-w-xl mx-auto h-full">
                     <h1 className="mt-14 font-sans font-semibold tracking-tighter text-5xl">
@@ -71,7 +101,7 @@ const ChangelogPage = async () => {
                         Gebeta Maps is comprehensive location api service for TypeScript
                         that provides a wide range of features to make location and map related task easier.
                     </p>
-                    <hr className="h-px bg-gray-300 mt-5"/>
+                    <hr className="h-px bg-gray-300 mt-5" />
                     <div className="mt-8 flex flex-wrap text-gray-600 dark:text-gray-300 gap-x-1 gap-y-3 sm:gap-x-2">
                         <IconLink
                             href="/docs"
@@ -128,7 +158,7 @@ const ChangelogPage = async () => {
                                             {props.children?.toString().includes("date=") &&
                                                 props.children?.toString().split("date=")[1]}
 
-                                            <div className="w-4 h-[1px] dark:bg-white/60 bg-black"/>
+                                            <div className="w-4 h-[1px] dark:bg-white/60 bg-black" />
                                         </time>
                                     </div>
                                     <Link
@@ -159,7 +189,7 @@ const ChangelogPage = async () => {
                             h3: (props) => (
                                 <h3 className="text-xl tracking-tighter py-1" {...props}>
                                     {props.children?.toString()?.trim()}
-                                    <hr className="h-[1px] my-1 mb-2 bg-input"/>
+                                    <hr className="h-[1px] my-1 mb-2 bg-input" />
                                 </h3>
                             ),
                             p: (props) => <p className="my-0 ml-10 text-sm" {...props} />,
@@ -170,7 +200,7 @@ const ChangelogPage = async () => {
                                 />
                             ),
                             li: (props) => <li className="my-1" {...props} />,
-                            a: ({className, ...props}: any) => (
+                            a: ({ className, ...props }: any) => (
                                 <Link
                                     target="_blank"
                                     className={cn("font-medium underline", className)}
@@ -184,7 +214,7 @@ const ChangelogPage = async () => {
                                 <img
                                     className="rounded-full w-6 h-6 border opacity-70 inline-block"
                                     {...props}
-                                    style={{maxWidth: "100%"}}
+                                    style={{ maxWidth: "100%" }}
                                 />
                             ),
                         }}
@@ -219,14 +249,14 @@ export function Glow() {
             >
                 <defs>
                     <radialGradient id={`${id}-desktop`} cx="100%">
-                        <stop offset="0%" stopColor="rgba(41, 37, 36, 0.4)"/>
-                        <stop offset="53.95%" stopColor="rgba(28, 25, 23, 0.09)"/>
-                        <stop offset="100%" stopColor="rgba(0, 0, 0, 0)"/>
+                        <stop offset="0%" stopColor="rgba(41, 37, 36, 0.4)" />
+                        <stop offset="53.95%" stopColor="rgba(28, 25, 23, 0.09)" />
+                        <stop offset="100%" stopColor="rgba(0, 0, 0, 0)" />
                     </radialGradient>
                     <radialGradient id={`${id}-mobile`} cy="100%">
-                        <stop offset="0%" stopColor="rgba(41, 37, 36, 0.3)"/>
-                        <stop offset="53.95%" stopColor="rgba(28, 25, 23, 0.09)"/>
-                        <stop offset="100%" stopColor="rgba(0, 0, 0, 0)"/>
+                        <stop offset="0%" stopColor="rgba(41, 37, 36, 0.3)" />
+                        <stop offset="53.95%" stopColor="rgba(28, 25, 23, 0.09)" />
+                        <stop offset="100%" stopColor="rgba(0, 0, 0, 0)" />
                     </radialGradient>
                 </defs>
                 <rect
@@ -243,7 +273,7 @@ export function Glow() {
                 />
             </svg>
             <div
-                className="absolute inset-x-0 bottom-0 right-0 h-px dark:bg-white/5 mix-blend-overlay lg:left-auto lg:top-0 lg:h-auto lg:w-px"/>
+                className="absolute inset-x-0 bottom-0 right-0 h-px dark:bg-white/5 mix-blend-overlay lg:left-auto lg:top-0 lg:h-auto lg:w-px" />
         </div>
     );
 }
