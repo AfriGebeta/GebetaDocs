@@ -154,6 +154,10 @@ export const navMenu: {
         path: "/docs",
     },
     {
+        name: "authentication",
+        path: "/authentication",
+    },
+    {
         name: "api playground",
         path: "/api-playground",
     },
