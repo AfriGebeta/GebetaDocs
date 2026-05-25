@@ -1,9 +1,12 @@
 ---
 title: Getting Started
-description: Geocoding is the process of finding locations that match a user’s search query or interest on the map.
+description: Geocoding is the process of finding locations that match a user's search query or interest on the map.
 ---
 
-With the Gebeta Maps Geocoding API, you can retrieve information about places like restaurants, hotels, parks, or museums. Each place includes ratings, reviews, photos, contact information, and more. Additionally, you can access detailed information such as distance, directions, and place availability.
+The Gebeta Geocoding API does two things: forward geocoding and reverse geocoding:
+
+* **Forward geocoding** converts location text into geographic coordinates, turning `Bole Road` into `38.7578,9.0192`.
+* **Reverse geocoding** turns geographic coordinates into place names, turning `38.7578, 9.0192` into `Bole Road`. These location names can vary in specificity, from individual street/addresses to cities and countries containing the given coordinates.
 
 ## Types of Geocoding
 
@@ -21,8 +24,55 @@ With the Gebeta Maps Geocoding API, you can retrieve information about places li
   </Card>
 </Cards>
 
-## API Limits and Restrictions
+## Geographic Feature Types
 
-The Geocoding API has a rate limit of **50 requests per second** per API token. Exceeding this limit will result in an error and rejected requests. To manage this, consider:
-- Throttling your requests.
-- Using multiple tokens for different applications or users.
+Various types of geographic features are available in the Gebeta Geocoding API. These features are returned in search results under the following hierarchy:
+
+| Feature Type | Description                                                                                |
+| :--- |:-------------------------------------------------------------------------------------------|
+| **country** | Generally recognized countries (e.g., Ethiopia).                                           |
+| **region** | Top-level sub-national administrative features (e.g., Oromia, Amhara).                     |
+| **place** | Typically cities, towns, villages, or municipalities. Suitable for main locality displays. |
+| **locality** | Official sub-city features (e.g., sub-cities, districts, zones).                           |
+| **neighborhood** | Colloquial sub-city areas or local quarters.                                               |
+| **street** | Street features hosting one or more addresses (e.g., Bole Road).                           |
+| **address** | Individual residential, business, or point of interest addresses.                          |
+
+## Geocoding response object
+
+The response to a Geocoding API request is an object containing the following properties:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| **data** | `object` | Main payload enclosing the query details and matching locations. |
+| **data.query** | `string` | Echoes the search query or coordinates coordinates. |
+| **data.results** | `array` | An array of feature objects. Forward matches are ordered by search relevance and distance weight. Reverse matches are sorted by proximity. |
+
+### Result properties object
+
+Each feature object in the `results` array contains the following properties:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| **id** | `string` | Uniquely identifies the feature index and database document identifier. |
+| **name** | `string` | The formatted primary name of the matched location or POI. |
+| **display_name** | `string` | The complete formatted description of the result combining place name, city, and country. |
+| **category** | `string` | Feature type category tag (e.g., highway, accommodation, shop, amenity). |
+| **location** | `object` | An object representing the exact coordinates center point of the feature. |
+| **location.lat** | `number` | Latitude coordinate of the feature. |
+| **location.lng** | `number` | Longitude coordinate of the feature. |
+| **address** | `object` | Address envelope outlining context variables. |
+| **address.city** | `string` | Name of city, zone, or locality. |
+| **address.country** | `string` | Name of the country. |
+| **address.country_code**| `string` | ISO country abbreviation code (e.g., ETH, USA). |
+
+## Geocoding API errors
+
+| Response body message / error object | HTTP error code | Description |
+| :--- | :--- | :--- |
+| `{ "query": { "apiKey": ["missing api key"] } }` | `422 Unprocessable Entity` | No token was used in the query or header. |
+| `{ "query": { "limit": ["limit must be a number"] } }` | `422 Unprocessable Entity` | The limit parameter was provided but was not a number. |
+| `{ "query": { "body": ["..."] } }` | `422 Unprocessable Entity` | Data validation failed (e.g., bounding box coordinate bounds or proximity layout values are invalid). |
+| `{ "error": { "status": 400, "code": "BAD_REQUEST", "message": "..." } }` | `400 Bad Request` | Reverse geocoding input latitude/longitude missing, out of range, or invalid. |
+| `{ "error": { "status": "500", "message": "...", "code": "HE00001" } }` | `500 Internal Server Error` | The geocoding service encountered an unhandled internal system error. |
+| `{ "error": { "status": "500", "message": "...", "code": "HE00002" } }` | `500 Internal Server Error` | Internal server conflict or communication issues with the core verification servers. |

@@ -1,290 +1,62 @@
 ---
 title: Reverse Geocoding
-description: Retrieve accurate location coordinates by entering a place name, returning an array of potential matches with their corresponding details.
+description: Retrieve place names and address details from geographic coordinates, returning an array of matching locations.
 ---
 
+## Reverse geocoding
 
-## Request Sample
+`GET https://mapapi.gebeta.app/v2/search/reverse-geocoding?lon={longitude}&lat={latitude}`
+
+The reverse geocoding query type allows you to look up a pair of coordinates and returns the geographic features at that location.
+
+### Required parameters
+
+| Required parameters | Type | Description |
+| :--- | :--- | :--- |
+| **lat** | `number` | The latitude decimal value from the geographic coordinate. Range: `-90` to `90`. |
+| **lon** | `number` | The longitude decimal value from the geographic coordinate. Range: `-180` to `180`. |
+| **apiKey** | `string` | A valid Gebeta API access token. Can also be supplied in the HTTP request as an `Authorization: Bearer <apiKey>` header. |
+
+### Optional parameters
+
+| Optional parameters | Type | Description |
+| :--- | :--- | :--- |
+| **size** | `integer` | Specify the maximum number of results to return. Default: `1`. Allowed range: `1` to `5`. |
+| **category** | `string` | Filter results to include only a subset of feature categories. Comma-separated list of category terms. |
+
+### Example requests
+
 ```bash
-curl https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}
+# A basic reverse geocoding request
+curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&apiKey=YOUR_API_KEY"
+
+# Retrieve places near a specific location filtered by size
+curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&size=3&apiKey=YOUR_API_KEY"
 ```
-## Parameters
 
-<table style={{ borderCollapse: 'collapse', width: '100%' ,  marginBottom: '10px' }}>
-  <thead>
-    <tr>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Parameter</th>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Type</th>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Description</th>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Required</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>lat</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Latitude of the location you want to reverse-geocode.</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
-    </tr>
-    <tr>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>lon</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Longitude of the location you want to reverse-geocode.</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
-    </tr>
-    <tr>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>format</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Response format for reverse geocoding. Currently only <strong>osm</strong> is supported.</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>No</td>
-    </tr>
-    <tr>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>apiKey</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>string</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Your Gebeta Maps API key.</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>Yes</td>
-    </tr>
-  </tbody>
-</table>
+### Response
 
-
-## Response Codes for Reverse Geocoding API
-<table style={{ borderCollapse: 'collapse', width: '100%' ,  marginBottom: '10px' }}>
-  <thead>
-    <tr>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Status Code</th>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Message</th>
-      <th style={{ border: '1px solid #ccc', padding: '8px' }}>Description</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>200</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}>OK</td>
-      <td style={{ border: '1px solid #ccc', padding: '8px' }}> Request successful. Matching location information was found and returned.</td>
-    </tr>
-
-     <tr>
-          <td style={{ border: '1px solid #ccc', padding: '8px' }}>404</td>
-          <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Found</td>
-          <td style={{ border: '1px solid #ccc', padding: '8px' }}>No matching location exists for the provided coordinates.</td>
-        </tr>
-
-        <tr>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>401</td>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Authorized – No Token</td>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Authentication failed. A valid API key was not provided</td>
-         </tr>
-        <tr>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>401</td>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>Not Authorized – Invalid Token</td>
-           <td style={{ border: '1px solid #ccc', padding: '8px' }}>The provided API key is invalid or expired.</td>
-         </tr>
-         <tr>
-            <td style={{ border: '1px solid #ccc', padding: '8px' }}>422</td>
-            <td style={{ border: '1px solid #ccc', padding: '8px' }}>Invalid Input</td>
-            <td style={{ border: '1px solid #ccc', padding: '8px' }}>One or more request parameters are incorrect. Review and correct your input.</td>
-          </tr>
-  </tbody>
-</table>
-
-
-## Example
-
-<Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
-  <Tab value="JavaScript">
-  ```javascript
-fetch('https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=8.989022&lon=38.79036&apiKey={your-api-key}')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-  ```
-  </Tab>
-  <Tab value="Rust">
-  ```rust
-use reqwest::blocking::get;
-use std::collections::HashMap;
-
-fn main() {
-    let lat = "8.989022";
-    let lon = "38.79036";
-    let api_key = "{your-api-key}";
-    let url = format!("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={}&lon={}&apiKey={}", lat, lon, api_key);
-
-    let response: HashMap<String, String> = get(&url)
-        .unwrap()
-        .json()
-        .unwrap();
-
-    println!("{:?}", response);
-}
-  ```
-  </Tab>
-  <Tab value="Go">
-  ```go
-package main
-
-import (
-    "encoding/json"
-    "fmt"
-    "net/http"
-)
-
-func main() {
-    lat := "8.989022"
-    lon := "38.79036"
-    apiKey := "{your-api-key}"
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=%s&lon=%s&apiKey=%s", lat, lon, apiKey)
-
-    resp, err := http.Get(url)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
-
-    var result map[string]interface{}
-    json.NewDecoder(resp.Body).Decode(&result)
-    fmt.Println(result)
-}
-  ```
-  </Tab>
-  <Tab value="PHP">
-  ```php
-<?php
-$lat = "8.989022";
-$lon = "38.79036";
-$apiKey = "{your-api-key}";
-$url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={$lat}&lon={$lon}&apiKey={$apiKey}";
-
-$response = file_get_contents($url);
-$data = json_decode($response, true);
-print_r($data);
-?>
-  ```
-  </Tab>
-  <Tab value="Python">
-  ```python
-import requests
-
-lat = "8.989022"
-lon = "38.79036"
-api_key = "{your-api-key}"
-url = f"https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat={lat}&lon={lon}&apiKey={api_key}"
-
-response = requests.get(url)
-data = response.json()
-print(data)
-  ```
-  </Tab>
-  <Tab value="Ruby">
-  ```ruby
-require 'net/http'
-require 'json'
-
-lat = "8.989022"
-lon = "38.79036"
-api_key = "{your-api-key}"
-url = URI("https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=#{lat}&lon=#{lon}&apiKey=#{api_key}")
-
-response = Net::HTTP.get(url)
-data = JSON.parse(response)
-puts data
-  ```
-  </Tab>
-  <Tab value="Dart">
-  ```dart
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
-void main() async {
-  String lat = "8.989022";
-  String lon = "38.79036";
-  String apiKey = "{your-api-key}";
-  String url = "https://mapapi.gebeta.app/api/v1/route/revgeocoding?lat=$lat&lon=$lon&apiKey=$apiKey";
-
-  final response = await http.get(Uri.parse(url));
-
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    print(data);
-  } else {
-    print('Error: ${response.statusCode}');
+```json
+{
+  "data": {
+    "query": "9.019200,38.757800",
+    "results": [
+      {
+        "id": "way:123456",
+        "name": "Bole Road",
+        "display_name": "Bole Road, Addis Ababa, Ethiopia",
+        "category": "highway",
+        "location": {
+          "lat": 9.019185,
+          "lng": 38.757812
+        },
+        "address": {
+          "city": "Addis Ababa",
+          "country": "Ethiopia",
+          "country_code": "ETH"
+        }
+      }
+    ]
   }
 }
-  ```
-  </Tab>
-</Tabs>
-
-<Accordions>
-  <Accordion title="Success Response">
-  ```json
-  {
-  "msg": "ok",
-  "data": [
-    {
-      "name": "haji suktala building materials",
-      "latitude": 9.05559,
-      "longitude": 38.705503,
-      "Country": "Ethiopia",
-      "City": "addis ababa",
-      "type": "Building",
-      "duration": 347.13057844,
-      "distance": 347.13057844
-    },
-    {
-      "name": "yeshumnesh habte menuta",
-      "latitude": 9.054104,
-      "longitude": 38.705375,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "store",
-      "duration": 201.28878069,
-      "distance": 201.28878069
-    },
-    {
-      "name": "cbe birr agent - addis ababa",
-      "latitude": 9.051433,
-      "longitude": 38.705426,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "finance store",
-      "duration": 203.30454625,
-      "distance": 203.30454625
-    },
-    {
-      "name": "fatuma seid yesuf",
-      "latitude": 9.051433,
-      "longitude": 38.705426,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "store",
-      "duration": 203.30454625,
-      "distance": 203.30454625
-    },
-    {
-      "name": "hambra engneering plc",
-      "latitude": 9.05238,
-      "longitude": 38.70223,
-      "Country": "Ethiopia",
-      "City": "Addis Ababa",
-      "type": "establishment",
-      "duration": 214.47480581,
-      "distance": 214.47480581
-    },
-  ],
-  "count": 5
-}
-  ```
-  </Accordion>
-  <Accordion title="Error Response">
-    ```json
-"error": {
-        "additional": null,
-        "code": "A_ERR00004",
-        "message": "Invalid access token!",
-        "status": 401
-    }
-    ```
-  </Accordion>
-</Accordions>
+```

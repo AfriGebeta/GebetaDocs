@@ -1,0 +1,72 @@
+---
+title: Forward Geocoding
+description: Find precise location coordinates by searching for a place name, returning an array of matching locations.
+---
+
+## Forward geocoding with search text input
+
+`GET https://mapapi.gebeta.app/v2/search/geocode?query={search_text}`
+
+The forward geocoding query type allows you to look up a location using a string of search text and returns its coordinates, standardized address, and geographic context.
+
+### Required parameters
+
+| Required parameters | Type | Description |
+| :--- | :--- | :--- |
+| **query** | `string` | The feature you are trying to look up (e.g., address, city, POI). Must be a URL-encoded string. |
+| **apiKey** | `string` | A valid Gebeta API access token. Can also be supplied in the HTTP request as an `Authorization: Bearer <apiKey>` header. |
+
+### Optional parameters
+
+| Optional parameters | Type | Description |
+| :--- | :--- | :--- |
+| **autocomplete** | `boolean` | Specify whether to return autocomplete results (`true`, default) or not (`false`). When `true`, results will be included that match partial string prefixes using ngrams and phonetic indexes. |
+| **bbox** | `string` | Limit results to only those contained within the supplied bounding box. Provided as four comma-separated coordinates in `minLng,minLat,maxLng,maxLat` order (e.g., `38.7,8.9,38.8,9.1`). |
+| **country** | `string` | Limit results to one or more countries. Permitted values are ISO country codes (alpha-2 or alpha-3) separated by commas (e.g. `et` or `us,ca`). |
+| **language** | `string` | Set the language of the text supplied in responses. |
+| **limit** | `integer` | Specify the maximum number of results to return. Default: `10` or `5`. Allowed range: `1` to `10`. |
+| **proximity** | `string` | Bias the response to favor results closer to a location. Provided as `lng,lat` coordinates (e.g., `38.75,9.02`), or the string `ip` to bias results based on the client IP address. |
+| **category** | `string` | Filter results to include only a subset of feature categories. Comma-separated list of category terms. |
+
+### Example requests
+
+```bash
+# A basic forward geocoding request
+curl "https://mapapi.gebeta.app/v2/search/geocode?query=Bole+Road&apiKey=YOUR_API_KEY"
+
+# Find 'Chester' with a proximity bias coordinate
+curl "https://mapapi.gebeta.app/v2/search/geocode?query=chester&proximity=-74.70850,40.78375&apiKey=YOUR_API_KEY"
+
+# Filter forward search results to only return matches within Ethiopia (ET)
+curl "https://mapapi.gebeta.app/v2/search/geocode?query=Bole&country=et&apiKey=YOUR_API_KEY"
+
+# Limit the results to 2 results using the limit option
+curl "https://mapapi.gebeta.app/v2/search/geocode?query=Washington&limit=2&apiKey=YOUR_API_KEY"
+```
+
+### Response
+
+```json
+{
+  "data": {
+    "query": "Bole Road",
+    "results": [
+      {
+        "id": "way:123456",
+        "name": "Bole Road",
+        "display_name": "Bole Road, Addis Ababa, Ethiopia",
+        "category": "highway",
+        "location": {
+          "lat": 9.019185,
+          "lng": 38.757812
+        },
+        "address": {
+          "city": "Addis Ababa",
+          "country": "Ethiopia",
+          "country_code": "ETH"
+        }
+      }
+    ]
+  }
+}
+```
