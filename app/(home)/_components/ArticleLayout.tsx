@@ -19,6 +19,19 @@ export default function ArticleLayout() {
     const [group, setGroup] = useState("docs");
     const cts = source.pageTree.children
 
+    const TILES_CHILD_ORDER = ["Overview", "JavaScript SDK", "Flutter SDK"];
+
+    function getFolderChildren(item) {
+        if (item.name !== "Tiles" || item.type !== "folder") return item.children;
+
+        return [...item.children].sort((a, b) => {
+            const aIndex = TILES_CHILD_ORDER.indexOf(a.name);
+            const bIndex = TILES_CHILD_ORDER.indexOf(b.name);
+
+            return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+        });
+    }
+
     const {setOpenSearch} = useSearchContext();
     const pathname = usePathname();
 
@@ -72,7 +85,7 @@ export default function ArticleLayout() {
                                             }
                                         }}
                                     >
-                                        <Link href={item?.url || "/docs"}
+                                        <Link href={item?.url || item?.children?.[0]?.url || "/docs"}
                                               className="whitespace-nowrap">{item.name}</Link>
                                         {item.name === "VRP API" && <NewBadge/>}
                                         {item.name === "Place Validation API" && <NewBadge />}
@@ -97,11 +110,10 @@ export default function ArticleLayout() {
                                                 className="relative overflow-hidden"
                                             >
                                                 <motion.div className="text-sm">
-                                                    {item.children.map((listItem, j) => (
+                                                    {getFolderChildren(item).map((listItem, j) => (
                                                         <div key={listItem.name}>
                                                             <AsideLink href={listItem.url} startWith="/docs">
                                                                 {listItem.name}
-                                                                {listItem.name === "Tiles" && <NewBadge/>}
                                                             </AsideLink>
                                                         </div>
                                                     ))}
