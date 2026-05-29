@@ -386,7 +386,14 @@ const SideBarForm = ({
                 addToast('Invalid JSON format!', 'error')
             }
         } else {
-            getRoute(urlMap[object.type])
+
+            const url = urlMap[object.type];
+
+            const cleanUrl = url
+                .replace(/([?&])apiKey=[^&]*&?/g, "")
+                .replace(/\?&/, "?")
+                .replace(/[?&]$/, "");
+            getRoute(cleanUrl)
                 .then((data) => {
                     if (!data.error) {
                         setApiResponse(data.data);
