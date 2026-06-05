@@ -34,7 +34,7 @@ const RequestSample = ({curl, http, js = [], className = '' }) => {
                             key={lang}
                             onClick={() => setActiveTab(i)}
                             className={`px-3 py-1 text-sm rounded-md transition-all ${activeTab === i
-                                ? 'bg-white dark:bg-gray-700 shadow-sm text-purple-600 dark:text-orange-400 font-medium'
+                                ? 'bg-white dark:bg-gray-700 shadow-sm  dark:text-orange-400 font-medium'
                                 : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
                                 }`}
                         >

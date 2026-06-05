@@ -9,7 +9,6 @@ import {useToast} from "@/providers/ToastProvider";
 
 const PlayGroundHeader = () => {
     const dispatch = useDispatch()
-    const {token} = useSelector((state) => state)
     const {addToast} = useToast()
 
     const [apiToken, setApiToken] = useState("")
