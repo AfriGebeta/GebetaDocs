@@ -7,7 +7,7 @@ import {PlayGroundContext} from "@/providers/Playground";
 const styles = [
     {
         type: "Vector",
-        url: "https://tiles.gebeta.app/styles/standard/style.json",
+        url: "/style.json",
         image: "/vector.png"
     },
     {
@@ -566,15 +566,15 @@ const Map = memo(({
             center: [position[1], position[0]],
             zoom: 13,
             attributionControl: false,
-            transformRequest: (url, resourceType) => {
+            ...(process.env.NODE_ENV === "development" ? {transformRequest: (url, resourceType) => {
                 if (resourceType === 'Tile') {
                     return {
                         url: url,
-                        headers: {'Authorization': 'Bearer ' + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55bmFtZSI6ImdlYmV0YTEiLCJkZXNjcmlwdGlvbiI6ImMzZWZhNTRjLWU2ODctNGIyMS1iYjY1LWZkY2Y4ZTMxNzMwMCIsImlkIjoiZDIyOWU3YWQtMTkxYS00ODU0LWE4MmEtNmM3NWI1Zjk2MzkwIiwidXNlcm5hbWUiOiJnZWJldGExIn0.zs9Za-EqN5R_I2NZUxrJJOwFug3jN9AUp6xkDvfyRS4"}
+                        headers: {'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_GEBETA_MAP_KEY}
                     };
                 }
                 return {url};
-            },
+            }}:{}),
         });
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right');

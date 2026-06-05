@@ -124,6 +124,7 @@ const SideBarForm = ({
     });
 
     const {token} = useSelector((state) => state);
+        console.log({token})
     const optimizedTripJson = useRef(null);
 
     const addWaypointInput = () => {
@@ -254,21 +255,21 @@ const SideBarForm = ({
     //for curl
     const curlMap = {
         geocoding: selectedGeocoding === "forward"
-            ? `curl -X GET "${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=yourapitoken"`
-            : `curl -X GET "${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=yourapitoken"`,
+            ? `curl -X GET "${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token?.token}"`
+            : `curl -X GET "${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token?.token}"`,
 
         direction: `curl -X GET "${BASE_URL}/api/route/direction/?origin=${origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
             }&destination=${destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-            }&apiKey=yourapitoken${showAlternatives ? "&alternative=t" : ""}${waypointsString}"`,
+            }&apiKey=${token?.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}"`,
 
-        tss: `curl -X GET "${BASE_URL}/api/route/tss?${waypointsString}&apiKey=yourapitoken"`,
+        tss: `curl -X GET "${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token?.token}"`,
 
         onm: `curl -X GET "${BASE_URL}/api/route/onm?origin=${origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
-            }${waypointsString}&apiKey=yourapitoken"`,
+            }${waypointsString}&apiKey=${token?.token}"`,
 
-        matrix: `curl -X GET "${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=yourapitoken"`,
+        matrix: `curl -X GET "${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token?.token}"`,
 
-        optimizedTrip: `curl -X POST "${BASE_URL}/api/optimized-trip?apiKey=yourapitoken" \\
+        optimizedTrip: `curl -X POST "${BASE_URL}/api/optimized-trip?apiKey=${token?.token}" \\
   -H "Content-Type: application/json" \\
   -d '{
     "vehicles": [...],
@@ -280,21 +281,21 @@ const SideBarForm = ({
     //http
     const httpMap = {
         geocoding: selectedGeocoding === "forward"
-            ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=yourapitoken`
-            : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=yourapitoken`,
+            ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token?.token}`
+            : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token?.token}`,
 
         direction: `${BASE_URL}/api/route/direction/?origin=${origin.lat ? `${origin.lat},${origin.lng}` : `${manualCoords.origin.lat},${manualCoords.origin.lng}`
             }&destination=${destination.lat ? `${destination.lat},${destination.lng}` : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-            }&apiKey=yourapitoken${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
+            }&apiKey=${token?.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
 
-        tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=yourapitoken`,
+        tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token?.token}`,
 
         onm: `${BASE_URL}/api/route/onm?origin=${origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
-            }${waypointsString}&apiKey=yourapitoken`,
+            }${waypointsString}&apiKey=${token?.token}`,
 
-        matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=yourapitoken`,
+        matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token?.token}`,
 
-        optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=yourapitoken`,
+        optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=${token?.token}`,
     };
 
     const getPolylineCoordinates = (responseObject) => {
@@ -316,7 +317,8 @@ const SideBarForm = ({
         } else if (object.type === "tss") {
             setCoordinateFunction({ type: "tss", coords: data.data.direction });
         } else if (object.type === "matrix") {
-            const locations = data?.data?.destinations?.map(dest => [dest.location.lat, dest.location.lng]) || [];
+            console.log({data})
+            const locations = data?.data?.destinations?.map(dest => [dest.lat, dest.lon]) || [];
             setCoordinateFunction({ type: "matrix", coords: locations });
         } else if (object.type === "optimizedTrip") {
             setCoordinateFunction({
@@ -390,9 +392,9 @@ const SideBarForm = ({
             const url = urlMap[object.type];
 
             const cleanUrl = url
-                .replace(/([?&])apiKey=[^&]*&?/g, "")
                 .replace(/\?&/, "?")
                 .replace(/[?&]$/, "");
+                console.log({cleanUrl, url})
             getRoute(cleanUrl)
                 .then((data) => {
                     if (!data.error) {
