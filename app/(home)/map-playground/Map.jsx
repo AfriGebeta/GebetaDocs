@@ -29,12 +29,15 @@ const Map = memo(({
                       instructions,
                       showInstructions,
                       mapRef,
-                      alternatives
+                      alternatives,
+                      selectedGeocoding,
+                      onReverseMapClickRef
                   }) => {
     // const mapRef = useRef(null);
     const instructionMarkersRef = useRef([]);
     const animationRef = useRef(null);
     const selectedButtonRef = useRef(selectedButton);
+    const selectedGeocodingRef = useRef(selectedGeocoding);
     const markersRef = useRef([]);
     const polylineLayersRef = useRef([]);
     const playContext = useContext(PlayGroundContext);
@@ -54,6 +57,10 @@ const Map = memo(({
     useEffect(() => {
         selectedButtonRef.current = selectedButton;
     }, [selectedButton]);
+
+    useEffect(() => {
+        selectedGeocodingRef.current = selectedGeocoding;
+    }, [selectedGeocoding]);
 
     const position = [9.035961873355374, 38.75238418579102];
 
@@ -102,6 +109,12 @@ const Map = memo(({
             lat: e.lngLat.lat,
             lng: e.lngLat.lng
         };
+
+        // When reverse geocoding mode is active, populate the coordinate input in SideBarForm
+        if (selectedGeocodingRef.current === "reverse" && onReverseMapClickRef?.current) {
+            onReverseMapClickRef.current(coordinates);
+            return;
+        }
 
         if (selectedButtonRef.current === "start") {
             setOriginCoordinates(coordinates);

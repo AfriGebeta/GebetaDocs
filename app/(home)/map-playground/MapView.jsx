@@ -14,6 +14,9 @@ const MapView = () => {
     const [alternatives, setAlternatives] = useState([]);
     const [activeInstruction, setActiveInstruction] = useState(null);
     const [selectedButton, setSelectedButton] = useState("");
+    const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
+    // Shared ref: SideBarForm registers a callback here; Map calls it on click when in reverse mode
+    const onReverseMapClickRef = useRef(null);
     const { playground } = useSelector((state) => state)
 
     const setSelectedButtonFunction = (text) => {
@@ -49,6 +52,8 @@ const MapView = () => {
                     showAlternatives={showAlternatives}
                     setShowAlternatives={setShowAlternatives}
                     setAlternatives={setAlternatives}
+                    onGeocodingModeChange={setSelectedGeocoding}
+                    onReverseMapClickRef={onReverseMapClickRef}
                 />
             </div>
 
@@ -64,6 +69,8 @@ const MapView = () => {
                     showAlternatives={showAlternatives}
                     setShowAlternatives={setShowAlternatives}
                     alternatives={alternatives}
+                    selectedGeocoding={selectedGeocoding}
+                    onReverseMapClickRef={onReverseMapClickRef}
                 />
             </div>
         </main>

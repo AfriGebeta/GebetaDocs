@@ -88,7 +88,9 @@ const SideBarForm = ({
     mapRef,
     showAlternatives,
     setShowAlternatives,
-    setAlternatives
+    setAlternatives,
+    onGeocodingModeChange,
+    onReverseMapClickRef
 }) => {
     const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
     const [startWayPoint, setStartWayPoint] = useState(false);
@@ -96,6 +98,7 @@ const SideBarForm = ({
     const [apiResponse, setApiResponse] = useState({});
     const [notify, setNotify] = useState({visible: false});
     const [coordinate, setCoordinate] = useState({latitude: null, longitude: null});
+    const [reverseInputValue, setReverseInputValue] = useState("");
     const [waypointInputs, setWaypointInputs] = useState([""]);
 
     const {addToast} = useToast()
@@ -225,7 +228,38 @@ const SideBarForm = ({
         clearWaypoints();
     };
 
-    const setGeocoding = (text) => setSelectedGeocoding(text);
+    // Register the callback Map.jsx calls when the user clicks the map in reverse geocoding mode
+    useEffect(() => {
+        if (onReverseMapClickRef) {
+            onReverseMapClickRef.current = ({ lat, lng }) => {
+                const formatted = `${lat},${lng}`;
+                setReverseInputValue(formatted);
+                setCoordinate({ latitude: lat, longitude: lng });
+            };
+        }
+        return () => {
+            if (onReverseMapClickRef) onReverseMapClickRef.current = null;
+        };
+    }, [onReverseMapClickRef]);
+
+    // Clear reverse coordinate fields whenever the geocoding mode changes
+    useEffect(() => {
+        setReverseInputValue("");
+        setCoordinate({ latitude: null, longitude: null });
+    }, [selectedGeocoding]);
+
+    // Clear reverse coordinate fields when leaving the Geocoding playground
+    useEffect(() => {
+        if (object.type !== "geocoding") {
+            setReverseInputValue("");
+            setCoordinate({ latitude: null, longitude: null });
+        }
+    }, [object.type]);
+
+    const setGeocoding = (text) => {
+        setSelectedGeocoding(text);
+        if (onGeocodingModeChange) onGeocodingModeChange(text);
+    };
 
     const setOptionalParameter = (text) => {
         if (text === "instruction") setShowInstructions(!showInstructions);
@@ -647,8 +681,11 @@ const SideBarForm = ({
                             <input
                                 placeholder="Enter latitude,longitude"
                                 className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
+                                value={reverseInputValue}
                                 onChange={(e) => {
-                                    const [lat, lng] = e.target.value.split(',').map(coord => coord.trim());
+                                    const val = e.target.value;
+                                    setReverseInputValue(val);
+                                    const [lat, lng] = val.split(',').map(coord => coord.trim());
                                     setCoordinate({ latitude: lat, longitude: lng });
                                 }}
                             />
