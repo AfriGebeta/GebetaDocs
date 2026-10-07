@@ -76,9 +76,6 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mdx,md,json}": "prettier --write"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,mdx,md,json}": "prettier --write"
-  },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
     "@types/node": "22.5.4",
