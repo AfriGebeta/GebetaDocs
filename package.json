@@ -7,7 +7,7 @@
     "dev": "cross-env PORT=4000 next dev --turbo",
     "start": "PORT=4000 next start",
     "postinstall": "fumadocs-mdx",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",

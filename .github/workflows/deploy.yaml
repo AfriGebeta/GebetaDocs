@@ -98,4 +98,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ln -sfn ~/gebeta-docs/releases/$NEW_VERSION ~/gebeta-docs/current"
 
           # Restart the server
-          ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "pm2 restart all"
+          ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "cd ~/gebeta-docs/current && npm install --omit=dev && pm2 reload gebeta-docs || pm2 start npm --name gebeta-docs -- start"
