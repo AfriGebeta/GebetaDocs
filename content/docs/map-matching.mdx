@@ -20,11 +20,17 @@ The Map Matching API takes a series of GPS coordinates and matches them to the m
   <Card title="GPS Trace Correction" description="Clean up GPS tracking data from mobile devices to remove drift and inaccuracies." icon="">
   </Card>
 
-  <Card title="Route Reconstruction" description="Reconstruct delivery or service routes from GPS logs for accurate analysis." icon="">
-  </Card>
+<Card
+  title="Route Reconstruction"
+  description="Reconstruct delivery or service routes from GPS logs for accurate analysis."
+  icon=""
+></Card>
 
-  <Card title="Movement Analysis" description="Analyze vehicle movement patterns on road networks for optimization insights." icon="">
-  </Card>
+<Card
+  title="Movement Analysis"
+  description="Analyze vehicle movement patterns on road networks for optimization insights."
+  icon=""
+></Card>
 
   <Card title="Location Analytics" description="Improve accuracy of location-based analytics by snapping coordinates to actual roads." icon="">
   </Card>
@@ -33,31 +39,31 @@ The Map Matching API takes a series of GPS coordinates and matches them to the m
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&apiKey={your-api-key}&radius=1     
+curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&apiKey={your-api-key}&radius=1
 ```
 
 ## Request Parameters
 
-| Parameter | Type | Description | Required |
-|-----------|------|-------------|----------|
-| `path` | `array` | Array of coordinate objects in format `[{lat,lng},{lat,lng}]` | `yes` |
-| `apiKey` | `string` | Your API key for accessing Gebeta Maps | `yes` |
-| `radius` | `number` | Search radius in meters for matching coordinates to roads (default: 1) | `yes` |
-
+| Parameter | Type     | Description                                                            | Required |
+| --------- | -------- | ---------------------------------------------------------------------- | -------- |
+| `path`    | `array`  | Array of coordinate objects in format `[{lat,lng},{lat,lng}]`          | `yes`    |
+| `apiKey`  | `string` | Your API key for accessing Gebeta Maps                                 | `yes`    |
+| `radius`  | `number` | Search radius in meters for matching coordinates to roads (default: 1) | `yes`    |
 
 ## Response Codes
 
 <br />
 
-| Status Code | Message | Description |
-|-------------|---------|-------------|
-| `200` | `OK` | The request was successful. The system matched the path and returned the corrected route. |
-| `404` | `NoRoute` | No matching route found for the provided coordinates. |
-| `401` | `Not Authorized - No Token` | Authentication failed. No valid token was provided. |
-| `401` | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. |
-| `422` | `InvalidInput` | The request parameters are incorrect. Review the input values and adjust as needed. |
+| Status Code | Message                          | Description                                                                               |
+| ----------- | -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `200`       | `OK`                             | The request was successful. The system matched the path and returned the corrected route. |
+| `404`       | `NoRoute`                        | No matching route found for the provided coordinates.                                     |
+| `401`       | `Not Authorized - No Token`      | Authentication failed. No valid token was provided.                                       |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired.                           |
+| `422`       | `InvalidInput`                   | The request parameters are incorrect. Review the input values and adjust as needed.       |
 
 ## Request Example
+
 ```bash
 curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&apiKey={your-api-key}&radius=1'
 ```
@@ -108,4 +114,3 @@ curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?
 </Accordions>
 
 <br />
-

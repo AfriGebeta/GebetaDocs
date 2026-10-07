@@ -1,9 +1,9 @@
-"use client"
-import { ApiReferenceReact } from '@scalar/api-reference-react'
-import { useTheme } from 'next-themes'
+'use client';
+import { ApiReferenceReact } from '@scalar/api-reference-react';
+import { useTheme } from 'next-themes';
 
 function ApiDocs() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <ApiReferenceReact
@@ -17,7 +17,7 @@ function ApiDocs() {
         },
         theme: 'purple',
         darkMode: theme === 'dark' ? true : false,
-        hideDarkModeToggle: true
+        hideDarkModeToggle: true,
       }}
     />
   );

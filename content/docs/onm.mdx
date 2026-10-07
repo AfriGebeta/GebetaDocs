@@ -14,23 +14,32 @@ Use the ONM API to calculate the best routes for different scenarios, such as op
     - Improve decision-making for emergency or everyday needs.
   </Card>
 
-  <Card title="Delivery Route Optimization" description="Optimize your delivery routes by finding the best order to visit multiple destinations." icon="📦">
-    - Streamline delivery processes to save time and resources.
-    - Minimize fuel costs by optimizing routes.
-    - Improve customer satisfaction with faster deliveries.
-  </Card>
+<Card
+  title="Delivery Route Optimization"
+  description="Optimize your delivery routes by finding the best order to visit multiple destinations."
+  icon="📦"
+>
+  - Streamline delivery processes to save time and resources. - Minimize fuel costs by optimizing
+  routes. - Improve customer satisfaction with faster deliveries.
+</Card>
 
-  <Card title="Trip Planning" description="Plan your trips effectively by identifying the best routes to multiple destinations." icon="🗺️">
-    - Organize multi-stop trips with ease.
-    - Enhance travel experience with well-planned itineraries.
-    - Save time by avoiding unnecessary detours.
-  </Card>
+<Card
+  title="Trip Planning"
+  description="Plan your trips effectively by identifying the best routes to multiple destinations."
+  icon="🗺️"
+>
+  - Organize multi-stop trips with ease. - Enhance travel experience with well-planned itineraries.
+  - Save time by avoiding unnecessary detours.
+</Card>
 
-  <Card title="Transportation Cost Estimation" description="Estimate transportation costs by calculating travel distances, fuel prices, and vehicle efficiency." icon="💰">
-    - Provide users with accurate cost projections for trips.
-    - Assist in budgeting for travel expenses.
-    - Support decision-making for vehicle selection and trip planning.
-  </Card>
+<Card
+  title="Transportation Cost Estimation"
+  description="Estimate transportation costs by calculating travel distances, fuel prices, and vehicle efficiency."
+  icon="💰"
+>
+  - Provide users with accurate cost projections for trips. - Assist in budgeting for travel
+  expenses. - Support decision-making for vehicle selection and trip planning.
+</Card>
 
   <Card title="Traffic Data Access" description="Utilize real-time and historical traffic data for research, planning, or forecasting purposes." icon="📊">
     - Analyze traffic patterns for better decision-making.
@@ -47,22 +56,21 @@ curl https://mapapi.gebeta.app/api/route/onm/?json=[]&origin={}&apiKey={}
 
 ### Parameters
 
-| **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
-|----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
-| `origin`             | `string`  | The origin in latitude and longitude format, e.g., `{longitude, latitude}`.                                 | `yes`        |
-| `json`               | `string[]`  | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
-| `apiKey`             | `string`  | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
+| **Parameter** | **Type**   | **Description**                                                                                              | **Required** |
+| ------------- | ---------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
+| `origin`      | `string`   | The origin in latitude and longitude format, e.g., `{longitude, latitude}`.                                  | `yes`        |
+| `json`        | `string[]` | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
+| `apiKey`      | `string`   | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
 
 ## Response Codes for ONM API
 
-| Status Code | Message                         | Description                                                                                       |
-|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
-| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
-| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
-| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
-| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               |
-
+| Status Code | Message                          | Description                                                                                          |
+| ----------- | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `200`       | `OK`                             | The request was successful. The system found a valid route and returned the requested data.          |
+| `404`       | `NoRoute`                        | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `401`       | `Not Authorized - No Token`      | Authentication failed. No valid token was provided. Please include a valid authentication token.     |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.          |
+| `422`       | `InvalidInput`                   | The request parameters are incorrect. Review the input values and adjust as needed.                  |
 
 ## ONM API - CURL Request
 
@@ -90,13 +98,13 @@ use reqwest::blocking::get;
 use std::collections::HashMap;
 
 fn main() {
-    let api_key = "{your-api-key}";
-    let origin = "origin-latitude,origin-longitude";
-    let coordinates = "8.989022,38.79036;9.03045,38.76530";
-    let url = format!(
-        "https://mapapi.gebeta.app/api/route/onm/?json=[{}]&origin={}&apiKey={}",
-        coordinates, origin, api_key
-    );
+let api_key = "{your-api-key}";
+let origin = "origin-latitude,origin-longitude";
+let coordinates = "8.989022,38.79036;9.03045,38.76530";
+let url = format!(
+"https://mapapi.gebeta.app/api/route/onm/?json=[{}]&origin={}&apiKey={}",
+coordinates, origin, api_key
+);
 
     let response: HashMap<String, String> = get(&url)
         .unwrap()
@@ -104,38 +112,41 @@ fn main() {
         .unwrap();
 
     println!("{:?}", response);
-}
-  ```
-  </Tab>
 
-  <Tab value="Go">
-  ```go
+}
+
+````
+</Tab>
+
+<Tab value="Go">
+```go
 package main
 
 import (
-    "encoding/json"
-    "fmt"
-    "net/http"
+  "encoding/json"
+  "fmt"
+  "net/http"
 )
 
 func main() {
-    apiKey := "{your-api-key}"
-    origin := "{origin-latitude,origin-longitude}"
-    coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
+  apiKey := "{your-api-key}"
+  origin := "{origin-latitude,origin-longitude}"
+  coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
 
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm/?json=[%s]&origin=%s&apiKey=%s", coordinates, origin, apiKey)
+  url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm/?json=[%s]&origin=%s&apiKey=%s", coordinates, origin, apiKey)
 
-    resp, err := http.Get(url)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
+  resp, err := http.Get(url)
+  if err != nil {
+      panic(err)
+  }
+  defer resp.Body.Close()
 
-    var result map[string]interface{}
-    json.NewDecoder(resp.Body).Decode(&result)
-    fmt.Println(result)
+  var result map[string]interface{}
+  json.NewDecoder(resp.Body).Decode(&result)
+  fmt.Println(result)
 }
-  ```
+````
+
   </Tab>
 
   <Tab value="PHP">
@@ -150,11 +161,12 @@ $response = file_get_contents($url);
 $data = json_decode($response, true);
 print_r($data);
 ?>
-  ```
-  </Tab>
 
-  <Tab value="Python">
-  ```python
+````
+</Tab>
+
+<Tab value="Python">
+```python
 import requests
 
 api_key = "{your-api-key}"
@@ -165,7 +177,8 @@ url = f"https://mapapi.gebeta.app/api/route/onm/?json=[{coordinates}]&origin={or
 response = requests.get(url)
 data = response.json()
 print(data)
-  ```
+````
+
   </Tab>
 
   <Tab value="Ruby">
@@ -181,30 +194,32 @@ url = URI("https://mapapi.gebeta.app/api/route/onm/?json=[#{coordinates}]&origin
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
 puts data
-  ```
-  </Tab>
 
-  <Tab value="Dart">
-  ```dart
+````
+</Tab>
+
+<Tab value="Dart">
+```dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  String apiKey = "{your-api-key}";
-  String origin = "origin-latitude,origin-longitude";
-  String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
-  String url = "https://mapapi.gebeta.app/api/route/onm/?json=[$coordinates]&origin=$origin&apiKey=$apiKey";
+String apiKey = "{your-api-key}";
+String origin = "origin-latitude,origin-longitude";
+String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
+String url = "https://mapapi.gebeta.app/api/route/onm/?json=[$coordinates]&origin=$origin&apiKey=$apiKey";
 
-  final response = await http.get(Uri.parse(url));
+final response = await http.get(Uri.parse(url));
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    print(data);
-  } else {
-    print('Error: ${response.statusCode}');
-  }
+if (response.statusCode == 200) {
+  var data = json.decode(response.body);
+  print(data);
+} else {
+  print('Error: ${response.statusCode}');
 }
-  ```
+}
+````
+
   </Tab>
 </Tabs>
 

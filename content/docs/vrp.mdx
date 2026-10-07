@@ -21,8 +21,11 @@ With the VRP API, you can:
   <Card title="Fleet Management" description="Manage routes for a fleet of vehicles across multiple depots while optimizing for fuel consumption, time, or distance." icon="🚚">
   </Card>
 
-  <Card title="Delivery Route Optimization" description="Find the best routes for delivery trucks or couriers based on their starting depots and customer locations." icon="📦">
-  </Card>
+<Card
+  title="Delivery Route Optimization"
+  description="Find the best routes for delivery trucks or couriers based on their starting depots and customer locations."
+  icon="📦"
+></Card>
 
   <Card title="Logistics and Distribution" description="Plan logistics operations that involve multiple warehouses or depots for dispatching vehicles to serve various customer locations." icon="🏢">
   </Card>
@@ -38,11 +41,11 @@ curl https://docs.gebeta.app/api/optimized-trip?apiKey={your-api-key}
 
 ### Request Parameters
 
-| **Parameter**        | **Type**  | **Description**                                                                                              | **Required** |
-|----------------------|-----------|--------------------------------------------------------------------------------------------------------------|--------------|
-| `vehicles`             | `Array`  | A list of vehicles with details such as current location, capacity, and max distance.                                 | `yes`        |
-| `customers`               | `Array`  | A list of customer locations along with their demand (e.g., number of packages or items to deliver). | `yes`        |
-| `depots`             | `Array`  | A list of depots with their location.                                                                      | `yes`        |
+| **Parameter** | **Type** | **Description**                                                                                      | **Required** |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------- | ------------ |
+| `vehicles`    | `Array`  | A list of vehicles with details such as current location, capacity, and max distance.                | `yes`        |
+| `customers`   | `Array`  | A list of customer locations along with their demand (e.g., number of packages or items to deliver). | `yes`        |
+| `depots`      | `Array`  | A list of depots with their location.                                                                | `yes`        |
 
 ### Request Example (POST)
 
@@ -101,13 +104,13 @@ curl https://docs.gebeta.app/api/optimized-trip?apiKey={your-api-key}
 
 ## Response Codes for ONM API
 
-| Status Code | Message                         | Description                                                                                       |
-|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
-| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
-| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
-| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
-| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               |
+| Status Code | Message                          | Description                                                                                          |
+| ----------- | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `200`       | `OK`                             | The request was successful. The system found a valid route and returned the requested data.          |
+| `404`       | `NoRoute`                        | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `401`       | `Not Authorized - No Token`      | Authentication failed. No valid token was provided. Please include a valid authentication token.     |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.          |
+| `422`       | `InvalidInput`                   | The request parameters are incorrect. Review the input values and adjust as needed.                  |
 
 ## Success Response Example
 

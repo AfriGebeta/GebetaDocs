@@ -11,18 +11,18 @@ The reverse geocoding query type allows you to look up a pair of coordinates and
 
 ### Required parameters
 
-| Required parameters | Type | Description |
-| :--- | :--- | :--- |
-| **lat** | `number` | The latitude decimal value from the geographic coordinate. Range: `-90` to `90`. |
-| **lon** | `number` | The longitude decimal value from the geographic coordinate. Range: `-180` to `180`. |
-| **apiKey** | `string` | A valid Gebeta API access token. Can also be supplied in the HTTP request as an `Authorization: Bearer <apiKey>` header. |
+| Required parameters | Type     | Description                                                                                                              |
+| :------------------ | :------- | :----------------------------------------------------------------------------------------------------------------------- |
+| **lat**             | `number` | The latitude decimal value from the geographic coordinate. Range: `-90` to `90`.                                         |
+| **lon**             | `number` | The longitude decimal value from the geographic coordinate. Range: `-180` to `180`.                                      |
+| **apiKey**          | `string` | A valid Gebeta API access token. Can also be supplied in the HTTP request as an `Authorization: Bearer <apiKey>` header. |
 
 ### Optional parameters
 
-| Optional parameters | Type | Description |
-| :--- | :--- | :--- |
-| **size** | `integer` | Specify the maximum number of results to return. Default: `1`. Allowed range: `1` to `5`. |
-| **category** | `string` | Filter results to include only a subset of feature categories. Comma-separated list of category terms. |
+| Optional parameters | Type      | Description                                                                                            |
+| :------------------ | :-------- | :----------------------------------------------------------------------------------------------------- |
+| **size**            | `integer` | Specify the maximum number of results to return. Default: `1`. Allowed range: `1` to `5`.              |
+| **category**        | `string`  | Filter results to include only a subset of feature categories. Comma-separated list of category terms. |
 
 ### Example requests
 

@@ -5,7 +5,7 @@ description: A sophisticated geographic verification service designed to validat
 
 ## **Overview**
 
-<br/>
+<br />
 
 The Place Validation API ensures that user-provided addresses—from country level down to specific districts—are geographically consistent. Because address data in certain regions can be inconsistent, our API uses a probabilistic matching engine to provide a **"Confidence Level"** for each part of the address.
 
@@ -15,10 +15,9 @@ The Place Validation API ensures that user-provided addresses—from country lev
 
 <br />
 
-
 ## **The Probability Logic**
 
-<br/>
+<br />
 
 In regions like Ethiopia, geographic data can be scarce or inconsistently mapped. Our API doesn't just return a **"Yes/No"** answer. Instead:
 
@@ -36,17 +35,23 @@ In regions like Ethiopia, geographic data can be scarce or inconsistently mapped
 
 ## **Use Cases**
 
-<br/>
+<br />
 
 <Cards>
   <Card title="Address Cleaning" description="Standardize messy user input into structured geographic data." icon="📍">
   </Card>
 
-  <Card title="Data Accuracy" description="Verify if a specific Woreda (District) actually exists within a stated Borough or City." icon="✅">
-  </Card>
+<Card
+  title="Data Accuracy"
+  description="Verify if a specific Woreda (District) actually exists within a stated Borough or City."
+  icon="✅"
+></Card>
 
-  <Card title="Risk Mitigation" description="Use confidence scores (high, medium, low) to decide whether to accept an address or flag it for manual review." icon="📉">
-  </Card>
+<Card
+  title="Risk Mitigation"
+  description="Use confidence scores (high, medium, low) to decide whether to accept an address or flag it for manual review."
+  icon="📉"
+></Card>
 
   <Card title="Regional Optimization" description="Specifically tuned for data-scarce regions where official naming conventions may vary." icon="🌍">
   </Card>
@@ -60,7 +65,7 @@ In regions like Ethiopia, geographic data can be scarce or inconsistently mapped
 
 ## **Usage**
 
-<br/>
+<br />
 
 To use the Place Validation API, send a POST request:
 
@@ -73,7 +78,6 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
 ---
 
 <br />
-
 
 ---
 
@@ -108,7 +112,7 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
 <Accordions>
   <Accordion title="Success Response">
 
-  ```json
+```json
 {
   "levels": {
     "country": {
@@ -142,7 +146,8 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
   },
   "valid": false
 }
-  ```
+```
+
   </Accordion>
 </Accordions>
 
@@ -156,13 +161,11 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
 
 <br />
 
-
-
-| Confidence Level |Description                                                                                      |
-|------------------|--------------------------------------------------------------------------------------------------|
-| `high`           | Strong match found. The input closely matches our database with minimal variation                |
-| `medium`         | Probable match. There may be slight spelling differences or evolving administrative boundaries   |
-| `low`            | Weak match. The input has significant differences from our database. Manual review recommended   |
+| Confidence Level | Description                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| `high`           | Strong match found. The input closely matches our database with minimal variation              |
+| `medium`         | Probable match. There may be slight spelling differences or evolving administrative boundaries |
+| `low`            | Weak match. The input has significant differences from our database. Manual review recommended |
 
 <br />
 
@@ -174,7 +177,7 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
 
 ## **API Limits and Restrictions**
 
-<br/>
+<br />
 
 The Place Validation API follows the standard Gebeta Maps rate limits:
 

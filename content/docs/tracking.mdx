@@ -5,7 +5,7 @@ description: Real-Time Vehicle & Asset Location Streaming via WebSockets
 
 ## **Overview**
 
-<br/>
+<br />
 
 The Tracking API enables real-time location streaming between drivers (or mobile agents) and offices (or control centers) using secure WebSocket connections.
 
@@ -21,7 +21,7 @@ With support for authentication, subscriptions, and continuous location updates,
 
 ## **Key Features**
 
-<br/>
+<br />
 
 - 🚗 **Real-time driver location updates**
 
@@ -49,15 +49,14 @@ wss://track.gebeta.app/v1/track
 
 ## **Roles**
 
-<br/>
-
-| **Role**                                   | **Description**                        |
-|--------------------------------------------|----------------------------------------|
-| `driver`                                   | Sends live location updates            |
-| `office`                                   | Subscribes to driver locations        |
-
 <br />
 
+| **Role** | **Description**                |
+| -------- | ------------------------------ |
+| `driver` | Sends live location updates    |
+| `office` | Subscribes to driver locations |
+
+<br />
 
 ---
 
@@ -65,7 +64,7 @@ wss://track.gebeta.app/v1/track
 
 ## **Use Cases**
 
-<br/>
+<br />
 
 <Cards>
   <Card title="Fleet Tracking" description="Monitor all active drivers in real time from a central office dashboard." icon="🚚">
@@ -74,17 +73,23 @@ wss://track.gebeta.app/v1/track
     - Improved operational awareness
   </Card>
 
-  <Card title="Delivery Monitoring" description="Track individual delivery drivers to ensure accurate ETAs and route compliance." icon="📦">
-    - Subscribe to specific drivers
-    - Detect delays or route deviations
-    - Improve customer satisfaction
-  </Card>
+<Card
+  title="Delivery Monitoring"
+  description="Track individual delivery drivers to ensure accurate ETAs and route compliance."
+  icon="📦"
+>
+  - Subscribe to specific drivers - Detect delays or route deviations - Improve customer
+  satisfaction
+</Card>
 
-  <Card title="Dispatch & Control Centers" description="Allow offices to observe and manage driver activity efficiently." icon="🏢">
-    - Subscribe to all drivers or selected drivers
-    - Real-time decision making
-    - Seamless coordination between teams
-  </Card>
+<Card
+  title="Dispatch & Control Centers"
+  description="Allow offices to observe and manage driver activity efficiently."
+  icon="🏢"
+>
+  - Subscribe to all drivers or selected drivers - Real-time decision making - Seamless coordination
+  between teams
+</Card>
 
   <Card title="Live Map Visualization" description="Integrate real-time location data into web or mobile maps." icon="🗺️">
     - Smooth marker updates
@@ -101,13 +106,13 @@ wss://track.gebeta.app/v1/track
 
 ## **Authentication Flow**
 
-<br/>
+<br />
 
 All clients must authenticate immediately after connection.
 
 ### **Authenticate Message**
 
-<br/>
+<br />
 
 ```json
 {
@@ -124,13 +129,13 @@ All clients must authenticate immediately after connection.
 
 ### **Parameters**
 
-<br/>
+<br />
 
-| Field     | Type     | Description                    | Required |
-|-----------|----------|--------------------------------|----------|
-| `user_id` | `string` | Unique identifier of the user  | `yes`    |
-| `role`    | `string` | `driver` or `office`           | `yes`    |
-| `token`   | `string` | Valid JWT access token         | `yes`    |
+| Field     | Type     | Description                   | Required |
+| --------- | -------- | ----------------------------- | -------- |
+| `user_id` | `string` | Unique identifier of the user | `yes`    |
+| `role`    | `string` | `driver` or `office`          | `yes`    |
+| `token`   | `string` | Valid JWT access token        | `yes`    |
 
 <br />
 
@@ -140,7 +145,7 @@ All clients must authenticate immediately after connection.
 
 ## **Driver: Sending Location Updates**
 
-<br/>
+<br />
 
 Once authenticated, a driver can continuously send location updates.
 
@@ -165,16 +170,16 @@ Once authenticated, a driver can continuously send location updates.
 
 ### **Payload Fields**
 
-<br/>
+<br />
 
-| Field     | Type     | Description              |
-|-----------|----------|--------------------------|
-| `lat`     | `number` | Latitude                 |
-| `lng`     | `number` | Longitude                |
-| `speed`   | `number` | Speed (km/h)             |
-| `bearing` | `number` | Direction in degrees     |
+| Field     | Type     | Description          |
+| --------- | -------- | -------------------- |
+| `lat`     | `number` | Latitude             |
+| `lng`     | `number` | Longitude            |
+| `speed`   | `number` | Speed (km/h)         |
+| `bearing` | `number` | Direction in degrees |
 
-<br/>
+<br />
 📌 **Recommended update interval:** 2–5 seconds
 
 <br />
@@ -185,14 +190,13 @@ Once authenticated, a driver can continuously send location updates.
 
 ## **Office: Subscribing to Drivers**
 
-<br/>
+<br />
 
 Offices can subscribe to specific drivers or all drivers.
 
-<br/>
+<br />
 
 ### **Subscribe to a Specific Driver**
-
 
 ```json
 {
@@ -220,7 +224,7 @@ Offices can subscribe to specific drivers or all drivers.
 
 ## **Receiving Location Updates (Office)**
 
-<br/>
+<br />
 
 Subscribed offices receive real-time updates in the following format:
 
@@ -245,14 +249,14 @@ Subscribed offices receive real-time updates in the following format:
 
 ## **Heartbeat (Ping / Pong)**
 
-<br/>
+<br />
 
 The server may send WebSocket ping frames to ensure connection health.
 
 Clients must respond with pong:
 
 ```javascript
-ws.on("ping", () => {
+ws.on('ping', () => {
   ws.pong();
 });
 ```
@@ -265,7 +269,7 @@ ws.on("ping", () => {
 
 ## **Example Implementations**
 
-<br/>
+<br />
 
 <Tabs items={['JavaScript (Driver)', 'JavaScript (Office)']}>
   <Tab value="JavaScript (Driver)">
@@ -273,15 +277,15 @@ ws.on("ping", () => {
   const WebSocket = require("ws");
   const ws = new WebSocket("wss://track.gebeta.app/v1/track");
 
-  ws.on("open", () => {
-    ws.send(JSON.stringify({
-      action: "authenticate",
-      payload: {
-        user_id: "DR_1",
-        role: "driver",
-        token: "<JWT_TOKEN>"
-      }
-    }));
+ws.on("open", () => {
+ws.send(JSON.stringify({
+action: "authenticate",
+payload: {
+user_id: "DR_1",
+role: "driver",
+token: "<JWT_TOKEN>"
+}
+}));
 
     setInterval(() => {
       ws.send(JSON.stringify({
@@ -295,35 +299,38 @@ ws.on("ping", () => {
         }
       }));
     }, 3000);
-  });
-  ```
-  </Tab>
 
-  <Tab value="JavaScript (Office)">
-  ```javascript
-  const WebSocket = require("ws");
-  const ws = new WebSocket("wss://track.gebeta.app/v1/track");
+});
 
-  ws.on("open", () => {
-    ws.send(JSON.stringify({
-      action: "authenticate",
-      payload: {
-        user_id: "office_1",
-        role: "office",
-        token: "<JWT_TOKEN>"
-      }
-    }));
+````
+</Tab>
 
-    ws.send(JSON.stringify({
-      action: "subscribe",
-      entity: "driver:DR_1"
-    }));
-  });
+<Tab value="JavaScript (Office)">
+```javascript
+const WebSocket = require("ws");
+const ws = new WebSocket("wss://track.gebeta.app/v1/track");
 
-  ws.on("message", msg => {
-    console.log("UPDATE:", JSON.parse(msg));
-  });
-  ```
+ws.on("open", () => {
+  ws.send(JSON.stringify({
+    action: "authenticate",
+    payload: {
+      user_id: "office_1",
+      role: "office",
+      token: "<JWT_TOKEN>"
+    }
+  }));
+
+  ws.send(JSON.stringify({
+    action: "subscribe",
+    entity: "driver:DR_1"
+  }));
+});
+
+ws.on("message", msg => {
+  console.log("UPDATE:", JSON.parse(msg));
+});
+````
+
   </Tab>
 </Tabs>
 
@@ -335,14 +342,14 @@ ws.on("ping", () => {
 
 ## **Error Handling**
 
-<br/>
+<br />
 
-| Error          | Description                      |
-|----------------|----------------------------------|
-| `Unauthorized` | Invalid or missing token         |
-| `InvalidAction`| Unsupported action type          |
-| `Forbidden`    | Unauthorized subscription        |
-| `BadPayload`   | Missing or malformed fields      |
+| Error           | Description                 |
+| --------------- | --------------------------- |
+| `Unauthorized`  | Invalid or missing token    |
+| `InvalidAction` | Unsupported action type     |
+| `Forbidden`     | Unauthorized subscription   |
+| `BadPayload`    | Missing or malformed fields |
 
 <br />
 
@@ -352,7 +359,7 @@ ws.on("ping", () => {
 
 ## **Limits & Restrictions**
 
-<br/>
+<br />
 
 - 🔄 **Max connections:** Configurable per company
 

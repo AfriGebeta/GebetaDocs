@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { source } from '@/app/source';
 import type { Metadata } from 'next';
-import { DocsBody, DocsDescription, DocsPage, DocsTitle, } from 'fumadocs-ui/page';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
@@ -11,11 +11,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import PageActions from '@/components/custom/cards/page-actions';
 
-export default async function Page({
-  params,
-}: {
-  params: { slug?: string[] };
-}) {
+export default async function Page({ params }: { params: { slug?: string[] } }) {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
@@ -26,7 +22,12 @@ export default async function Page({
   const openItems = [
     { label: 'Open this page', href: page.url },
     ...(docsRepoBaseUrl
-      ? [{ label: 'Open source file', href: `${docsRepoBaseUrl}/blob/main/content/docs/${page.file.path}` }]
+      ? [
+          {
+            label: 'Open source file',
+            href: `${docsRepoBaseUrl}/blob/main/content/docs/${page.file.path}`,
+          },
+        ]
       : []),
   ];
 
@@ -36,7 +37,9 @@ export default async function Page({
       <DocsDescription>{page.data.description}</DocsDescription>
       <PageActions markdown={markdown} />
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, TypeTable, Tab, Tabs, Accordion, Accordions }} />
+        <MDX
+          components={{ ...defaultMdxComponents, TypeTable, Tab, Tabs, Accordion, Accordions }}
+        />
       </DocsBody>
     </DocsPage>
   );

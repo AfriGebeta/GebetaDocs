@@ -26,17 +26,23 @@ description: The Route Optimization API is designed to identify the most efficie
     - Minimize expenses with efficient route suggestions.
   </Card>
 
-  <Card title="Fleet Management" description="Manage your fleet effectively by optimizing routes for vehicles and drivers." icon="🚚">
-    - Assign tasks and priorities to each vehicle and driver.
-    - Meet business goals with optimal routing solutions.
-    - Enhance customer satisfaction with timely deliveries.
-  </Card>
+<Card
+  title="Fleet Management"
+  description="Manage your fleet effectively by optimizing routes for vehicles and drivers."
+  icon="🚚"
+>
+  - Assign tasks and priorities to each vehicle and driver. - Meet business goals with optimal
+  routing solutions. - Enhance customer satisfaction with timely deliveries.
+</Card>
 
-  <Card title="Delivery Route Optimization" description="Find the best routes for delivery trucks and couriers." icon="📦">
-    - Optimize routes based on delivery time windows and capacity.
-    - Reduce fuel consumption for cost-effective deliveries.
-    - Ensure timely deliveries while maximizing courier skills.
-  </Card>
+<Card
+  title="Delivery Route Optimization"
+  description="Find the best routes for delivery trucks and couriers."
+  icon="📦"
+>
+  - Optimize routes based on delivery time windows and capacity. - Reduce fuel consumption for
+  cost-effective deliveries. - Ensure timely deliveries while maximizing courier skills.
+</Card>
 
   <Card title="Commute Optimization" description="Find the best route for your daily commute based on your transportation mode." icon="🚌">
     - Compare travel time, distance, cost, and environmental impact.
@@ -53,21 +59,20 @@ curl https://mapapi.gebeta.app/api/route/tss/?json=[]&apiKey={yourapikey}
 
 ### Parameters
 
-| **Parameter**        | **Type**      | **Description**                                                                                              | **Required** |
-|----------------------|---------------|--------------------------------------------------------------------------------------------------------------|--------------|
-| `json`               | `string[]`    | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
-| `apiKey`             | `string`      | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
+| **Parameter** | **Type**   | **Description**                                                                                              | **Required** |
+| ------------- | ---------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
+| `json`        | `string[]` | An array of semicolon-separated latitude and longitude pairs to specify which places to visit along the way. | `yes`        |
+| `apiKey`      | `string`   | Your API key for accessing Gebeta Maps.                                                                      | `yes`        |
 
 ## Response Codes for Route Optimization API
 
-| Status Code | Message                         | Description                                                                                       |
-|-------------|---------------------------------|---------------------------------------------------------------------------------------------------|
-| `200`       | `OK`                            | The request was successful. The system found a valid route and returned the requested data.       |
-| `404`       | `NoRoute`                       | No route exists between the specified locations. Confirm that the locations are accessible by route. |
-| `401`       | `Not Authorized - No Token`     | Authentication failed. No valid token was provided. Please include a valid authentication token.   |
-| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.       |
-| `422`       | `InvalidInput`                  | The request parameters are incorrect. Review the input values and adjust as needed.               | 
-
+| Status Code | Message                          | Description                                                                                          |
+| ----------- | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `200`       | `OK`                             | The request was successful. The system found a valid route and returned the requested data.          |
+| `404`       | `NoRoute`                        | No route exists between the specified locations. Confirm that the locations are accessible by route. |
+| `401`       | `Not Authorized - No Token`      | Authentication failed. No valid token was provided. Please include a valid authentication token.     |
+| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired. Use a current, valid token.          |
+| `422`       | `InvalidInput`                   | The request parameters are incorrect. Review the input values and adjust as needed.                  |
 
 ## Route Optimization API - CURL Request
 
@@ -95,12 +100,12 @@ use reqwest::blocking::get;
 use std::collections::HashMap;
 
 fn main() {
-    let api_key = "{your-api-key}";
-    let coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
-    let url = format!(
-        "https://mapapi.gebeta.app/api/route/tss/?json=[{}]&apiKey={}",
-        coordinates, api_key
-    );
+let api_key = "{your-api-key}";
+let coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
+let url = format!(
+"https://mapapi.gebeta.app/api/route/tss/?json=[{}]&apiKey={}",
+coordinates, api_key
+);
 
     let response: HashMap<String, String> = get(&url)
         .unwrap()
@@ -108,37 +113,40 @@ fn main() {
         .unwrap();
 
     println!("{:?}", response);
+
 }
-  ```
-  </Tab>
-  
-  <Tab value="Go">
-  ```go 
+
+````
+</Tab>
+
+<Tab value="Go">
+```go
 package main
 
 import (
-    "encoding/json"
-    "fmt"
-    "net/http"
+  "encoding/json"
+  "fmt"
+  "net/http"
 )
 
 func main() {
-    apiKey := "{your-api-key}"
-    coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
-    
-    url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/tss/?json=[%s]&apiKey=%s&includeCoordinate=1", coordinates, apiKey)
+  apiKey := "{your-api-key}"
+  coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
 
-    resp, err := http.Get(url)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
+  url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/tss/?json=[%s]&apiKey=%s&includeCoordinate=1", coordinates, apiKey)
 
-    var result map[string]interface{}
-    json.NewDecoder(resp.Body).Decode(&result)
-    fmt.Println(result)
+  resp, err := http.Get(url)
+  if err != nil {
+      panic(err)
+  }
+  defer resp.Body.Close()
+
+  var result map[string]interface{}
+  json.NewDecoder(resp.Body).Decode(&result)
+  fmt.Println(result)
 }
-  ```
+````
+
   </Tab>
   
   <Tab value="PHP">
@@ -152,11 +160,12 @@ $response = file_get_contents($url);
 $data = json_decode($response, true);
 print_r($data);
 ?>
-  ```
-  </Tab>
-  
-  <Tab value="Python">
-  ```python
+
+````
+</Tab>
+
+<Tab value="Python">
+```python
 import requests
 
 api_key = "{your-api-key}"
@@ -166,7 +175,8 @@ url = f"https://mapapi.gebeta.app/api/route/tss/?json=[{coordinates}]&apiKey={ap
 response = requests.get(url)
 data = response.json()
 print(data)
-  ```
+````
+
   </Tab>
   
   <Tab value="Ruby">
@@ -181,29 +191,31 @@ url = URI("https://mapapi.gebeta.app/api/route/tss/?json=[#{coordinates}]&apiKey
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
 puts data
-  ```
-  </Tab>
-  
-  <Tab value="Dart">
-  ```dart
+
+````
+</Tab>
+
+<Tab value="Dart">
+```dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  String apiKey = "{your-api-key}";
-  String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
-  String url = "https://mapapi.gebeta.app/api/route/tss/?json=[$coordinates]&apiKey=$apiKey";
+String apiKey = "{your-api-key}";
+String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
+String url = "https://mapapi.gebeta.app/api/route/tss/?json=[$coordinates]&apiKey=$apiKey";
 
-  final response = await http.get(Uri.parse(url));
+final response = await http.get(Uri.parse(url));
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    print(data);
-  } else {
-    print('Error: ${response.statusCode}');
-  }
+if (response.statusCode == 200) {
+  var data = json.decode(response.body);
+  print(data);
+} else {
+  print('Error: ${response.statusCode}');
 }
-  ```  
+}
+````
+
   </Tab>
 </Tabs>
 
