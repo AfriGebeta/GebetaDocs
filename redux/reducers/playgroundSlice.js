@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  current: 'geocoding',
+  current: "geocoding",
 };
 
 export const playgroundSlice = createSlice({
-  name: 'playground',
+  name: "playground",
   initialState,
   reducers: {
     changeTopicPlayGround: (state, action) => {

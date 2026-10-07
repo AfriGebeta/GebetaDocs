@@ -256,7 +256,7 @@ The server may send WebSocket ping frames to ensure connection health.
 Clients must respond with pong:
 
 ```javascript
-ws.on('ping', () => {
+ws.on("ping", () => {
   ws.pong();
 });
 ```

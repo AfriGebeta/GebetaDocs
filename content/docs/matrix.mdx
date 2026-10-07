@@ -51,7 +51,7 @@ Harness the power of the Matrix API to efficiently calculate optimal routes tail
 ## Usage
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
+curl https://mapapi.gebeta.app/api/route/matrix?json=[]&apiKey={}
 ```
 
 ## Parameters
@@ -76,7 +76,7 @@ curl https://mapapi.gebeta.app/api/route/matrix/?json=[]&apiKey={}
 To get a route matrix using the Matrix API, you can use the following `curl` command:
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/matrix/?json=[{latitude1,longitude1},{latitude2,longitude2}]&apiKey={your-api-key}"
+curl "https://mapapi.gebeta.app/api/route/matrix?json=[{latitude1,longitude1},{latitude2,longitude2}]&apiKey={your-api-key}"
 ```
 
 ## Example
@@ -84,7 +84,7 @@ curl "https://mapapi.gebeta.app/api/route/matrix/?json=[{latitude1,longitude1},{
 <Tabs items={['JavaScript', 'Rust', 'Go', 'PHP', 'Python', 'Ruby', 'Dart']}>
   <Tab value="JavaScript">
   ```javascript
-fetch('https://mapapi.gebeta.app/api/route/matrix/?json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}')
+fetch('https://mapapi.gebeta.app/api/route/matrix?json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}')
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
@@ -100,7 +100,7 @@ fn main() {
 let api_key = "{your-api-key}";
 let coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
 let url = format!(
-"https://mapapi.gebeta.app/api/route/matrix/?json=[{}]&apiKey={}",
+"https://mapapi.gebeta.app/api/route/matrix?json=[{}]&apiKey={}",
 coordinates, api_key
 );
 
@@ -130,7 +130,7 @@ func main() {
   apiKey := "{your-api-key}"
   coordinates := "{8.989022,38.79036},{9.03045,38.76530}"
 
-  url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/matrix/?json=[%s]&apiKey=%s", coordinates, apiKey)
+  url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/matrix?json=[%s]&apiKey=%s", coordinates, apiKey)
 
   resp, err := http.Get(url)
   if err != nil {
@@ -151,7 +151,7 @@ func main() {
 <?php
 $apiKey = "{your-api-key}";
 $coordinates = "{8.989022,38.79036};{9.03045,38.76530}";
-$url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey={$apiKey}";
+$url = "https://mapapi.gebeta.app/api/route/matrix?json=[$coordinates]&apiKey={$apiKey}";
 
 $response = file_get_contents($url);
 $data = json_decode($response, true);
@@ -167,7 +167,7 @@ import requests
 
 api_key = "{your-api-key}"
 coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
-url = f"https://mapapi.gebeta.app/api/route/matrix/?json=[coordinates]&apiKey={api_key}"
+url = f"https://mapapi.gebeta.app/api/route/matrix?json=[coordinates]&apiKey={api_key}"
 
 response = requests.get(url)
 data = response.json()
@@ -183,7 +183,7 @@ require 'json'
 
 api_key = "{your-api-key}"
 coordinates = "{8.989022,38.79036},{9.03045,38.76530}"
-url = URI("https://mapapi.gebeta.app/api/route/matrix/?json=[#{coordinates}]&apiKey=#{api_key}")
+url = URI("https://mapapi.gebeta.app/api/route/matrix?json=[#{coordinates}]&apiKey=#{api_key}")
 
 response = Net::HTTP.get(url)
 data = JSON.parse(response)
@@ -200,7 +200,7 @@ import 'package:http/http.dart' as http;
 void main() async {
 String apiKey = "{your-api-key}";
 String coordinates = "{8.989022,38.79036},{9.03045,38.76530}";
-String url = "https://mapapi.gebeta.app/api/route/matrix/?json=[$coordinates]&apiKey=$apiKey";
+String url = "https://mapapi.gebeta.app/api/route/matrix?json=[$coordinates]&apiKey=$apiKey";
 
 final response = await http.get(Uri.parse(url));
 

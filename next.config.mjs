@@ -1,4 +1,4 @@
-import { createMDX } from 'fumadocs-mdx/next';
+import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
@@ -6,7 +6,7 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   logging: {
-    browserToTerminal: process.env.NODE_ENV === 'production',
+    browserToTerminal: process.env.NODE_ENV === "production",
   },
 };
 

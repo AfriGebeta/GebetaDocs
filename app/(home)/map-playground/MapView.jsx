@@ -1,9 +1,9 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import Map from './Map';
-import SideBarForm from './SideBarForm';
-import { returnPlaygroundObject } from 'data/playground';
-import { useSelector } from 'react-redux';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import Map from "./Map";
+import SideBarForm from "./SideBarForm";
+import { returnPlaygroundObject } from "data/playground";
+import { useSelector } from "react-redux";
 
 const MapView = () => {
   const mapRef = useRef(null);
@@ -13,17 +13,17 @@ const MapView = () => {
   const [showAlternatives, setShowAlternatives] = useState(false);
   const [alternatives, setAlternatives] = useState([]);
   const [activeInstruction, setActiveInstruction] = useState(null);
-  const [selectedButton, setSelectedButton] = useState('');
+  const [selectedButton, setSelectedButton] = useState("");
   const { playground } = useSelector((state) => state);
 
   const setSelectedButtonFunction = (text) => {
-    if (text == selectedButton) setSelectedButton('');
+    if (text == selectedButton) setSelectedButton("");
     else setSelectedButton(text);
   };
 
   const t = returnPlaygroundObject(playground.current);
   useEffect(() => {
-    if (t.type !== 'direction') {
+    if (t.type !== "direction") {
       setInstructions([]);
       setShowInstructions(false);
     }

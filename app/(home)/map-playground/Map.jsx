@@ -1,24 +1,24 @@
-'use client';
-import React, { memo, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import maplibregl from 'maplibre-gl';
+"use client";
+import React, { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
+import maplibregl from "maplibre-gl";
 
-import { PlayGroundContext } from '@/providers/Playground';
+import { PlayGroundContext } from "@/providers/Playground";
 
 const styles = [
   {
-    type: 'Vector',
-    url: '/style.json',
-    image: '/vector.png',
+    type: "Vector",
+    url: "/style.json",
+    image: "/vector.png",
   },
   {
-    type: 'Raster',
-    url: 'https://tiles.gebeta.app/styles/raster/raster.json',
-    image: '/raster.png',
+    type: "Raster",
+    url: "https://tiles.gebeta.app/styles/raster/raster.json",
+    image: "/raster.png",
   },
   {
-    type: 'Terrain',
-    url: 'https://tiles.gebeta.app/styles/standard/terrain/terrain.json',
-    image: '/terrain.png',
+    type: "Terrain",
+    url: "https://tiles.gebeta.app/styles/standard/terrain/terrain.json",
+    image: "/terrain.png",
   },
 ];
 
@@ -58,13 +58,13 @@ const Map = memo(
     const position = [9.035961873355374, 38.75238418579102];
 
     const getDriverColor = (index) => {
-      const colors = ['#FFA500', '#3F51B5', '#4CAF50', '#9C27B0', '#FF5722', '#607D8B'];
+      const colors = ["#FFA500", "#3F51B5", "#4CAF50", "#9C27B0", "#FF5722", "#607D8B"];
       return colors[index % colors.length];
     };
 
     const createDriverMarkerIcon = (driverIndex) => {
-      const el = document.createElement('div');
-      el.className = 'driver-marker';
+      const el = document.createElement("div");
+      el.className = "driver-marker";
       const color = getDriverColor(driverIndex);
 
       el.innerHTML = `
@@ -77,8 +77,8 @@ const Map = memo(
     };
 
     const createCustomerMarkerIcon = (driverIndex, customerIndex) => {
-      const el = document.createElement('div');
-      el.className = 'customer-marker';
+      const el = document.createElement("div");
+      el.className = "customer-marker";
       const color = getDriverColor(driverIndex);
 
       el.innerHTML = `
@@ -104,11 +104,11 @@ const Map = memo(
           lng: e.lngLat.lng,
         };
 
-        if (selectedButtonRef.current === 'start') {
+        if (selectedButtonRef.current === "start") {
           setOriginCoordinates(coordinates);
-        } else if (selectedButtonRef.current === 'destination') {
+        } else if (selectedButtonRef.current === "destination") {
           setDestinationCoordinates(coordinates);
-        } else if (selectedButtonRef.current === 'waypoint') {
+        } else if (selectedButtonRef.current === "waypoint") {
           setWaypointsCoordinates(coordinates);
         }
       },
@@ -116,7 +116,7 @@ const Map = memo(
     );
 
     const getRandomColor = () => {
-      const colors = ['#3F51B5', '#009688', '#FF5722', '#607D8B', '#795548', '#9C27B0'];
+      const colors = ["#3F51B5", "#009688", "#FF5722", "#607D8B", "#795548", "#9C27B0"];
       return colors[Math.floor(Math.random() * colors.length)];
     };
 
@@ -152,7 +152,7 @@ const Map = memo(
           essential: true,
         });
       } catch (error) {
-        console.error('Error fitting map to coordinates:', error);
+        console.error("Error fitting map to coordinates:", error);
       }
     }, []);
 
@@ -175,10 +175,10 @@ const Map = memo(
 
         if (mapRef.current.getSource(lineId)) {
           mapRef.current.getSource(lineId).setData({
-            type: 'Feature',
+            type: "Feature",
             properties: {},
             geometry: {
-              type: 'LineString',
+              type: "LineString",
               coordinates: partialCoords,
             },
           });
@@ -193,36 +193,36 @@ const Map = memo(
     }, []);
 
     const createMarkerIcon = (type, isActive = false) => {
-      const el = document.createElement('div');
-      el.className = 'marker';
+      const el = document.createElement("div");
+      el.className = "marker";
 
       let bgColor, borderColor, textColor;
 
       switch (type) {
-        case 'start':
-          bgColor = '#4CAF50';
-          borderColor = '#388E3C';
-          textColor = 'white';
+        case "start":
+          bgColor = "#4CAF50";
+          borderColor = "#388E3C";
+          textColor = "white";
           break;
-        case 'destination':
-          bgColor = '#F44336';
-          borderColor = '#D32F2F';
-          textColor = 'white';
+        case "destination":
+          bgColor = "#F44336";
+          borderColor = "#D32F2F";
+          textColor = "white";
           break;
-        case 'waypoint':
-          bgColor = '#2196F3';
-          borderColor = '#1976D2';
-          textColor = 'white';
+        case "waypoint":
+          bgColor = "#2196F3";
+          borderColor = "#1976D2";
+          textColor = "white";
           break;
-        case 'instruction':
-          bgColor = isActive ? '#FF9800' : '#607D8B';
-          borderColor = isActive ? '#F57C00' : '#455A64';
-          textColor = 'white';
+        case "instruction":
+          bgColor = isActive ? "#FF9800" : "#607D8B";
+          borderColor = isActive ? "#F57C00" : "#455A64";
+          textColor = "white";
           break;
         default:
-          bgColor = '#9E9E9E';
-          borderColor = '#616161';
-          textColor = 'white';
+          bgColor = "#9E9E9E";
+          borderColor = "#616161";
+          textColor = "white";
       }
 
       el.innerHTML = `
@@ -243,7 +243,7 @@ const Map = memo(
 
       if (origin && origin.lat && origin.lng) {
         const marker = new maplibregl.Marker({
-          element: createMarkerIcon('start'),
+          element: createMarkerIcon("start"),
         })
           .setLngLat([origin.lng, origin.lat])
           .addTo(mapRef.current);
@@ -253,7 +253,7 @@ const Map = memo(
 
       if (destination && destination.lat && destination.lng) {
         const marker = new maplibregl.Marker({
-          element: createMarkerIcon('destination'),
+          element: createMarkerIcon("destination"),
         })
           .setLngLat([destination.lng, destination.lat])
           .addTo(mapRef.current);
@@ -265,7 +265,7 @@ const Map = memo(
         waypoints.forEach((point, index) => {
           if (point && point.lat && point.lng) {
             const marker = new maplibregl.Marker({
-              element: createMarkerIcon('waypoint'),
+              element: createMarkerIcon("waypoint"),
             })
               .setLngLat([point.lng, point.lat])
               .addTo(mapRef.current);
@@ -278,24 +278,24 @@ const Map = memo(
 
     const addToMap = (map, coordinates, outlineId, lineId, isAlternative = false) => {
       map.addSource(lineId, {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: coordinates,
           },
         },
       });
 
       map.addSource(outlineId, {
-        type: 'geojson',
+        type: "geojson",
         data: {
-          type: 'Feature',
+          type: "Feature",
           properties: {},
           geometry: {
-            type: 'LineString',
+            type: "LineString",
             coordinates: coordinates,
           },
         },
@@ -303,31 +303,31 @@ const Map = memo(
 
       map.addLayer({
         id: outlineId,
-        type: 'line',
+        type: "line",
         source: outlineId,
         layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
+          "line-join": "round",
+          "line-cap": "round",
         },
         paint: {
-          'line-color': '#ffffff',
-          'line-width': 6,
-          'line-opacity': 0.7,
+          "line-color": "#ffffff",
+          "line-width": 6,
+          "line-opacity": 0.7,
         },
       });
 
       map.addLayer({
         id: lineId,
-        type: 'line',
+        type: "line",
         source: lineId,
         layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
+          "line-join": "round",
+          "line-cap": "round",
         },
         paint: {
-          'line-color': isAlternative ? '#AAB8E4' : '#0056B3',
-          'line-width': 8,
-          'line-dasharray': [0.0001, 0.0001],
+          "line-color": isAlternative ? "#AAB8E4" : "#0056B3",
+          "line-width": 8,
+          "line-dasharray": [0.0001, 0.0001],
         },
       });
 
@@ -353,12 +353,12 @@ const Map = memo(
       polylineLayersRef.current = [];
 
       if (coordinate && coordinate.coords) {
-        if (coordinate.type === 'direction' || coordinate.type === 'tss') {
+        if (coordinate.type === "direction" || coordinate.type === "tss") {
           const lineId = `polyline-${coordinate.type}`;
           const outlineId = `${lineId}-outline`;
 
           let coordinates;
-          if (Array.isArray(coordinate.coords[0]) && typeof coordinate.coords[0][0] === 'number') {
+          if (Array.isArray(coordinate.coords[0]) && typeof coordinate.coords[0][0] === "number") {
             coordinates = coordinate.coords.map((coord) => [coord[1], coord[0]]);
           } else {
             coordinates = coordinate.coords.map((coord) => [coord.lng, coord.lat]);
@@ -369,7 +369,7 @@ const Map = memo(
           if (alternatives) {
             alternatives.forEach((item, index) => {
               let alternative;
-              if (Array.isArray(item.direction[0]) && typeof item.direction[0][0] === 'number') {
+              if (Array.isArray(item.direction[0]) && typeof item.direction[0][0] === "number") {
                 alternative = item.direction.map((coord) => [coord[1], coord[0]]);
               } else {
                 alternative = item.direction.map((coord) => [coord.lng, coord.lat]);
@@ -377,30 +377,30 @@ const Map = memo(
 
               const altLineId = `polyline-alternative-${index}`;
               const altOutlineId = `${altLineId}-outline`;
-              const altColor = '#4285F4';
+              const altColor = "#4285F4";
               const isAlternative = true;
               addToMap(map, alternative, altOutlineId, altLineId, isAlternative, altColor);
             });
           }
-        } else if (coordinate.type === 'onm') {
+        } else if (coordinate.type === "onm") {
           coordinate.coords.forEach((path, index) => {
             const lineId = `polyline-onm-${index}`;
             const outlineId = `${lineId}-outline`;
 
             let coordinates;
-            if (Array.isArray(path[0]) && typeof path[0][0] === 'number') {
+            if (Array.isArray(path[0]) && typeof path[0][0] === "number") {
               coordinates = path.map((coord) => [coord[1], coord[0]]);
             } else {
               coordinates = path.map((coord) => [coord.lng, coord.lat]);
             }
 
             map.addSource(outlineId, {
-              type: 'geojson',
+              type: "geojson",
               data: {
-                type: 'Feature',
+                type: "Feature",
                 properties: {},
                 geometry: {
-                  type: 'LineString',
+                  type: "LineString",
                   coordinates: coordinates,
                 },
               },
@@ -408,26 +408,26 @@ const Map = memo(
 
             map.addLayer({
               id: outlineId,
-              type: 'line',
+              type: "line",
               source: outlineId,
               layout: {
-                'line-join': 'round',
-                'line-cap': 'round',
+                "line-join": "round",
+                "line-cap": "round",
               },
               paint: {
-                'line-color': '#ffffff',
-                'line-width': 6,
-                'line-opacity': 0.7,
+                "line-color": "#ffffff",
+                "line-width": 6,
+                "line-opacity": 0.7,
               },
             });
 
             map.addSource(lineId, {
-              type: 'geojson',
+              type: "geojson",
               data: {
-                type: 'Feature',
+                type: "Feature",
                 properties: {},
                 geometry: {
-                  type: 'LineString',
+                  type: "LineString",
                   coordinates: coordinates,
                 },
               },
@@ -437,16 +437,16 @@ const Map = memo(
 
             map.addLayer({
               id: lineId,
-              type: 'line',
+              type: "line",
               source: lineId,
               layout: {
-                'line-join': 'round',
-                'line-cap': 'round',
+                "line-join": "round",
+                "line-cap": "round",
               },
               paint: {
-                'line-color': color,
-                'line-width': 4,
-                'line-dasharray': [0.0001, 0.0001],
+                "line-color": color,
+                "line-width": 4,
+                "line-dasharray": [0.0001, 0.0001],
               },
             });
 
@@ -456,7 +456,7 @@ const Map = memo(
 
           const allCoords = coordinate.coords.flat();
           fitMapToCoordinates(allCoords);
-        } else if (coordinate.type === 'matrix') {
+        } else if (coordinate.type === "matrix") {
           markersRef.current.forEach((marker) => marker.remove());
           markersRef.current = [];
 
@@ -466,7 +466,7 @@ const Map = memo(
 
           points.forEach((point, index) => {
             const marker = new maplibregl.Marker({
-              element: createMarkerIcon('waypoint'),
+              element: createMarkerIcon("waypoint"),
             })
               .setLngLat(point)
               .addTo(mapRef.current);
@@ -479,12 +479,12 @@ const Map = memo(
               const coordinates = [points[i], points[j]];
 
               map.addSource(lineId, {
-                type: 'geojson',
+                type: "geojson",
                 data: {
-                  type: 'Feature',
+                  type: "Feature",
                   properties: {},
                   geometry: {
-                    type: 'LineString',
+                    type: "LineString",
                     coordinates: coordinates,
                   },
                 },
@@ -492,16 +492,16 @@ const Map = memo(
 
               map.addLayer({
                 id: lineId,
-                type: 'line',
+                type: "line",
                 source: lineId,
                 layout: {
-                  'line-join': 'round',
-                  'line-cap': 'round',
+                  "line-join": "round",
+                  "line-cap": "round",
                 },
                 paint: {
-                  'line-color': '#3F51B5',
-                  'line-width': 2,
-                  'line-opacity': 0.6,
+                  "line-color": "#3F51B5",
+                  "line-width": 2,
+                  "line-opacity": 0.6,
                 },
               });
 
@@ -537,11 +537,11 @@ const Map = memo(
       instructionMarkersRef.current = [];
 
       instructions.forEach((instruction, index) => {
-        const el = document.createElement('div');
-        el.className = 'instruction-marker';
+        const el = document.createElement("div");
+        el.className = "instruction-marker";
         el.innerHTML = `
                 <div class="relative">
-                    <div class="instruction-marker-circle ${activeInstruction === index ? 'active' : ''}">
+                    <div class="instruction-marker-circle ${activeInstruction === index ? "active" : ""}">
                         ${index + 1}
                     </div>
                     ${
@@ -550,16 +550,16 @@ const Map = memo(
                     <div class="instruction-marker-tooltip">
                         ${instruction.path} (${instruction.distance.toFixed(0)}m)
                     </div>`
-                        : ''
+                        : ""
                     }
                 </div>
             `;
 
-        el.addEventListener('click', () => setActiveInstruction(index));
+        el.addEventListener("click", () => setActiveInstruction(index));
 
         const marker = new maplibregl.Marker({
           element: el,
-          anchor: 'bottom',
+          anchor: "bottom",
         })
           .setLngLat([instruction.turning_longitude, instruction.turning_latitude])
           .addTo(mapRef.current);
@@ -574,18 +574,18 @@ const Map = memo(
 
     useEffect(() => {
       const map = new maplibregl.Map({
-        container: 'map',
-        style: 'https://tiles.gebeta.app/styles/standard/style.json',
+        container: "map",
+        style: "https://tiles.gebeta.app/styles/standard/style.json",
         center: [position[1], position[0]],
         zoom: 13,
         attributionControl: false,
-        ...(process.env.NODE_ENV === 'development'
+        ...(process.env.NODE_ENV === "development"
           ? {
               transformRequest: (url, resourceType) => {
-                if (resourceType === 'Tile') {
+                if (resourceType === "Tile") {
                   return {
                     url: url,
-                    headers: { Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_GEBETA_MAP_KEY },
+                    headers: { Authorization: "Bearer " + process.env.NEXT_PUBLIC_GEBETA_MAP_KEY },
                   };
                 }
                 return { url };
@@ -594,22 +594,22 @@ const Map = memo(
           : {}),
       });
 
-      map.addControl(new maplibregl.NavigationControl(), 'top-right');
-      map.addControl(new LogoControl(), 'bottom-left');
+      map.addControl(new maplibregl.NavigationControl(), "top-right");
+      map.addControl(new LogoControl(), "bottom-left");
 
-      map.addControl(new LayerControl(styles), 'top-right');
+      map.addControl(new LayerControl(styles), "top-right");
 
       mapRef.current = map;
 
-      map.on('click', handleMapClick);
+      map.on("click", handleMapClick);
 
-      map.on('load', () => {
+      map.on("load", () => {
         updateMarkers();
         updatePolylines();
       });
 
       return () => {
-        map.off('click', handleMapClick);
+        map.off("click", handleMapClick);
         map.remove();
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
@@ -652,7 +652,7 @@ const Map = memo(
 
     return (
       <div className="h-full overflow-hidden relative">
-        <div id="map" style={{ width: '100%', height: '100%' }} />
+        <div id="map" style={{ width: "100%", height: "100%" }} />
         {showInstructions && instructions && instructions.length > 0 && (
           <div className="absolute top-4 left-4 bg-white bg-opacity-90 rounded-lg shadow-md overflow-hidden w-64">
             <div className="max-h-[70vh] overflow-y-auto instruction-scrollbar">
@@ -664,12 +664,12 @@ const Map = memo(
                 {instructions.map((step, index) => (
                   <div
                     key={index}
-                    className={`px-4 py-3 cursor-pointer transition-colors ${activeInstruction === index ? 'bg-orange-50' : 'hover:bg-gray-50'}`}
+                    className={`px-4 py-3 cursor-pointer transition-colors ${activeInstruction === index ? "bg-orange-50" : "hover:bg-gray-50"}`}
                     onClick={() => setActiveInstruction(index)}
                   >
                     <div className="flex items-start">
                       <div
-                        className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 mt-0.5 ${activeInstruction === index ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-600'}`}
+                        className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-3 mt-0.5 ${activeInstruction === index ? "bg-orange-500 text-white" : "bg-orange-100 text-orange-600"}`}
                       >
                         <span className="text-xs font-medium">{index + 1}</span>
                       </div>
@@ -695,17 +695,17 @@ export default Map;
 
 class LogoControl {
   onAdd(map) {
-    this._container = document.createElement('div');
-    this._container.className = 'maplibregl-ctrl maplibregl-ctrl-logo';
+    this._container = document.createElement("div");
+    this._container.className = "maplibregl-ctrl maplibregl-ctrl-logo";
 
-    const logo = document.createElement('img');
+    const logo = document.createElement("img");
     logo.src =
-      'https://github.com/AfriGebeta/GebetaDocs/blob/41ad169bdb6d7ac2757f2c553943c43522f08947/assets/icons/maplogo.png?raw=true';
-    logo.style.width = '30px';
-    logo.style.height = 'auto';
+      "https://github.com/AfriGebeta/GebetaDocs/blob/41ad169bdb6d7ac2757f2c553943c43522f08947/assets/icons/maplogo.png?raw=true";
+    logo.style.width = "30px";
+    logo.style.height = "auto";
 
-    const attribution = document.createElement('div');
-    attribution.style.fontSize = '10px';
+    const attribution = document.createElement("div");
+    attribution.style.fontSize = "10px";
 
     this._container.appendChild(logo);
     this._container.appendChild(attribution);
@@ -726,12 +726,12 @@ class LayerControl {
 
   onAdd(map) {
     this._map = map;
-    this._container = document.createElement('div');
+    this._container = document.createElement("div");
     this._container.className =
-      'group maplibregl-ctrl relative px-2 py-1 rounded-sm text-[#222] bg-white hover:bg-white/95';
+      "group maplibregl-ctrl relative px-2 py-1 rounded-sm text-[#222] bg-white hover:bg-white/95";
 
-    const button = document.createElement('button');
-    button.className = '!p-0 bg-white rounded-md shadow flex items-center';
+    const button = document.createElement("button");
+    button.className = "!p-0 bg-white rounded-md shadow flex items-center";
     button.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers-icon lucide-layers group-hover:text-[#ffa500] transition-all duration-150">
         <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
@@ -740,38 +740,38 @@ class LayerControl {
       </svg>
     `;
 
-    this._menu = document.createElement('div');
+    this._menu = document.createElement("div");
     this._menu.className =
-      'absolute right-0 mt-2 w-40 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden';
+      "absolute right-0 mt-2 w-40 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 hidden";
 
     this.styles?.forEach((style) => {
-      const item = document.createElement('button');
-      item.className = 'flex items-center w-full px-4 py-2 text-sm text-left hover:bg-gray-100';
+      const item = document.createElement("button");
+      item.className = "flex items-center w-full px-4 py-2 text-sm text-left hover:bg-gray-100";
 
       if (style.image) {
-        const img = document.createElement('img');
+        const img = document.createElement("img");
         img.src = style.image;
-        img.className = 'w-5 h-5 mr-2';
+        img.className = "w-5 h-5 mr-2";
         item.appendChild(img);
       }
 
-      const text = document.createElement('span');
+      const text = document.createElement("span");
       text.textContent = style.type;
       item.appendChild(text);
 
       item.onclick = () => {
         map.setStyle(style.url);
-        this._menu.classList.add('hidden');
+        this._menu.classList.add("hidden");
       };
       this._menu.appendChild(item);
     });
 
     button.onclick = (e) => {
       e.stopPropagation();
-      this._menu.classList.toggle('hidden');
+      this._menu.classList.toggle("hidden");
     };
 
-    document.addEventListener('click', this._onDocClick);
+    document.addEventListener("click", this._onDocClick);
 
     this._container.appendChild(button);
     this._container.appendChild(this._menu);
@@ -780,12 +780,12 @@ class LayerControl {
 
   _onDocClick(e) {
     if (this._container && !this._container.contains(e.target)) {
-      this._menu.classList.add('hidden');
+      this._menu.classList.add("hidden");
     }
   }
 
   onRemove() {
-    document.removeEventListener('click', this._onDocClick);
+    document.removeEventListener("click", this._onDocClick);
     this._container.parentNode.removeChild(this._container);
     this._map = undefined;
   }

@@ -1,4 +1,4 @@
-import { API, handleApiError } from './util';
+import { API, handleApiError } from "./util";
 
 export const getRoute = async (url) => {
   try {
@@ -13,7 +13,7 @@ export const getRoutes = async (url, body) => {
   try {
     const { data } = await API.post(url, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     return { error: null, data };

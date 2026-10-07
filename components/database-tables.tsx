@@ -5,10 +5,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Key, Link } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip-docs';
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Key, Link } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip-docs";
 
 interface Field {
   name: string;
@@ -36,7 +36,7 @@ export default function DatabaseTable({ fields }: DatabaseTableProps) {
       </TableHeader>
       <TableBody>
         {fields.map((field, index) => (
-          <TableRow key={index} className={index % 2 === 0 ? 'bga-muted/50' : ''}>
+          <TableRow key={index} className={index % 2 === 0 ? "bga-muted/50" : ""}>
             <TableCell className="font-medium">{field.name}</TableCell>
             <TableCell className="font-mono text-sm">
               <Badge variant="outline">{field.type}</Badge>

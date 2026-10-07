@@ -1,9 +1,9 @@
 // redux/store.js
-'use client';
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
-import playGroundReducer from './reducers/playgroundSlice';
-import tokenReducer from './reducers/tokenSlice';
+"use client";
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import playGroundReducer from "./reducers/playgroundSlice";
+import tokenReducer from "./reducers/tokenSlice";
 
 const rootReducer = combineReducers({
   playground: playGroundReducer,

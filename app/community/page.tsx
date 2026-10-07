@@ -1,6 +1,6 @@
-import CommunityHeader from './_components/header';
-import Stats from './_components/stats';
-import Section from '@/app/(home)/_components/section';
+import CommunityHeader from "./_components/header";
+import Stats from "./_components/stats";
+import Section from "@/app/(home)/_components/section";
 
 export default async function CommunityPage() {
   return (

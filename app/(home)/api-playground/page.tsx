@@ -1,6 +1,6 @@
-'use client';
-import { ApiReferenceReact } from '@scalar/api-reference-react';
-import { useTheme } from 'next-themes';
+"use client";
+import { ApiReferenceReact } from "@scalar/api-reference-react";
+import { useTheme } from "next-themes";
 
 function ApiDocs() {
   const { theme } = useTheme();
@@ -8,15 +8,15 @@ function ApiDocs() {
   return (
     <ApiReferenceReact
       configuration={{
-        searchHotKey: 'k',
+        searchHotKey: "k",
         metaData: {
-          title: 'Gebeta Maps API Playground',
+          title: "Gebeta Maps API Playground",
         },
         spec: {
-          url: 'gebeta-api.openapi.json',
+          url: "gebeta-api.openapi.json",
         },
-        theme: 'purple',
-        darkMode: theme === 'dark' ? true : false,
+        theme: "purple",
+        darkMode: theme === "dark" ? true : false,
         hideDarkModeToggle: true,
       }}
     />

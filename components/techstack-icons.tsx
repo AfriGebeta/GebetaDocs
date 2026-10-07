@@ -1,4 +1,4 @@
-import { Icons } from './icons';
+import { Icons } from "./icons";
 
 type TechStackIconType = {
   [key: string]: {
@@ -8,15 +8,15 @@ type TechStackIconType = {
 };
 export const techStackIcons: TechStackIconType = {
   nextJs: {
-    name: 'Nextjs',
+    name: "Nextjs",
     icon: <Icons.nextJS className="w-10 h-10" />,
   },
   react: {
-    name: 'React',
+    name: "React",
     icon: <Icons.react className="w-10 h-10" />,
   },
   flutter: {
-    name: 'flutter',
+    name: "flutter",
     icon: <Icons.flutter className="w-10 h-10" />,
   },
 };

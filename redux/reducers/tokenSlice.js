@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  token: 'youapitoken',
+  token: "youapitoken",
 };
 
 export const tokenSlice = createSlice({
-  name: 'token',
+  name: "token",
   initialState,
   reducers: {
     changeToken: (state, action) => {

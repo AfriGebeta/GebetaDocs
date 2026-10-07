@@ -1,5 +1,5 @@
-'use client';
-import React, { createContext, useState } from 'react';
+"use client";
+import React, { createContext, useState } from "react";
 
 export const PlayGroundContext = createContext({
   waypoints: [],
@@ -48,7 +48,7 @@ export const PlayGroundProvider = ({ children }) => {
       if (waypoints.length < 10) {
         setWaypoints((prev) => [...prev, coordinates]);
       } else {
-        console.log('Maximum of 10 waypoints allowed.');
+        console.log("Maximum of 10 waypoints allowed.");
       }
     }
   };

@@ -1,7 +1,7 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
-const radioInputs = [{ name: 'forward' }, { name: 'reverse' }];
+const radioInputs = [{ name: "forward" }, { name: "reverse" }];
 
 const RadioInputGeocoding = ({ selectedGeocoding, setGeocoding, setSelectedButtonFunction }) => {
   return (
@@ -13,8 +13,8 @@ const RadioInputGeocoding = ({ selectedGeocoding, setGeocoding, setSelectedButto
               type="radio"
               checked={selectedGeocoding === n.name}
               onChange={() => {
-                if (n.name == 'reverse') {
-                  setSelectedButtonFunction('start');
+                if (n.name == "reverse") {
+                  setSelectedButtonFunction("start");
                 }
                 setGeocoding(n.name);
               }}

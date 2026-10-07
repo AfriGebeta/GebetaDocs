@@ -1,13 +1,13 @@
-'use client';
-import clsx from 'clsx';
-import { LayoutGroup, motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { Highlight, themes } from 'prism-react-renderer';
-import { useState } from 'react';
+"use client";
+import clsx from "clsx";
+import { LayoutGroup, motion } from "framer-motion";
+import { useTheme } from "next-themes";
+import { Highlight, themes } from "prism-react-renderer";
+import { useState } from "react";
 
 const tabs = [
   {
-    name: 'directions.ts',
+    name: "directions.ts",
     code: `import { direction } from 'gebetamap';
     let start = {lat : 9.4343 , lon : 38.,434534}
     let stop = {lat :9.2334 , lon : 38.53432}
@@ -15,7 +15,7 @@ const tabs = [
     let data = await direction(start , stop , apiKey) `,
   },
   {
-    name: 'tss.ts',
+    name: "tss.ts",
     code: `import { tss } from 'gebetamap';
 
   const  apiKey = "";
@@ -29,7 +29,7 @@ const tabs = [
  `,
   },
   {
-    name: 'oneToMany.ts',
+    name: "oneToMany.ts",
     code: `import { oneToMany } from 'gebetamap';
    let start = {lat : 9.4343 , lon : 38.,434534}
    const apiKey = ""
@@ -42,7 +42,7 @@ const tabs = [
  `,
   },
   {
-    name: 'geocoding.ts',
+    name: "geocoding.ts",
     code: `    import { geocoding } from 'gebetamap';
     String name = "kotebe 02";
     String apiKey = "";
@@ -51,7 +51,7 @@ const tabs = [
   },
 ];
 
-function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg aria-hidden="true" viewBox="0 0 42 10" fill="none" {...props}>
       <circle cx="5" cy="5" r="4.5" />
@@ -63,8 +63,8 @@ function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 export default function Hero() {
   const theme = useTheme();
-  const [activeTab, setActiveTab] = useState('directions.ts');
-  const code = tabs.find((tab) => tab.name === activeTab)?.code ?? '';
+  const [activeTab, setActiveTab] = useState("directions.ts");
+  const code = tabs.find((tab) => tab.name === activeTab)?.code ?? "";
   return (
     <div className="relative">
       <div className="relative">
@@ -82,16 +82,16 @@ export default function Hero() {
                     key={tab.name}
                     onClick={() => setActiveTab(tab.name)}
                     className={clsx(
-                      'flex h-6 rounded-full cursor-pointer',
+                      "flex h-6 rounded-full cursor-pointer",
                       activeTab === tab.name
-                        ? 'bg-gradient-to-r from-stone-800/90 via-stone-900 to-orange-900/20 p-px font-medium text-primary'
-                        : 'text-slate-500'
+                        ? "bg-gradient-to-r from-stone-800/90 via-stone-900 to-orange-900/20 p-px font-medium text-primary"
+                        : "text-slate-500"
                     )}
                   >
                     <div
                       className={clsx(
-                        'flex items-center rounded-full px-4 py-2',
-                        tab.name === activeTab && 'border border-primary'
+                        "flex items-center rounded-full px-4 py-2",
+                        tab.name === activeTab && "border border-primary"
                       )}
                     >
                       {tab.name}
@@ -106,10 +106,10 @@ export default function Hero() {
                   className="select-none border-r border-slate-300/5 pr-4 font-mono text-slate-600"
                 >
                   {Array.from({
-                    length: code.split('\n').length,
+                    length: code.split("\n").length,
                   }).map((_, index) => (
                     <div key={index}>
-                      {(index + 1).toString().padStart(2, '0')}
+                      {(index + 1).toString().padStart(2, "0")}
                       <br />
                     </div>
                   ))}
@@ -117,19 +117,19 @@ export default function Hero() {
                 <Highlight
                   key={theme.resolvedTheme}
                   code={code}
-                  language={'tsx'}
+                  language={"tsx"}
                   theme={{
-                    ...(theme.resolvedTheme === 'light'
+                    ...(theme.resolvedTheme === "light"
                       ? themes.nightOwlLight
                       : themes.duotoneDark),
 
                     plain: {
-                      backgroundColor: 'transparent',
+                      backgroundColor: "transparent",
                     },
                   }}
                 >
                   {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                    <pre className={clsx(className, 'flex overflow-x-auto pb-6')} style={style}>
+                    <pre className={clsx(className, "flex overflow-x-auto pb-6")} style={style}>
                       <code className="px-4">
                         {tokens.map((line, lineIndex) => (
                           <div key={lineIndex} {...getLineProps({ line })}>

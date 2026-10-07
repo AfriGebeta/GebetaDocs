@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import { ThemeToggle } from '@/components/theme-toggler';
-import { NavbarMobile, NavbarMobileBtn } from '../nav-mobile';
-import { NavLink } from './nav-link';
-import { Logo } from './logo';
+import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggler";
+import { NavbarMobile, NavbarMobileBtn } from "../nav-mobile";
+import { NavLink } from "./nav-link";
+import { Logo } from "./logo";
 
 export const Navbar = () => {
   const logoAssets = {
@@ -95,28 +95,28 @@ export const Navbar = () => {
 
 export const navMenu = [
   {
-    name: 'home',
-    path: '/',
+    name: "home",
+    path: "/",
   },
   {
-    name: 'docs',
-    path: '/docs',
+    name: "docs",
+    path: "/docs",
   },
   {
-    name: 'api playground',
-    path: '/api-playground',
+    name: "api playground",
+    path: "/api-playground",
   },
   {
-    name: 'map playground',
-    path: '/map-playground',
+    name: "map playground",
+    path: "/map-playground",
   },
 
   {
-    name: 'changelogs',
-    path: '/changelogs',
+    name: "changelogs",
+    path: "/changelogs",
   },
   {
-    name: 'community',
-    path: '/community',
+    name: "community",
+    path: "/community",
   },
 ];

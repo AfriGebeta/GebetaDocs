@@ -1,28 +1,28 @@
 //@ts-nocheck
 
-'use client';
+"use client";
 
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { useSearchContext } from 'fumadocs-ui/provider';
-import { usePathname, useRouter } from 'next/navigation';
-import { ChevronDownIcon, Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { source } from '@/app/source';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
-import { AsideLink } from '@/components/ui/aside-link';
-import Link from 'next/link';
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useSearchContext } from "fumadocs-ui/provider";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronDownIcon, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { source } from "@/app/source";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { AsideLink } from "@/components/ui/aside-link";
+import Link from "next/link";
 
 export default function ArticleLayout() {
   const [currentOpen, setCurrentOpen] = useState<number>(0);
-  const [group, setGroup] = useState('docs');
+  const [group, setGroup] = useState("docs");
   const cts = source.pageTree.children;
 
-  const TILES_CHILD_ORDER = ['Overview', 'JavaScript SDK', 'Flutter SDK'];
+  const TILES_CHILD_ORDER = ["Overview", "JavaScript SDK", "Flutter SDK"];
 
   function getFolderChildren(item) {
-    if (item.name !== 'Tiles' || item.type !== 'folder') return item.children;
+    if (item.name !== "Tiles" || item.type !== "folder") return item.children;
 
     return [...item.children].sort((a, b) => {
       const aIndex = TILES_CHILD_ORDER.indexOf(a.name);
@@ -40,7 +40,7 @@ export default function ArticleLayout() {
       (item) => item?.children && item?.children.some((listItem) => listItem.url === pathname)
     );
 
-    console.log('defaultValue', defaultValue);
+    console.log("defaultValue", defaultValue);
     return defaultValue === -1 ? 0 : defaultValue;
   }
 
@@ -49,11 +49,11 @@ export default function ArticleLayout() {
   }, [pathname]);
 
   return (
-    <div className={cn('fixed top-0')}>
+    <div className={cn("fixed top-0")}>
       <aside
         className={cn(
-          'md:transition-all',
-          'border-r border-lines top-[43px] md:flex hidden md:w-[268px] lg:w-[286px] overflow-y-auto absolute h-[calc(92dvh-7px)] flex-col justify-between w-[var(--fd-sidebar-width)]'
+          "md:transition-all",
+          "border-r border-lines top-[43px] md:flex hidden md:w-[268px] lg:w-[286px] overflow-y-auto absolute h-[calc(92dvh-7px)] flex-col justify-between w-[var(--fd-sidebar-width)]"
         )}
       >
         <div className="mt-4">
@@ -68,7 +68,7 @@ export default function ArticleLayout() {
             <p className="text-sm">Search documentation...</p>
           </button>
 
-          <MotionConfig transition={{ duration: 0.4, type: 'spring', bounce: 0 }}>
+          <MotionConfig transition={{ duration: 0.4, type: "spring", bounce: 0 }}>
             <div className="flex flex-col">
               {cts.map((item, index) => (
                 <div key={item.name}>
@@ -83,31 +83,31 @@ export default function ArticleLayout() {
                     }}
                   >
                     <Link
-                      href={item?.url || item?.children?.[0]?.url || '/docs'}
+                      href={item?.url || item?.children?.[0]?.url || "/docs"}
                       className="whitespace-nowrap"
                     >
                       {item.name}
                     </Link>
-                    {item.name === 'VRP API' && <NewBadge />}
-                    {item.name === 'Place Validation API' && <NewBadge />}
-                    {item.name === 'Tracking API' && <NewBadge />}
-                    {item.name === 'Map Matching API' && <NewBadge />}
-                    {item.type === 'folder' && (
+                    {item.name === "VRP API" && <NewBadge />}
+                    {item.name === "Place Validation API" && <NewBadge />}
+                    {item.name === "Tracking API" && <NewBadge />}
+                    {item.name === "Map Matching API" && <NewBadge />}
+                    {item.type === "folder" && (
                       <motion.div animate={{ rotate: currentOpen === index ? 180 : 0 }}>
                         <ChevronDownIcon
                           className={cn(
-                            'h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200'
+                            "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200"
                           )}
                         />
                       </motion.div>
                     )}
                   </button>
-                  {item.type === 'folder' && (
+                  {item.type === "folder" && (
                     <AnimatePresence initial={false}>
                       {currentOpen === index && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
+                          animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           className="relative overflow-hidden"
                         >
@@ -139,10 +139,10 @@ function NewBadge({ isSelected }: { isSelected?: boolean }) {
     <div className="flex items-center justify-end w-full">
       <Badge
         className={cn(
-          'pointer-events-none no-underline border-dashed !decoration-transparent bg-[#FFA500] text-white',
-          isSelected && '!border-solid'
+          "pointer-events-none no-underline border-dashed !decoration-transparent bg-[#FFA500] text-white",
+          isSelected && "!border-solid"
         )}
-        variant={isSelected ? 'default' : 'outline'}
+        variant={isSelected ? "default" : "outline"}
       >
         New
       </Badge>
@@ -152,7 +152,7 @@ function NewBadge({ isSelected }: { isSelected?: boolean }) {
 
 const tabs = [
   {
-    value: 'docs',
+    value: "docs",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
         <path
@@ -166,11 +166,11 @@ const tabs = [
         ></path>
       </svg>
     ),
-    title: 'Documentation',
-    description: 'Get started and concepts ',
+    title: "Documentation",
+    description: "Get started and concepts ",
   },
   {
-    value: 'api-playground',
+    value: "api-playground",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
         <path
@@ -193,11 +193,11 @@ const tabs = [
         ></path>
       </svg>
     ),
-    title: 'API Playground',
-    description: 'Endpoints ',
+    title: "API Playground",
+    description: "Endpoints ",
   },
   {
-    value: 'map-playground',
+    value: "map-playground",
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
         <path
@@ -211,8 +211,8 @@ const tabs = [
         ></path>
       </svg>
     ),
-    title: 'Map Playground',
-    description: 'Location service playground',
+    title: "Map Playground",
+    description: "Location service playground",
   },
 ];
 
@@ -225,14 +225,14 @@ function SidebarTab({ group, setGroup }: { group: string; setGroup: (group: stri
       value={group}
       onValueChange={(val) => {
         switch (val) {
-          case 'docs':
-            router.push('/docs');
+          case "docs":
+            router.push("/docs");
             break;
-          case 'api-playground':
-            router.push('/api-playground');
+          case "api-playground":
+            router.push("/api-playground");
             break;
-          case 'map-playground':
-            router.push('/map-playground');
+          case "map-playground":
+            router.push("/map-playground");
             break;
         }
       }}

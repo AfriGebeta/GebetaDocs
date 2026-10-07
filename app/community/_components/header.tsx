@@ -1,5 +1,5 @@
-import { IconLink } from '@/app/changelogs/_components/changelog-layout';
-import { GitHubIcon, XIcon } from '@/app/changelogs/_components/icons';
+import { IconLink } from "@/app/changelogs/_components/changelog-layout";
+import { GitHubIcon, XIcon } from "@/app/changelogs/_components/icons";
 
 export default function CommunityHeader() {
   return (

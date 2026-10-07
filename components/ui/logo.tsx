@@ -1,5 +1,5 @@
-import { SVGProps } from 'react';
-import { cn } from '@/lib/utils';
+import { SVGProps } from "react";
+import { cn } from "@/lib/utils";
 
 export const Logo = (props: SVGProps<any>) => {
   return (
@@ -8,7 +8,7 @@ export const Logo = (props: SVGProps<any>) => {
       height="70"
       viewBox="0 0 70 70"
       fill="none"
-      className={cn('w-5 h-5', props.className)}
+      className={cn("w-5 h-5", props.className)}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

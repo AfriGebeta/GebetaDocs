@@ -1,5 +1,5 @@
-@import '@fontsource/zen-dots';
-@import '@fontsource-variable/plus-jakarta-sans';
+@import "@fontsource/zen-dots";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @tailwind base;
 @tailwind components;
@@ -11,7 +11,7 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans Variable', system-ui;
+  font-family: "Plus Jakarta Sans Variable", system-ui;
 }
 
 ::-webkit-scrollbar {
@@ -93,7 +93,7 @@ body {
 }
 
 .marker-waypoint:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -172,7 +172,7 @@ body {
 }
 
 .instruction-marker-tooltip:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;

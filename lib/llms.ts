@@ -1,11 +1,11 @@
-import { readFile } from 'node:fs/promises';
-import { source } from '@/app/source';
+import { readFile } from "node:fs/promises";
+import { source } from "@/app/source";
 
-const PUBLIC_SITE_URL = 'https://docs.gebeta.app';
+const PUBLIC_SITE_URL = "https://docs.gebeta.app";
 
 function normalizeBaseUrl(value: string): string {
   try {
-    const url = new URL(value.startsWith('http') ? value : `https://${value}`);
+    const url = new URL(value.startsWith("http") ? value : `https://${value}`);
     return url.origin;
   } catch {
     return PUBLIC_SITE_URL;
@@ -22,24 +22,24 @@ function toAbsoluteUrl(path: string): string {
 }
 
 function safeTitle(pathSegments: string[]): string {
-  const value = pathSegments[pathSegments.length - 1] ?? 'Documentation';
-  return value.replace(/[-_]/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const value = pathSegments[pathSegments.length - 1] ?? "Documentation";
+  return value.replace(/[-_]/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 export function generateLlmsIndex(): string {
   const pages = source.getPages().sort((a, b) => a.url.localeCompare(b.url));
 
   const lines = [
-    '# Gebeta Maps Documentation',
-    '',
-    '> LLM-friendly index for AI agents and coding assistants.',
-    '',
+    "# Gebeta Maps Documentation",
+    "",
+    "> LLM-friendly index for AI agents and coding assistants.",
+    "",
     `- Site: ${getSiteUrl()}`,
-    `- Docs Root: ${toAbsoluteUrl('/docs')}`,
-    `- Full Dump: ${toAbsoluteUrl('/llms-full.txt')}`,
-    '',
-    '## Documentation Pages',
-    '',
+    `- Docs Root: ${toAbsoluteUrl("/docs")}`,
+    `- Full Dump: ${toAbsoluteUrl("/llms-full.txt")}`,
+    "",
+    "## Documentation Pages",
+    "",
   ];
 
   for (const page of pages) {
@@ -53,28 +53,28 @@ export function generateLlmsIndex(): string {
   }
 
   lines.push(
-    '',
-    '## Other Useful Pages',
-    '',
-    `- API Playground: ${toAbsoluteUrl('/api-playground')}`,
-    `- Map Playground: ${toAbsoluteUrl('/map-playground')}`,
-    `- Changelogs: ${toAbsoluteUrl('/changelogs')}`,
-    ''
+    "",
+    "## Other Useful Pages",
+    "",
+    `- API Playground: ${toAbsoluteUrl("/api-playground")}`,
+    `- Map Playground: ${toAbsoluteUrl("/map-playground")}`,
+    `- Changelogs: ${toAbsoluteUrl("/changelogs")}`,
+    ""
   );
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 export async function generateLlmsFull(): Promise<string> {
   const pages = source.getPages().sort((a: any, b: any) => a.url.localeCompare(b.url));
 
   const sections: string[] = [
-    '# Gebeta Maps Documentation (Full)',
-    '',
-    '> Complete LLM-friendly dump of docs pages for offline indexing and vibe coding workflows.',
-    '',
-    `Source Index: ${toAbsoluteUrl('/llms.txt')}`,
-    '',
+    "# Gebeta Maps Documentation (Full)",
+    "",
+    "> Complete LLM-friendly dump of docs pages for offline indexing and vibe coding workflows.",
+    "",
+    `Source Index: ${toAbsoluteUrl("/llms.txt")}`,
+    "",
   ];
 
   for (const page of pages) {
@@ -83,10 +83,10 @@ export async function generateLlmsFull(): Promise<string> {
     const absoluteUrl = toAbsoluteUrl(page.url);
     const description = page.data?.description;
 
-    const markdown = await readFile(path, 'utf-8').catch(() => '');
+    const markdown = await readFile(path, "utf-8").catch(() => "");
 
     sections.push(`## ${title}`);
-    sections.push('');
+    sections.push("");
     sections.push(`URL: ${absoluteUrl}`);
     sections.push(`Source: ${path}`);
 
@@ -94,12 +94,12 @@ export async function generateLlmsFull(): Promise<string> {
       sections.push(`Description: ${description}`);
     }
 
-    sections.push('');
-    sections.push(markdown.trim() || '_No source markdown found._');
-    sections.push('');
-    sections.push('---');
-    sections.push('');
+    sections.push("");
+    sections.push(markdown.trim() || "_No source markdown found._");
+    sections.push("");
+    sections.push("---");
+    sections.push("");
   }
 
-  return sections.join('\n');
+  return sections.join("\n");
 }

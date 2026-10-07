@@ -1,23 +1,23 @@
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { Fragment, useEffect, useState } from 'react';
-import useMeasure from 'react-use-measure';
-import { Highlight, themes } from 'prism-react-renderer';
-import clsx from 'clsx';
-import { Check, Copy } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { useTheme } from "next-themes";
+import { Fragment, useEffect, useState } from "react";
+import useMeasure from "react-use-measure";
+import { Highlight, themes } from "prism-react-renderer";
+import clsx from "clsx";
+import { Check, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const tabs: { name: string; code: string }[] = [
   {
-    name: 'geocoding.ts',
+    name: "geocoding.ts",
     code: `import { geocoding } from 'gebetamap';
 let name = "kotebe 02";
 let apiKey = "";
 const geo = await geocoding(name, apiKey)`,
   },
   {
-    name: 'directions.ts',
+    name: "directions.ts",
     code: `import { direction } from 'gebetamap';
 let start = {lat : 9.4343 , lon : 38.,434534}
 let stop = {lat :9.2334 , lon : 38.53432}
@@ -25,7 +25,7 @@ const apiKey = ""
 let data = await direction(start , stop , apiKey)`,
   },
   {
-    name: 'tss.ts',
+    name: "tss.ts",
     code: `import { tss } from 'gebetamap';
 const  apiKey = "";
 let points = [
@@ -36,7 +36,7 @@ let points = [
 const ts = await tss(points , apiKey)`,
   },
   {
-    name: 'oneToMany.ts',
+    name: "oneToMany.ts",
     code: `import { oneToMany } from 'gebetamap';
 let start = {lat : 9.4343 , lon : 38.,434534}
 const apiKey = ""
@@ -49,7 +49,7 @@ const onm = await oneToMany  (start, points, apiKey);`,
   },
 ];
 
-function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg aria-hidden="true" viewBox="0 0 42 10" fill="none" {...props}>
       <circle cx="5" cy="5" r="4.5" />
@@ -60,11 +60,11 @@ function TrafficLightsIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 function CodePreview() {
-  const [currentTab, setCurrentTab] = useState<string>('geocoding.ts');
+  const [currentTab, setCurrentTab] = useState<string>("geocoding.ts");
 
   const theme = useTheme();
 
-  const code = tabs.find((tab) => tab.name === currentTab)?.code ?? '';
+  const code = tabs.find((tab) => tab.name === currentTab)?.code ?? "";
   const [copyState, setCopyState] = useState(false);
   const [ref, { height }] = useMeasure();
   const copyToClipboard = (text: string) => {
@@ -79,12 +79,12 @@ function CodePreview() {
   const [codeTheme, setCodeTheme] = useState(themes.synthwave84);
 
   useEffect(() => {
-    setCodeTheme(theme.resolvedTheme === 'light' ? themes.oneLight : themes.synthwave84);
+    setCodeTheme(theme.resolvedTheme === "light" ? themes.oneLight : themes.synthwave84);
   }, [theme.resolvedTheme]);
 
   return (
     <AnimatePresence initial={false}>
-      <MotionConfig transition={{ duration: 0.5, type: 'spring', bounce: 0 }}>
+      <MotionConfig transition={{ duration: 0.5, type: "spring", bounce: 0 }}>
         <motion.div
           animate={{ height: height > 0 ? height : undefined }}
           className="from-stone-100 to-stone-200 dark:to-black/90 dark:via-stone-950/10 dark:from-stone-950/90 relative overflow-hidden rounded-sm bg-gradient-to-tr ring-1 ring-white/10 backdrop-blur-lg"
@@ -101,8 +101,8 @@ function CodePreview() {
                     key={tab.name}
                     onClick={() => setCurrentTab(tab.name)}
                     className={clsx(
-                      'relative isolate flex h-6 cursor-pointer items-center justify-center rounded-full px-2.5',
-                      currentTab === tab.name ? 'text-stone-300' : 'text-slate-500'
+                      "relative isolate flex h-6 cursor-pointer items-center justify-center rounded-full px-2.5",
+                      currentTab === tab.name ? "text-stone-300" : "text-slate-500"
                     )}
                   >
                     {tab.name}
@@ -140,10 +140,10 @@ function CodePreview() {
                     className="border-slate-300/5 text-slate-600 select-none border-r pr-4 font-mono"
                   >
                     {Array.from({
-                      length: code.split('\n').length,
+                      length: code.split("\n").length,
                     }).map((_, index) => (
                       <Fragment key={index}>
-                        {(index + 1).toString().padStart(2, '0')}
+                        {(index + 1).toString().padStart(2, "0")}
                         <br />
                       </Fragment>
                     ))}
@@ -151,16 +151,16 @@ function CodePreview() {
                   <Highlight
                     key={theme.resolvedTheme}
                     code={code}
-                    language={'javascript'}
+                    language={"javascript"}
                     theme={{
                       ...codeTheme,
                       plain: {
-                        backgroundColor: 'transparent',
+                        backgroundColor: "transparent",
                       },
                     }}
                   >
                     {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                      <pre className={clsx(className, 'flex overflow-x-auto pb-6')} style={style}>
+                      <pre className={clsx(className, "flex overflow-x-auto pb-6")} style={style}>
                         <code className="px-4">
                           {tokens.map((line, lineIndex) => (
                             <div key={lineIndex} {...getLineProps({ line })}>

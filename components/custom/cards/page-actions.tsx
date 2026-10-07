@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import { CheckIcon, ChevronDownIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { useMemo, useState } from "react";
+import { CheckIcon, ChevronDownIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export type PageActionOpenItem = {
   label: string;
@@ -21,14 +21,14 @@ export default function PageActions({ markdown, className }: PageActionsProps) {
   const pathname = usePathname();
   const items = useMemo(() => {
     const pageUrl =
-      typeof window === 'undefined' ? pathname : new URL(pathname, window.location.origin);
+      typeof window === "undefined" ? pathname : new URL(pathname, window.location.origin);
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
       {
-        title: 'Open in ChatGPT',
+        title: "Open in ChatGPT",
         href: `https://chatgpt.com/?${new URLSearchParams({
-          hints: 'search',
+          hints: "search",
           q,
         })}`,
         icon: (
@@ -44,7 +44,7 @@ export default function PageActions({ markdown, className }: PageActionsProps) {
         ),
       },
       {
-        title: 'Open in Claude',
+        title: "Open in Claude",
         href: `https://claude.ai/new?${new URLSearchParams({
           q,
         })}`,
@@ -61,7 +61,7 @@ export default function PageActions({ markdown, className }: PageActionsProps) {
         ),
       },
       {
-        title: 'Open in Cursor',
+        title: "Open in Cursor",
         icon: (
           <svg
             fill="currentColor"
@@ -78,7 +78,7 @@ export default function PageActions({ markdown, className }: PageActionsProps) {
         })}`,
       },
       {
-        title: 'Open in Scira AI',
+        title: "Open in Scira AI",
         href: `https://scira.ai/?${new URLSearchParams({
           q,
         })}`,
@@ -157,7 +157,7 @@ export default function PageActions({ markdown, className }: PageActionsProps) {
   };
 
   return (
-    <div className={cn('mt-4 flex items-center gap-2', className)}>
+    <div className={cn("mt-4 flex items-center gap-2", className)}>
       <Button
         variant="outline"
         size="sm"

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useId, useRef } from 'react';
-import clsx from 'clsx';
-import { animate, Segment } from 'motion/react';
+import { useEffect, useId, useRef } from "react";
+import clsx from "clsx";
+import { animate, Segment } from "motion/react";
 
 type Star = [x: number, y: number, dim?: boolean, blur?: boolean];
 
@@ -68,8 +68,8 @@ const constellations: Array<Array<Star>> = [
 ];
 
 function Star({ blurId, point: [cx, cy, dim, blur] }: { blurId: string; point: Star }) {
-  let groupRef = useRef<React.ElementRef<'g'>>(null);
-  let ref = useRef<React.ElementRef<'circle'>>(null);
+  let groupRef = useRef<React.ElementRef<"g">>(null);
+  let ref = useRef<React.ElementRef<"circle">>(null);
 
   useEffect(() => {
     if (!groupRef.current || !ref.current) {
@@ -119,7 +119,7 @@ function Star({ blurId, point: [cx, cy, dim, blur] }: { blurId: string; point: S
 }
 
 function Constellation({ points, blurId }: { points: Array<Star>; blurId: string }) {
-  let ref = useRef<React.ElementRef<'path'>>(null);
+  let ref = useRef<React.ElementRef<"path">>(null);
   let uniquePoints = points.filter(
     (point, pointIndex) => points.findIndex((p) => String(p) === String(point)) === pointIndex
   );
@@ -133,13 +133,13 @@ function Constellation({ points, blurId }: { points: Array<Star>; blurId: string
     let sequence: Array<Segment> = [
       [
         ref.current,
-        { strokeDashoffset: 0, visibility: 'visible' },
+        { strokeDashoffset: 0, visibility: "visible" },
         { duration: 5, delay: Math.random() * 3 + 2 },
       ],
     ];
 
     if (isFilled) {
-      sequence.push([ref.current, { fill: 'rgb(255 255 255 / 0.02)' }, { duration: 1 }]);
+      sequence.push([ref.current, { fill: "rgb(255 255 255 / 0.02)" }, { duration: 1 }]);
     }
 
     let animation = animate(sequence);
@@ -159,7 +159,7 @@ function Constellation({ points, blurId }: { points: Array<Star>; blurId: string
         strokeDashoffset={1}
         pathLength={1}
         fill="transparent"
-        d={`M ${points.join('L')}`}
+        d={`M ${points.join("L")}`}
         className="invisible"
       />
       {uniquePoints.map((point, pointIndex) => (
@@ -178,7 +178,7 @@ export function StarField({ className }: { className?: string }) {
       fill="white"
       aria-hidden="true"
       className={clsx(
-        'pointer-events-none absolute w-[55.0625rem] origin-top-right rotate-[30deg] overflow-visible opacity-70',
+        "pointer-events-none absolute w-[55.0625rem] origin-top-right rotate-[30deg] overflow-visible opacity-70",
         className
       )}
     >

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { HomeLayoutProps } from 'fumadocs-ui/layouts/home';
+import { HomeLayoutProps } from "fumadocs-ui/layouts/home";
 
 /**
  * Shared layout configurations

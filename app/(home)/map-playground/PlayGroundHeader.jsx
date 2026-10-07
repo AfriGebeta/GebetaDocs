@@ -1,17 +1,17 @@
-'use client';
-import React, { useState } from 'react';
-import GeocodingDropdown from './GeocodingDropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeToken } from '@/redux/reducers/tokenSlice';
-import { Button } from '@/components/ui/button';
-import { Check, Copy } from 'lucide-react';
-import { useToast } from '@/providers/ToastProvider';
+"use client";
+import React, { useState } from "react";
+import GeocodingDropdown from "./GeocodingDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { changeToken } from "@/redux/reducers/tokenSlice";
+import { Button } from "@/components/ui/button";
+import { Check, Copy } from "lucide-react";
+import { useToast } from "@/providers/ToastProvider";
 
 const PlayGroundHeader = () => {
   const dispatch = useDispatch();
   const { addToast } = useToast();
 
-  const [apiToken, setApiToken] = useState('');
+  const [apiToken, setApiToken] = useState("");
   const [copyState, setCopyState] = useState(false);
 
   const handleCopy = (text) => {
@@ -22,8 +22,8 @@ const PlayGroundHeader = () => {
         setCopyState(false);
       }, 2000);
     });
-    console.log('copying');
-    addToast('Copied to clipboard!', 'info');
+    console.log("copying");
+    addToast("Copied to clipboard!", "info");
   };
   return (
     <div className="w-full pt-4 px-8 md:px-10">

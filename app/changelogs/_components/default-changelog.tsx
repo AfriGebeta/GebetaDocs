@@ -1,21 +1,21 @@
 //@ts-nocheck
 
-import Link from 'next/link';
-import { useId } from 'react';
-import { cn } from '@/lib/utils';
-import { IconLink } from './changelog-layout';
-import { BookIcon, GitHubIcon, XIcon } from './icons';
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
-import { StarField } from './stat-field';
-import Markdown from 'react-markdown';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import rehypeHighlight from 'rehype-highlight';
-import { betterFetch } from '@better-fetch/fetch';
+import Link from "next/link";
+import { useId } from "react";
+import { cn } from "@/lib/utils";
+import { IconLink } from "./changelog-layout";
+import { BookIcon, GitHubIcon, XIcon } from "./icons";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import { StarField } from "./stat-field";
+import Markdown from "react-markdown";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import rehypeHighlight from "rehype-highlight";
+import { betterFetch } from "@better-fetch/fetch";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 const ChangelogPage = async () => {
   const { data: releases } = await betterFetch(
-    'https://api.github.com/repos/AfriGebeta/traffic-app/releases'
+    "https://api.github.com/repos/AfriGebeta/traffic-app/releases"
   );
 
   const messages = releases
@@ -24,24 +24,24 @@ const ChangelogPage = async () => {
       tag: release.tag_name,
       title: release.name,
       content: getContent(release.body),
-      date: new Date(release.published_at).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
+      date: new Date(release.published_at).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       }),
       url: release.html_url,
     }));
 
   function getContent(content: string) {
-    const lines = content.split('\n');
+    const lines = content.split("\n");
     const newContext = lines.map((line) => {
-      const cleanedLine = line.replace(/&nbsp/g, '').trim();
+      const cleanedLine = line.replace(/&nbsp/g, "").trim();
 
       if (!cleanedLine) {
-        return '';
+        return "";
       }
 
-      if (cleanedLine.startsWith('## ')) {
+      if (cleanedLine.startsWith("## ")) {
         return cleanedLine;
       }
 
@@ -60,8 +60,8 @@ const ChangelogPage = async () => {
       const prNumber = prUrl?.match(/\/pull\/(\d+)/)?.[1];
 
       const mainContent = normalizedLine
-        .replace(/\s+by\s+@[A-Za-z0-9-]+(?=\s+in\s+https:\/\/github\.com\/[^\s)]+)/g, '')
-        .replace(/\s+in\s+https:\/\/github\.com\/[^\s)]+/g, '')
+        .replace(/\s+by\s+@[A-Za-z0-9-]+(?=\s+in\s+https:\/\/github\.com\/[^\s)]+)/g, "")
+        .replace(/\s+in\s+https:\/\/github\.com\/[^\s)]+/g, "")
         .trim();
 
       if (!mentions.length && !prUrl) {
@@ -75,16 +75,16 @@ const ChangelogPage = async () => {
       const parts = [mainContent || normalizedLine];
 
       if (mentions.length) {
-        parts.push(mentions.join(' '));
+        parts.push(mentions.join(" "));
       }
 
       if (prUrl) {
-        parts.push(`[PR ${prNumber ? `#${prNumber}` : 'link'}](${prUrl})`);
+        parts.push(`[PR ${prNumber ? `#${prNumber}` : "link"}](${prUrl})`);
       }
 
-      return `- ${parts.join(' – ')}`;
+      return `- ${parts.join(" – ")}`;
     });
-    return newContext.join('\n');
+    return newContext.join("\n");
   }
 
   return (
@@ -142,35 +142,35 @@ const ChangelogPage = async () => {
               pre: (props) => (
                 <defaultMdxComponents.pre
                   {...props}
-                  className={cn(props.className, ' ml-10 my-2')}
+                  className={cn(props.className, " ml-10 my-2")}
                 />
               ),
               h2: (props) => (
                 <h2
-                  id={props.children?.toString().split('date=')[0].trim()} // Extract ID dynamically
+                  id={props.children?.toString().split("date=")[0].trim()} // Extract ID dynamically
                   className="text-2xl relative mb-6 font-bold flex-col flex justify-center tracking-tighter before:content-[''] before:block before:h-[65px] before:-mt-[10px]"
                   {...props}
                 >
                   <div className="sticky top-0 left-[-9.9rem] hidden md:block">
                     <time className="flex gap-2 items-center text-gray-500 dark:text-white/80 text-sm md:absolute md:left-[-9.8rem] font-normal tracking-normal">
-                      {props.children?.toString().includes('date=') &&
-                        props.children?.toString().split('date=')[1]}
+                      {props.children?.toString().includes("date=") &&
+                        props.children?.toString().split("date=")[1]}
 
                       <div className="w-4 h-[1px] dark:bg-white/60 bg-black" />
                     </time>
                   </div>
                   <Link
                     href={
-                      props.children?.toString().split('date=')[0].trim().endsWith('.00')
-                        ? `/changelogs/${props.children?.toString().split('date=')[0].trim()}`
-                        : `#${props.children?.toString().split('date=')[0].trim()}`
+                      props.children?.toString().split("date=")[0].trim().endsWith(".00")
+                        ? `/changelogs/${props.children?.toString().split("date=")[0].trim()}`
+                        : `#${props.children?.toString().split("date=")[0].trim()}`
                     }
                   >
-                    {props.children?.toString().split('date=')[0].trim()}
+                    {props.children?.toString().split("date=")[0].trim()}
                   </Link>
                   <p className="text-xs font-normal opacity-60 hidden">
-                    {props.children?.toString().includes('date=') &&
-                      props.children?.toString().split('date=')[1]}
+                    {props.children?.toString().includes("date=") &&
+                      props.children?.toString().split("date=")[1]}
                   </p>
                 </h2>
               ),
@@ -191,7 +191,7 @@ const ChangelogPage = async () => {
               a: ({ className, ...props }: any) => (
                 <Link
                   target="_blank"
-                  className={cn('font-medium underline', className)}
+                  className={cn("font-medium underline", className)}
                   {...props}
                 />
               ),
@@ -200,7 +200,7 @@ const ChangelogPage = async () => {
                 <img
                   className="rounded-full w-6 h-6 border opacity-70 inline-block"
                   {...props}
-                  style={{ maxWidth: '100%' }}
+                  style={{ maxWidth: "100%" }}
                 />
               ),
             }}
@@ -213,7 +213,7 @@ const ChangelogPage = async () => {
 ${message.content}
 								`;
               })
-              .join('\n')}
+              .join("\n")}
           </Markdown>
         </div>
       </div>

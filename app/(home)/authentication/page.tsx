@@ -1,9 +1,9 @@
 /* eslint-disable  */
 // @ts-nocheck
-'use client';
+"use client";
 
 export default function ApiDocs() {
-  const CodeBlock = ({ code, language = 'bash', title }) => (
+  const CodeBlock = ({ code, language = "bash", title }) => (
     <div className="my-6 rounded-xl overflow-hidden border border-stone-200 dark:border-stone-700 bg-stone-900">
       {title && (
         <div className="flex items-center justify-between px-4 py-2 bg-stone-800 border-b border-stone-700">
@@ -38,15 +38,15 @@ export default function ApiDocs() {
     </h3>
   );
 
-  const Badge = ({ children, variant = 'default' }) => {
+  const Badge = ({ children, variant = "default" }) => {
     const variants = {
-      post: 'bg-emerald-500 text-white',
-      get: 'bg-sky-600 text-white',
-      put: 'bg-amber-500 text-white',
-      delete: 'bg-rose-500 text-white',
-      success: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300',
-      error: 'bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300',
-      default: 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300',
+      post: "bg-emerald-500 text-white",
+      get: "bg-sky-600 text-white",
+      put: "bg-amber-500 text-white",
+      delete: "bg-rose-500 text-white",
+      success: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300",
+      error: "bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300",
+      default: "bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300",
     };
     return (
       <span
@@ -57,12 +57,12 @@ export default function ApiDocs() {
     );
   };
 
-  const Note = ({ children, variant = 'info' }) => {
+  const Note = ({ children, variant = "info" }) => {
     const variants = {
       warning:
-        'bg-amber-50 dark:bg-amber-900/20 border-amber-400 text-stone-800 dark:text-stone-200',
-      info: 'bg-sky-50 dark:bg-sky-900/20 border-sky-400 text-stone-800 dark:text-stone-200',
-      danger: 'bg-rose-50 dark:bg-rose-900/20 border-rose-400 text-stone-800 dark:text-stone-200',
+        "bg-amber-50 dark:bg-amber-900/20 border-amber-400 text-stone-800 dark:text-stone-200",
+      info: "bg-sky-50 dark:bg-sky-900/20 border-sky-400 text-stone-800 dark:text-stone-200",
+      danger: "bg-rose-50 dark:bg-rose-900/20 border-rose-400 text-stone-800 dark:text-stone-200",
     };
     return (
       <div className={`mt-4 p-4 border-l-4 rounded-r-lg ${variants[variant]}`}>
@@ -121,8 +121,8 @@ export default function ApiDocs() {
           </p>
 
           <p className="text-stone-600 dark:text-stone-400 mb-4">
-            Instead of relying on one permanent credential, Service Accounts use two tokens: a{' '}
-            <span className="font-medium">Client Token</span> and a{' '}
+            Instead of relying on one permanent credential, Service Accounts use two tokens: a{" "}
+            <span className="font-medium">Client Token</span> and a{" "}
             <span className="font-medium">Server Token</span>. These tokens work together to
             securely generate a short-lived JWT access token.
           </p>
@@ -158,12 +158,12 @@ export default function ApiDocs() {
             supported:
           </p>
           <DataTable
-            headers={['Value', 'Description']}
+            headers={["Value", "Description"]}
             rows={[
-              [<InlineCode>WEB</InlineCode>, 'Web applications'],
-              [<InlineCode>ANDROID</InlineCode>, 'Android applications'],
-              [<InlineCode>IOS</InlineCode>, 'iOS applications'],
-              [<InlineCode>DESKTOP</InlineCode>, 'Desktop applications'],
+              [<InlineCode>WEB</InlineCode>, "Web applications"],
+              [<InlineCode>ANDROID</InlineCode>, "Android applications"],
+              [<InlineCode>IOS</InlineCode>, "iOS applications"],
+              [<InlineCode>DESKTOP</InlineCode>, "Desktop applications"],
             ]}
           />
         </section>
@@ -172,16 +172,16 @@ export default function ApiDocs() {
         <section id="statuses" className="mb-12 scroll-mt-24">
           <SectionHeading id="statuses">Service Account Status</SectionHeading>
           <DataTable
-            headers={['Value', 'Description']}
+            headers={["Value", "Description"]}
             rows={[
               [
                 <InlineCode>ACTIVE</InlineCode>,
-                'The service account is active and its token can be used',
+                "The service account is active and its token can be used",
               ],
-              [<InlineCode>SUSPENDED</InlineCode>, 'The service account is temporarily suspended'],
+              [<InlineCode>SUSPENDED</InlineCode>, "The service account is temporarily suspended"],
               [
                 <InlineCode>REVOKED</InlineCode>,
-                'The service account has been permanently revoked',
+                "The service account has been permanently revoked",
               ],
             ]}
           />
@@ -211,23 +211,23 @@ export default function ApiDocs() {
           <SubHeading>Configuration</SubHeading>
 
           <DataTable
-            headers={['Field', 'Type', 'Description']}
+            headers={["Field", "Type", "Description"]}
             rows={[
-              [<InlineCode>platform</InlineCode>, 'string', 'One of: WEB, ANDROID, IOS, DESKTOP'],
+              [<InlineCode>platform</InlineCode>, "string", "One of: WEB, ANDROID, IOS, DESKTOP"],
               [
                 <InlineCode>isAdmin</InlineCode>,
-                'boolean',
-                'Whether the account has admin privileges',
+                "boolean",
+                "Whether the account has admin privileges",
               ],
               [
                 <InlineCode>description</InlineCode>,
-                'string',
-                'A human-readable description of the service account',
+                "string",
+                "A human-readable description of the service account",
               ],
               [
                 <InlineCode>scopes</InlineCode>,
-                'string[]',
-                'Permissions assigned to the service account',
+                "string[]",
+                "Permissions assigned to the service account",
               ],
             ]}
           />
@@ -236,15 +236,15 @@ export default function ApiDocs() {
           <section id="scopes" className="mb-12 scroll-mt-24">
             <SectionHeading id="scopes">Available Token Scopes</SectionHeading>
             <DataTable
-              headers={['Scope', 'Description']}
+              headers={["Scope", "Description"]}
               rows={[
-                [<InlineCode>TILE</InlineCode>, 'Access to tile/map rendering services'],
-                [<InlineCode>MATRIX</InlineCode>, 'Access to distance matrix services'],
-                [<InlineCode>ONM</InlineCode>, 'Access to ONM services'],
-                [<InlineCode>DIRECTION</InlineCode>, 'Access to routing/direction services'],
-                [<InlineCode>TSS</InlineCode>, 'Access to route optimization services'],
-                [<InlineCode>GEOCODING</InlineCode>, 'Access to geocoding/autocomplete services'],
-                [<InlineCode>REVERSEGEOCODING</InlineCode>, 'Access to reverse geocoding services'],
+                [<InlineCode>TILE</InlineCode>, "Access to tile/map rendering services"],
+                [<InlineCode>MATRIX</InlineCode>, "Access to distance matrix services"],
+                [<InlineCode>ONM</InlineCode>, "Access to ONM services"],
+                [<InlineCode>DIRECTION</InlineCode>, "Access to routing/direction services"],
+                [<InlineCode>TSS</InlineCode>, "Access to route optimization services"],
+                [<InlineCode>GEOCODING</InlineCode>, "Access to geocoding/autocomplete services"],
+                [<InlineCode>REVERSEGEOCODING</InlineCode>, "Access to reverse geocoding services"],
               ]}
             />
           </section>
@@ -386,21 +386,21 @@ export default function ApiDocs() {
           <SectionHeading id="best-practices">Best Practices</SectionHeading>
           <ul className="list-disc list-inside text-stone-600 dark:text-stone-400 space-y-2 ml-2">
             <li>
-              <strong className="text-stone-800 dark:text-stone-200">Store tokens securely</strong>{' '}
+              <strong className="text-stone-800 dark:text-stone-200">Store tokens securely</strong>{" "}
               — Treat service account tokens like passwords. Never expose them in client-side code,
               public repositories, or logs.
             </li>
             <li>
               <strong className="text-stone-800 dark:text-stone-200">
                 Use the minimum required scopes
-              </strong>{' '}
+              </strong>{" "}
               — Only request the scopes your application needs. This limits the blast radius if a
               token is compromised.
             </li>
             <li>
               <strong className="text-stone-800 dark:text-stone-200">
                 Rotate tokens regularly
-              </strong>{' '}
+              </strong>{" "}
               — Delete old service accounts and create new ones periodically to reduce the risk of
               token leakage.
             </li>
@@ -412,8 +412,8 @@ export default function ApiDocs() {
             <li>
               <strong className="text-stone-800 dark:text-stone-200">
                 Suspend instead of delete
-              </strong>{' '}
-              — If you temporarily don't need a service account, update its status to{' '}
+              </strong>{" "}
+              — If you temporarily don't need a service account, update its status to{" "}
               <InlineCode>SUSPENDED</InlineCode> rather than deleting it. This preserves the account
               for future use.
             </li>
@@ -423,7 +423,7 @@ export default function ApiDocs() {
               whether they are still needed.
             </li>
             <li>
-              <strong className="text-stone-800 dark:text-stone-200">Separate environments</strong>{' '}
+              <strong className="text-stone-800 dark:text-stone-200">Separate environments</strong>{" "}
               — Create different service accounts for development, staging, and production
               environments.
             </li>
@@ -435,8 +435,8 @@ export default function ApiDocs() {
           <SectionHeading id="quickstart">Quick Start Example</SectionHeading>
 
           <p className="text-stone-600 dark:text-stone-400 mb-4">
-            This example shows how to authenticate using a Service Account by combining a{' '}
-            <span className="font-medium">Client Token</span> and a{' '}
+            This example shows how to authenticate using a Service Account by combining a{" "}
+            <span className="font-medium">Client Token</span> and a{" "}
             <span className="font-medium">Server Token</span>, then using the generated access token
             to call Gebeta Maps APIs.
           </p>

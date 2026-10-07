@@ -18,7 +18,7 @@ const SectionSvg = ({ crossesOffset }: { crossesOffset: string }) => {
 
 export default SectionSvg;
 
-export const PlusSvg = ({ className = '' }) => {
+export const PlusSvg = ({ className = "" }) => {
   return (
     <svg className={`${className} || ""`} width="11" height="11" fill="none">
       <path

@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from "react";
 
 export const Icons = {
   nextJS: (props?: SVGProps<any>) => (
@@ -127,7 +127,7 @@ export const Icons = {
           y={0}
           maskUnits="userSpaceOnUse"
           style={{
-            maskType: 'alpha',
+            maskType: "alpha",
           }}
         >
           <circle cx={20} cy={20.001} r={20} fill="currentColor" />

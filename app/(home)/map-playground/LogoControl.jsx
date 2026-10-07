@@ -1,9 +1,9 @@
-'use client';
-import { useMap } from 'react-leaflet';
-import { useEffect } from 'react';
-import L from 'leaflet';
+"use client";
+import { useMap } from "react-leaflet";
+import { useEffect } from "react";
+import L from "leaflet";
 
-import logoImage from 'assets/icons/maplogo.png';
+import logoImage from "assets/icons/maplogo.png";
 
 function LogoControl() {
   const map = useMap();
@@ -11,12 +11,12 @@ function LogoControl() {
   useEffect(() => {
     const LogoControl = L?.Control.extend({
       onAdd: function (map) {
-        const img = L.DomUtil.create('img');
+        const img = L.DomUtil.create("img");
         img.src = logoImage;
-        img.style.width = '50px';
-        img.style.background = 'white';
-        img.style.padding = '5px';
-        img.style.background = 'transparent';
+        img.style.width = "50px";
+        img.style.background = "white";
+        img.style.padding = "5px";
+        img.style.background = "transparent";
         return img;
       },
       onRemove: function (map) {
@@ -24,7 +24,7 @@ function LogoControl() {
       },
     });
 
-    const logoControl = new LogoControl({ position: 'bottomleft' });
+    const logoControl = new LogoControl({ position: "bottomleft" });
     logoControl.addTo(map);
 
     return () => {

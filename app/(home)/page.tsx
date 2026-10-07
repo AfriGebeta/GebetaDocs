@@ -1,10 +1,10 @@
-'use client';
-import { BringToFront, Map, MapPin, Route, Waypoints, Webhook } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ReactElement } from 'react';
-import CodePreview from '@/components/code-preview';
-import Features from '@/app/(home)/_components/feature';
+"use client";
+import { BringToFront, Map, MapPin, Route, Waypoints, Webhook } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ReactElement } from "react";
+import CodePreview from "@/components/code-preview";
+import Features from "@/app/(home)/_components/feature";
 
 export default function HomePage() {
   const features: {
@@ -14,52 +14,52 @@ export default function HomePage() {
     link: string;
   }[] = [
     {
-      name: 'Direction',
+      name: "Direction",
       description:
-        'A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.',
+        "A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.",
       icon: <Route />,
-      link: '/docs/direction',
+      link: "/docs/direction",
     },
     {
-      name: 'Matrix',
+      name: "Matrix",
       description:
-        'A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.',
+        "A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.",
       icon: <Webhook />,
-      link: '/docs/matrix',
+      link: "/docs/matrix",
     },
     {
-      name: 'One-to-Many',
+      name: "One-to-Many",
       description:
-        'The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.',
+        "The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.",
       icon: <MapPin />,
-      link: '/docs/onm',
+      link: "/docs/onm",
     },
     {
-      name: 'Route Optimization',
+      name: "Route Optimization",
       description:
-        'Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.',
+        "Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.",
       icon: <Waypoints />,
-      link: '/docs/route-optimization',
+      link: "/docs/route-optimization",
     },
     {
-      name: 'VRP',
+      name: "VRP",
       description:
-        'VRP api is designed to help optimize vehicle routes for delivery and fleet management tasks, where multiple depots and vehicles are involved.',
+        "VRP api is designed to help optimize vehicle routes for delivery and fleet management tasks, where multiple depots and vehicles are involved.",
       icon: <Waypoints />,
-      link: '/docs/vrp',
+      link: "/docs/vrp",
     },
     {
-      name: 'Forward and Reverse Geocoding',
+      name: "Forward and Reverse Geocoding",
       description:
-        'Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.',
+        "Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.",
       icon: <BringToFront />,
-      link: '/docs/geocoding/geocoding',
+      link: "/docs/geocoding/geocoding",
     },
     {
-      name: 'Tiles',
-      description: 'A tile API provides map tiles for displaying maps in your application.',
+      name: "Tiles",
+      description: "A tile API provides map tiles for displaying maps in your application.",
       icon: <Map />,
-      link: '/docs/tiles/overview',
+      link: "/docs/tiles/overview",
     },
   ];
 

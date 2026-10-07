@@ -1,14 +1,14 @@
 //@ts-nocheck
-'use client';
-import React, { createContext, useContext, useState } from 'react';
+"use client";
+import React, { createContext, useContext, useState } from "react";
 
 const ToastContext = createContext();
 
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = (message, type = 'success') => {
-    console.log('copying for real');
+  const addToast = (message, type = "success") => {
+    console.log("copying for real");
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
 
@@ -35,10 +35,10 @@ export const ToastProvider = ({ children }) => {
 
 const Toast = ({ message, type, onClose }) => {
   const bgColor = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-blue-500',
-    warning: 'bg-yellow-500',
+    success: "bg-green-500",
+    error: "bg-red-500",
+    info: "bg-blue-500",
+    warning: "bg-yellow-500",
   }[type];
 
   return (
@@ -63,7 +63,7 @@ const Toast = ({ message, type, onClose }) => {
 export const useToast = () => {
   const context = useContext(ToastContext);
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider');
+    throw new Error("useToast must be used within a ToastProvider");
   }
   return context;
 };

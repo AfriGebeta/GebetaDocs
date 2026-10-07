@@ -1,14 +1,14 @@
 // app/map-playground/page.js
-'use client';
-import React, { Suspense } from 'react';
-import dynamic from 'next/dynamic';
+"use client";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
 
 // Dynamic imports to avoid SSR issues
-const MapView = dynamic(() => import('./MapView'), { ssr: false });
-const PlayGroundHeader = dynamic(() => import('./PlayGroundHeader'), { ssr: false });
-const StoreProvider = dynamic(() => import('@/providers/StoreProvider'), { ssr: false });
+const MapView = dynamic(() => import("./MapView"), { ssr: false });
+const PlayGroundHeader = dynamic(() => import("./PlayGroundHeader"), { ssr: false });
+const StoreProvider = dynamic(() => import("@/providers/StoreProvider"), { ssr: false });
 const PlayGroundProvider = dynamic(
-  () => import('@/providers/Playground').then((mod) => mod.PlayGroundProvider),
+  () => import("@/providers/Playground").then((mod) => mod.PlayGroundProvider),
   { ssr: false }
 );
 

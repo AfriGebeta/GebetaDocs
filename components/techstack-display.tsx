@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-import { techStackIcons } from './techstack-icons';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from "@/lib/utils";
+import { techStackIcons } from "./techstack-icons";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const TechStackDisplay = ({
   skills,
@@ -11,7 +11,7 @@ export const TechStackDisplay = ({
 }) => {
   return (
     <div
-      className={cn('flex gap-7 flex-wrap mt-3 justify-center items-center max-w-4xl', className)}
+      className={cn("flex gap-7 flex-wrap mt-3 justify-center items-center max-w-4xl", className)}
     >
       {skills.map((icon) => {
         return (

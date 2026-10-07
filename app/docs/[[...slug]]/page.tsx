@@ -1,30 +1,30 @@
 //@ts-nocheck
-import { source } from '@/app/source';
-import type { Metadata } from 'next';
-import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import PageActions from '@/components/custom/cards/page-actions';
+import { source } from "@/app/source";
+import type { Metadata } from "next";
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
+import { notFound } from "next/navigation";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import PageActions from "@/components/custom/cards/page-actions";
 
 export default async function Page({ params }: { params: { slug?: string[] } }) {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
   const MDX = page.data.body;
-  const markdownPath = join(process.cwd(), 'content/docs', page.file.path);
-  const markdown = await readFile(markdownPath, 'utf-8').catch(() => '');
-  const docsRepoBaseUrl = process.env.NEXT_PUBLIC_DOCS_REPO_URL?.replace(/\/$/, '');
+  const markdownPath = join(process.cwd(), "content/docs", page.file.path);
+  const markdown = await readFile(markdownPath, "utf-8").catch(() => "");
+  const docsRepoBaseUrl = process.env.NEXT_PUBLIC_DOCS_REPO_URL?.replace(/\/$/, "");
   const openItems = [
-    { label: 'Open this page', href: page.url },
+    { label: "Open this page", href: page.url },
     ...(docsRepoBaseUrl
       ? [
           {
-            label: 'Open source file',
+            label: "Open source file",
             href: `${docsRepoBaseUrl}/blob/main/content/docs/${page.file.path}`,
           },
         ]

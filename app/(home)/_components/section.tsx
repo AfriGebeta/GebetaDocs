@@ -1,5 +1,5 @@
-import type React from 'react';
-import SectionSvg from './section-svg';
+import type React from "react";
+import SectionSvg from "./section-svg";
 
 const Section = ({
   className,
@@ -21,8 +21,8 @@ const Section = ({
       id={id}
       className={`
       relative
-      ${customPaddings || `py-10 lg:py-16  ${crosses ? '' : ''}`}
-      ${className || ' '}`}
+      ${customPaddings || `py-10 lg:py-16  ${crosses ? "" : ""}`}
+      ${className || " "}`}
     >
       {children}
 

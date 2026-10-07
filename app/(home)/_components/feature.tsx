@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   BringToFrontIcon,
@@ -8,48 +8,48 @@ import {
   RouteIcon,
   WaypointsIcon,
   WebhookIcon,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { TechStackDisplay } from '@/components/techstack-display';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { TechStackDisplay } from "@/components/techstack-display";
 
 const features = [
   {
     id: 7,
-    label: 'Tiles',
-    title: 'Map <strong>Tiles</strong> API',
-    description: 'A tile API provides map tiles for displaying maps in your application.',
+    label: "Tiles",
+    title: "Map <strong>Tiles</strong> API",
+    description: "A tile API provides map tiles for displaying maps in your application.",
     icon: MapIcon,
   },
   {
     id: 1,
-    label: 'Direction',
-    title: 'Advanced <strong>Direction</strong> API',
+    label: "Direction",
+    title: "Advanced <strong>Direction</strong> API",
     description:
-      'A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.',
+      "A direction API provides directions for various travel modes, including driving, walking, cycling, or public transit.",
     icon: RouteIcon,
   },
   {
     id: 4,
-    label: 'Route Optimization',
-    title: 'Smart <strong>Route Optimization</strong>',
+    label: "Route Optimization",
+    title: "Smart <strong>Route Optimization</strong>",
     description:
-      'Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.',
+      "Route optimization finds the best routes based on criteria like minimizing travel time, distance, or cost.",
     icon: WaypointsIcon,
   },
   {
     id: 2,
-    label: 'Matrix',
-    title: 'Travel Time <strong>Matrix</strong>',
+    label: "Matrix",
+    title: "Travel Time <strong>Matrix</strong>",
     description:
-      'A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.',
+      "A matrix API calculates travel times and distances between multiple origins and destinations for route optimization.",
     icon: WebhookIcon,
   },
   {
     id: 3,
-    label: 'One-to-Many',
-    title: 'Efficient <strong>One-to-Many</strong> Routing',
+    label: "One-to-Many",
+    title: "Efficient <strong>One-to-Many</strong> Routing",
     description:
-      'The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.',
+      "The One-to-Many (ONM) API provides travel times and distances from a single origin to multiple destinations for route analysis.",
     icon: MapPinIcon,
   },
   // {
@@ -61,10 +61,10 @@ const features = [
   // },
   {
     id: 6,
-    label: 'Geocoding',
-    title: '<strong>Geocoding</strong> Services',
+    label: "Geocoding",
+    title: "<strong>Geocoding</strong> Services",
     description:
-      'Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.',
+      "Geocoding matches user queries with places on the map, such as restaurants, hotels, parks, or museums.",
     icon: BringToFrontIcon,
   },
 ];
@@ -78,8 +78,8 @@ export default function Features() {
             <div
               key={feature.id}
               className={cn(
-                'justify-center border-x-[1.2px] md:min-h-[240px] border-t-[1.2px] md:border-t-0 transform-gpu flex flex-col p-10',
-                index >= 3 && 'md:border-t-[1.2px]'
+                "justify-center border-x-[1.2px] md:min-h-[240px] border-t-[1.2px] md:border-t-0 transform-gpu flex flex-col p-10",
+                index >= 3 && "md:border-t-[1.2px]"
               )}
             >
               <div className="flex items-center gap-2 my-1">
@@ -118,7 +118,7 @@ export default function Features() {
                 <strong>Map your way with confidence in minutes!</strong>
               </p>
               <div className="flex mt-[10px] z-20 justify-center items-start">
-                <TechStackDisplay skills={['flutter', 'react', 'nextJs']} />
+                <TechStackDisplay skills={["flutter", "react", "nextJs"]} />
               </div>
             </div>
           </div>

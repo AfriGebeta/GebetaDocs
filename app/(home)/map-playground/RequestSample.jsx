@@ -1,15 +1,15 @@
-'use client';
-import React, { useState } from 'react';
-import { useToast } from '@/providers/ToastProvider';
-import { Check, Copy } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+"use client";
+import React, { useState } from "react";
+import { useToast } from "@/providers/ToastProvider";
+import { Check, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const RequestSample = ({ curl, http, js = [], className = '' }) => {
+const RequestSample = ({ curl, http, js = [], className = "" }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [copyState, setCopyState] = useState(false);
 
   const { addToast } = useToast();
-  const languages = ['cURL', 'HTTP'];
+  const languages = ["cURL", "HTTP"];
   const hasJs = js.length > 0;
 
   const handleCopy = (text) => {
@@ -20,8 +20,8 @@ const RequestSample = ({ curl, http, js = [], className = '' }) => {
         setCopyState(false);
       }, 2000);
     });
-    console.log('copying');
-    addToast('Copied to clipboard!', 'info');
+    console.log("copying");
+    addToast("Copied to clipboard!", "info");
   };
 
   return (
@@ -35,8 +35,8 @@ const RequestSample = ({ curl, http, js = [], className = '' }) => {
               onClick={() => setActiveTab(i)}
               className={`px-3 py-1 text-sm rounded-md transition-all ${
                 activeTab === i
-                  ? 'bg-white dark:bg-gray-700 shadow-sm  dark:text-orange-400 font-medium'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+                  ? "bg-white dark:bg-gray-700 shadow-sm  dark:text-orange-400 font-medium"
+                  : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
               }`}
             >
               {lang}

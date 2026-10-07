@@ -1,8 +1,8 @@
 //@ts-nocheck
-import { useId } from 'react';
+import { useId } from "react";
 
-import { Intro, IntroFooter } from './changelog-layout';
-import { StarField } from './stat-field';
+import { Intro, IntroFooter } from "./changelog-layout";
+import { StarField } from "./stat-field";
 
 function Timeline() {
   let id = useId();

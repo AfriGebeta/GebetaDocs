@@ -1,28 +1,28 @@
-'use client';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import RequestSample from './RequestSample';
-import { useSelector } from 'react-redux';
-import ResponseSample from './Responsesample';
-import JsonViewer from './JsonViewer';
-import { getRoute, getRoutes } from '@/redux/api/routeAPI';
-import Notify from './Notify';
-import { PlayGroundContext } from '@/providers/Playground';
-import { BASE_URL } from '@/services/apiClient';
-import { useToast } from '@/providers/ToastProvider';
-import maplibregl from 'maplibre-gl';
+"use client";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import RequestSample from "./RequestSample";
+import { useSelector } from "react-redux";
+import ResponseSample from "./Responsesample";
+import JsonViewer from "./JsonViewer";
+import { getRoute, getRoutes } from "@/redux/api/routeAPI";
+import Notify from "./Notify";
+import { PlayGroundContext } from "@/providers/Playground";
+import { BASE_URL } from "@/services/apiClient";
+import { useToast } from "@/providers/ToastProvider";
+import maplibregl from "maplibre-gl";
 
 const exampleOptimizedTripJson = JSON.stringify(
   {
     vehicles: [
       {
-        name: 'driver 1',
+        name: "driver 1",
         current_location: [9.020929, 38.801699],
         capacities: {
           boxes: 3,
         },
       },
       {
-        name: 'driver 2',
+        name: "driver 2",
         current_location: [9.020929, 38.801699],
         capacities: {
           boxes: 3,
@@ -31,46 +31,46 @@ const exampleOptimizedTripJson = JSON.stringify(
     ],
     customers: [
       {
-        name: 'a',
+        name: "a",
         location: [9.022359, 38.799478],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
       {
-        name: 'b',
+        name: "b",
         location: [9.020431, 38.800401],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
       {
-        name: 'c',
+        name: "c",
         location: [9.021167, 38.798894],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
       {
-        name: 'd',
+        name: "d",
         location: [9.023101, 38.804816],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
       {
-        name: 'e',
+        name: "e",
         location: [9.022455, 38.804864],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
       {
-        name: 'f',
+        name: "f",
         location: [9.020251, 38.804151],
         demand: 1,
-        requested_from_depot: 'work-order-1234',
+        requested_from_depot: "work-order-1234",
       },
     ],
 
     depots: [
       {
-        name: 'work-order-1234',
+        name: "work-order-1234",
         location: [9.020929, 38.801699],
       },
     ],
@@ -92,13 +92,13 @@ const SideBarForm = ({
   setShowAlternatives,
   setAlternatives,
 }) => {
-  const [selectedGeocoding, setSelectedGeocoding] = useState('forward');
+  const [selectedGeocoding, setSelectedGeocoding] = useState("forward");
   const [startWayPoint, setStartWayPoint] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [apiResponse, setApiResponse] = useState({});
   const [notify, setNotify] = useState({ visible: false });
   const [coordinate, setCoordinate] = useState({ latitude: null, longitude: null });
-  const [waypointInputs, setWaypointInputs] = useState(['']);
+  const [waypointInputs, setWaypointInputs] = useState([""]);
 
   const { addToast } = useToast();
 
@@ -116,13 +116,13 @@ const SideBarForm = ({
   } = useContext(PlayGroundContext);
 
   const [manualCoords, setManualCoords] = useState({
-    origin: { lat: origin?.lat || '', lng: origin?.lng || '' },
-    destination: { lat: destination?.lat || '', lng: destination?.lng || '' },
+    origin: { lat: origin?.lat || "", lng: origin?.lng || "" },
+    destination: { lat: destination?.lat || "", lng: destination?.lng || "" },
   });
 
   const [onmOrigin, setOnmOrigin] = useState({
-    lat: origin?.lat || '',
-    lng: origin?.lng || '',
+    lat: origin?.lat || "",
+    lng: origin?.lng || "",
   });
 
   const { token } = useSelector((state) => state);
@@ -131,7 +131,7 @@ const SideBarForm = ({
 
   const addWaypointInput = () => {
     if (waypointInputs.length < 10) {
-      setWaypointInputs([...waypointInputs, '']);
+      setWaypointInputs([...waypointInputs, ""]);
     }
   };
 
@@ -145,12 +145,12 @@ const SideBarForm = ({
   };
 
   const handleOriginChange = (value) => {
-    const [lat, lng] = value.split(',').map((coord) => coord.trim());
+    const [lat, lng] = value.split(",").map((coord) => coord.trim());
     setManualCoords((prev) => ({
       ...prev,
       origin: {
-        lat: lat || '',
-        lng: lng || '',
+        lat: lat || "",
+        lng: lng || "",
       },
     }));
 
@@ -161,12 +161,12 @@ const SideBarForm = ({
   };
 
   const handleOnmOriginChange = (value) => {
-    console.log('bitchcness');
-    const [lat, lng] = value.split(',').map((coord) => coord.trim());
+    console.log("bitchcness");
+    const [lat, lng] = value.split(",").map((coord) => coord.trim());
 
     setOnmOrigin({
-      lat: lat || '',
-      lng: lng || '',
+      lat: lat || "",
+      lng: lng || "",
     });
 
     if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
@@ -176,12 +176,12 @@ const SideBarForm = ({
   };
 
   const handleDestinationChange = (value) => {
-    const [lat, lng] = value.split(',').map((coord) => coord.trim());
+    const [lat, lng] = value.split(",").map((coord) => coord.trim());
     setManualCoords((prev) => ({
       ...prev,
       destination: {
-        lat: lat || '',
-        lng: lng || '',
+        lat: lat || "",
+        lng: lng || "",
       },
     }));
 
@@ -196,7 +196,7 @@ const SideBarForm = ({
     newInputs[index] = value;
     setWaypointInputs(newInputs);
 
-    const [lat, lng] = value.split(',').map((coord) => coord.trim());
+    const [lat, lng] = value.split(",").map((coord) => coord.trim());
     if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
       const coords = { lat: parseFloat(lat), lng: parseFloat(lng) };
       if (index < waypoints.length) {
@@ -209,41 +209,41 @@ const SideBarForm = ({
 
   useEffect(() => {
     if (waypoints.length > 0) {
-      const newInputs = waypoints.map((wp) => (wp.lat && wp.lng ? `${wp.lat},${wp.lng}` : ''));
+      const newInputs = waypoints.map((wp) => (wp.lat && wp.lng ? `${wp.lat},${wp.lng}` : ""));
       if (
         newInputs.length < 10 &&
-        (newInputs.length === 0 || newInputs[newInputs.length - 1] !== '')
+        (newInputs.length === 0 || newInputs[newInputs.length - 1] !== "")
       ) {
-        newInputs.push('');
+        newInputs.push("");
       }
       setWaypointInputs(newInputs);
     } else {
-      setWaypointInputs(['']);
+      setWaypointInputs([""]);
     }
   }, [waypoints]);
 
   const clearAllWaypoints = () => {
-    setWaypointInputs(['']);
+    setWaypointInputs([""]);
     clearWaypoints();
   };
 
   const setGeocoding = (text) => setSelectedGeocoding(text);
 
   const setOptionalParameter = (text) => {
-    if (text === 'instruction') setShowInstructions(!showInstructions);
-    if (text === 'waypoints') setStartWayPoint(!startWayPoint);
+    if (text === "instruction") setShowInstructions(!showInstructions);
+    if (text === "waypoints") setStartWayPoint(!startWayPoint);
   };
 
   const waypointsString =
     waypoints.length > 0
-      ? `&${object.type === 'direction' ? 'waypoints' : 'json'}=[${waypoints.map((point) => `{${point.lat},${point.lng}}`).join(',')}]`
-      : '';
+      ? `&${object.type === "direction" ? "waypoints" : "json"}=[${waypoints.map((point) => `{${point.lat},${point.lng}}`).join(",")}]`
+      : "";
 
   const urlMap = {
     geocoding:
-      selectedGeocoding === 'forward'
+      selectedGeocoding === "forward"
         ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token.token}`
-        : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ''}&lon=${coordinate.longitude || ''}&apiKey=${token.token}`,
+        : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token.token}`,
 
     direction: `${BASE_URL}/api/route/direction/?origin=${
       origin.lat
@@ -253,11 +253,11 @@ const SideBarForm = ({
       destination.lat
         ? `${destination.lat},${destination.lng}`
         : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-    }&apiKey=${token.token}${showAlternatives ? '&alternative=t' : ''}${waypointsString}`,
+    }&apiKey=${token.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
 
     tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token.token}`,
     onm: `${BASE_URL}/api/route/onm?origin=${
-      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : '{}'
+      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
     }${waypointsString}&apiKey=${token.token}`,
     matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token.token}`,
     optimizedTrip: `${BASE_URL}/api/optimized-trip?apiKey=${token.token}`,
@@ -266,9 +266,9 @@ const SideBarForm = ({
   //for curl
   const curlMap = {
     geocoding:
-      selectedGeocoding === 'forward'
+      selectedGeocoding === "forward"
         ? `curl -X GET "${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token?.token}"`
-        : `curl -X GET "${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ''}&lon=${coordinate.longitude || ''}&apiKey=${token?.token}"`,
+        : `curl -X GET "${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token?.token}"`,
 
     direction: `curl -X GET "${BASE_URL}/api/route/direction/?origin=${
       origin.lat
@@ -278,12 +278,12 @@ const SideBarForm = ({
       destination.lat
         ? `${destination.lat},${destination.lng}`
         : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-    }&apiKey=${token?.token}${showAlternatives ? '&alternative=t' : ''}${waypointsString}"`,
+    }&apiKey=${token?.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}"`,
 
     tss: `curl -X GET "${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token?.token}"`,
 
     onm: `curl -X GET "${BASE_URL}/api/route/onm?origin=${
-      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : '{}'
+      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
     }${waypointsString}&apiKey=${token?.token}"`,
 
     matrix: `curl -X GET "${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token?.token}"`,
@@ -300,9 +300,9 @@ const SideBarForm = ({
   //http
   const httpMap = {
     geocoding:
-      selectedGeocoding === 'forward'
+      selectedGeocoding === "forward"
         ? `${BASE_URL}/api/v1/route/geocoding?name=${searchText}&apiKey=${token?.token}`
-        : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ''}&lon=${coordinate.longitude || ''}&apiKey=${token?.token}`,
+        : `${BASE_URL}/api/v1/route/revgeocoding?lat=${coordinate.latitude || ""}&lon=${coordinate.longitude || ""}&apiKey=${token?.token}`,
 
     direction: `${BASE_URL}/api/route/direction/?origin=${
       origin.lat
@@ -312,12 +312,12 @@ const SideBarForm = ({
       destination.lat
         ? `${destination.lat},${destination.lng}`
         : `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-    }&apiKey=${token?.token}${showAlternatives ? '&alternative=t' : ''}${waypointsString}`,
+    }&apiKey=${token?.token}${showAlternatives ? "&alternative=t" : ""}${waypointsString}`,
 
     tss: `${BASE_URL}/api/route/tss?${waypointsString}&apiKey=${token?.token}`,
 
     onm: `${BASE_URL}/api/route/onm?origin=${
-      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : '{}'
+      origin.lat && origin.lng ? `{${origin.lat},${origin.lng}}` : "{}"
     }${waypointsString}&apiKey=${token?.token}`,
 
     matrix: `${BASE_URL}/api/route/matrix?${waypointsString}&apiKey=${token?.token}`,
@@ -334,29 +334,29 @@ const SideBarForm = ({
   };
 
   const setForDrawing = (data) => {
-    console.log('alternatives', data.data?.alternative);
-    if (object.type === 'direction') {
+    console.log("alternatives", data.data?.alternative);
+    if (object.type === "direction") {
       setAlternatives(data?.data?.alternative);
-      setCoordinateFunction({ type: 'direction', coords: data.data.direction });
-    } else if (object.type === 'onm') {
+      setCoordinateFunction({ type: "direction", coords: data.data.direction });
+    } else if (object.type === "onm") {
       const array = data.data.directions.map((dir) => dir.direction);
-      setCoordinateFunction({ type: 'onm', coords: array });
-    } else if (object.type === 'tss') {
-      setCoordinateFunction({ type: 'tss', coords: data.data.direction });
-    } else if (object.type === 'matrix') {
+      setCoordinateFunction({ type: "onm", coords: array });
+    } else if (object.type === "tss") {
+      setCoordinateFunction({ type: "tss", coords: data.data.direction });
+    } else if (object.type === "matrix") {
       console.log({ data });
       const locations = data?.data?.destinations?.map((dest) => [dest.lat, dest.lon]) || [];
-      setCoordinateFunction({ type: 'matrix', coords: locations });
-    } else if (object.type === 'optimizedTrip') {
+      setCoordinateFunction({ type: "matrix", coords: locations });
+    } else if (object.type === "optimizedTrip") {
       setCoordinateFunction({
-        type: 'optimizedTrip',
+        type: "optimizedTrip",
         data: data,
       });
     }
   };
 
   const shouldContinue = () => {
-    if (object.type === 'direction') {
+    if (object.type === "direction") {
       if (
         manualCoords.origin.lat &&
         manualCoords.origin.lng &&
@@ -365,32 +365,32 @@ const SideBarForm = ({
       ) {
         return { error: false };
       } else if (!origin.lat || !origin.lng || !destination.lat || !destination.lng) {
-        return { error: true, message: 'Please set origin and destination' };
+        return { error: true, message: "Please set origin and destination" };
       }
     }
-    if (object.type === 'onm') {
+    if (object.type === "onm") {
       if ((!origin.lat || !origin.lng) && (!onmOrigin.lat || !onmOrigin.lng)) {
-        return { error: true, message: 'Please set origin coordinates' };
+        return { error: true, message: "Please set origin coordinates" };
       }
       if (waypoints.length === 0 && waypointInputs.every((input) => !input.trim())) {
-        return { error: true, message: 'Please set at least one waypoint' };
+        return { error: true, message: "Please set at least one waypoint" };
       }
-    } else if (object.type === 'matrix' || object.type === 'tss') {
+    } else if (object.type === "matrix" || object.type === "tss") {
       if (waypoints.length === 0) {
-        return { error: true, message: 'Please set at least one waypoint' };
+        return { error: true, message: "Please set at least one waypoint" };
       }
-    } else if (object.type === 'optimizedTrip') {
+    } else if (object.type === "optimizedTrip") {
       if (!optimizedTripJson.current?.value) {
-        return { error: true, message: 'Please provide trip JSON' };
+        return { error: true, message: "Please provide trip JSON" };
       }
-    } else if (object.type === 'geocoding') {
-      if (selectedGeocoding === 'forward' && !searchText.trim()) {
-        return { error: true, message: 'Please enter search text' };
+    } else if (object.type === "geocoding") {
+      if (selectedGeocoding === "forward" && !searchText.trim()) {
+        return { error: true, message: "Please enter search text" };
       } else if (
-        selectedGeocoding === 'reverse' &&
+        selectedGeocoding === "reverse" &&
         (!coordinate.latitude || !coordinate.longitude)
       ) {
-        return { error: true, message: 'Please enter coordinates' };
+        return { error: true, message: "Please enter coordinates" };
       }
     }
     return { error: false };
@@ -399,40 +399,40 @@ const SideBarForm = ({
   const calculate = () => {
     const response = shouldContinue();
     if (response.error) {
-      addToast('Something failed!', 'error');
+      addToast("Something failed!", "error");
       return;
     }
 
     setInstructions([]);
     setActiveInstruction(null);
 
-    if (object.type === 'optimizedTrip') {
+    if (object.type === "optimizedTrip") {
       try {
         const jsonData = JSON.parse(optimizedTripJson.current.value);
         getRoutes(urlMap[object.type], jsonData).then((data) => {
           if (!data.error) {
             setApiResponse(data.data);
             setForDrawing(data.data);
-            addToast('Successful!', 'success');
+            addToast("Successful!", "success");
           } else {
-            addToast(data.error, 'error');
+            addToast(data.error, "error");
           }
         });
       } catch (e) {
-        addToast('Invalid JSON format!', 'error');
+        addToast("Invalid JSON format!", "error");
       }
     } else {
       const url = urlMap[object.type];
 
-      const cleanUrl = url.replace(/\?&/, '?').replace(/[?&]$/, '');
+      const cleanUrl = url.replace(/\?&/, "?").replace(/[?&]$/, "");
       console.log({ cleanUrl, url });
       getRoute(cleanUrl).then((data) => {
         if (!data.error) {
           setApiResponse(data.data);
-          console.log('response', data.data);
+          console.log("response", data.data);
           setForDrawing(data);
 
-          console.log('response', data.data?.instruction);
+          console.log("response", data.data?.instruction);
           if (data.data?.instruction) {
             setInstructions(data.data.instruction);
             if (data.data.instruction.length > 0) {
@@ -440,9 +440,9 @@ const SideBarForm = ({
             }
           }
 
-          addToast('Successful!', 'success');
+          addToast("Successful!", "success");
         } else {
-          addToast(data?.error, 'error');
+          addToast(data?.error, "error");
         }
       });
     }
@@ -450,15 +450,15 @@ const SideBarForm = ({
 
   const renderButton = (type, request) => {
     switch (type) {
-      case 'start':
+      case "start":
         return (
           <button
             className={`
      w-full p-2.5 rounded-[4px]
     ${
-      selectedButton === 'start'
-        ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+      selectedButton === "start"
+        ? "bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]"
+        : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
     }
     text-white
     font-medium
@@ -469,22 +469,22 @@ const SideBarForm = ({
   `}
             onClick={(e) => {
               e.preventDefault();
-              setSelectedButtonFunction('start');
+              setSelectedButtonFunction("start");
             }}
           >
             Origin
           </button>
         );
-      case 'waypoint':
+      case "waypoint":
         return (
-          request !== 'geocoding' && (
+          request !== "geocoding" && (
             <button
               className={`
      w-full p-2.5 rounded-[4px]
     ${
-      selectedButton === 'waypoint'
-        ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+      selectedButton === "waypoint"
+        ? "bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]"
+        : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
     }
     text-white 
     font-medium
@@ -495,22 +495,22 @@ const SideBarForm = ({
   `}
               onClick={(e) => {
                 e.preventDefault();
-                setSelectedButtonFunction('waypoint');
+                setSelectedButtonFunction("waypoint");
               }}
             >
               Waypoints
             </button>
           )
         );
-      case 'destination':
+      case "destination":
         return (
           <button
             className={`
      w-full p-2.5 rounded-[4px]
     ${
-      selectedButton === 'destination'
-        ? 'bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]'
-        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+      selectedButton === "destination"
+        ? "bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400]"
+        : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
     }
     text-white 
     font-medium
@@ -521,7 +521,7 @@ const SideBarForm = ({
   `}
             onClick={(e) => {
               e.preventDefault();
-              setSelectedButtonFunction('destination');
+              setSelectedButtonFunction("destination");
             }}
           >
             Destination
@@ -534,7 +534,7 @@ const SideBarForm = ({
 
   const renderCoordinateInputs = () => {
     switch (object.type) {
-      case 'direction':
+      case "direction":
         return (
           <>
             <div className="space-y-2">
@@ -545,7 +545,7 @@ const SideBarForm = ({
                 value={
                   manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined
                     ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
-                    : ''
+                    : ""
                 }
                 onChange={(e) => handleOriginChange(e.target.value)}
               />
@@ -561,7 +561,7 @@ const SideBarForm = ({
                   manualCoords.destination.lat !== undefined &&
                   manualCoords.destination.lng !== undefined
                     ? `${manualCoords.destination.lat},${manualCoords.destination.lng}`
-                    : ''
+                    : ""
                 }
                 onChange={(e) => handleDestinationChange(e.target.value)}
               />
@@ -571,7 +571,7 @@ const SideBarForm = ({
           </>
         );
 
-      case 'onm':
+      case "onm":
         return (
           <>
             <div className="space-y-2">
@@ -582,7 +582,7 @@ const SideBarForm = ({
                 value={
                   manualCoords.origin.lat !== undefined && manualCoords.origin.lng !== undefined
                     ? `${manualCoords.origin.lat},${manualCoords.origin.lng}`
-                    : ''
+                    : ""
                 }
                 onChange={(e) => handleOriginChange(e.target.value)}
               />
@@ -592,8 +592,8 @@ const SideBarForm = ({
           </>
         );
 
-      case 'tss':
-      case 'matrix':
+      case "tss":
+      case "matrix":
         return renderWaypointInputs();
 
       default:
@@ -655,15 +655,15 @@ const SideBarForm = ({
   return (
     <div className="w-full px-8 md:px-0 overflow-hidden">
       <div className="relative w-full">
-        {object.type === 'geocoding' &&
+        {object.type === "geocoding" &&
           React.cloneElement(object.radioInput, {
             setSelectedButtonFunction,
             selectedGeocoding,
             setGeocoding,
           })}
 
-        {object.type === 'geocoding' ? (
-          selectedGeocoding === 'forward' ? (
+        {object.type === "geocoding" ? (
+          selectedGeocoding === "forward" ? (
             <div className="mt-[4%] flex flex-col ">
               <label className="text-sm font-medium -700 mb-1">Search</label>
               <input
@@ -680,7 +680,7 @@ const SideBarForm = ({
                 placeholder="Enter latitude,longitude"
                 className="w-full p-2.5 text-sm bg-white dark:bg-gray-800 -900  outline-none rounded-[4px] border border-gray-300"
                 onChange={(e) => {
-                  const [lat, lng] = e.target.value.split(',').map((coord) => coord.trim());
+                  const [lat, lng] = e.target.value.split(",").map((coord) => coord.trim());
                   setCoordinate({ latitude: lat, longitude: lng });
                 }}
               />
@@ -690,24 +690,24 @@ const SideBarForm = ({
 
         <Notify value={notify} />
 
-        {(object.type === 'direction' || object.type === 'onm') && (
-          <>{renderButton('start', object.type)}</>
+        {(object.type === "direction" || object.type === "onm") && (
+          <>{renderButton("start", object.type)}</>
         )}
 
-        {object.type === 'direction'
+        {object.type === "direction"
           ? startWayPoint
-            ? renderButton('waypoint', object.type)
+            ? renderButton("waypoint", object.type)
             : null
-          : object.type !== 'optimizedTrip'
-            ? renderButton('waypoint', object.type)
+          : object.type !== "optimizedTrip"
+            ? renderButton("waypoint", object.type)
             : null}
 
-        {object.type === 'direction' && renderButton('destination', object.type)}
+        {object.type === "direction" && renderButton("destination", object.type)}
 
-        {(object.type === 'direction' ||
-          object.type === 'onm' ||
-          object.type === 'tss' ||
-          object.type === 'matrix') && (
+        {(object.type === "direction" ||
+          object.type === "onm" ||
+          object.type === "tss" ||
+          object.type === "matrix") && (
           <>
             <div className="mt-4 relative">
               <div className="absolute inset-0 flex items-center">
@@ -722,7 +722,7 @@ const SideBarForm = ({
           </>
         )}
 
-        {object.type === 'optimizedTrip' && (
+        {object.type === "optimizedTrip" && (
           <div className="mt-4 space-y-2">
             <label className="text-sm font-medium -700 whitespace-nowrap">
               Trip Configuration JSON
@@ -741,7 +741,7 @@ const SideBarForm = ({
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(exampleOptimizedTripJson);
-                  addToast('Example JSON copied!', 'success');
+                  addToast("Example JSON copied!", "success");
                 }}
                 className="text-purple-600 hover:text-purple-800 flex items-center whitespace-nowrap"
               >
@@ -759,7 +759,7 @@ const SideBarForm = ({
           </div>
         )}
 
-        {object.type === 'direction' && (
+        {object.type === "direction" && (
           <>
             <h4 className="mt-6 text-sm font-medium -700 mb-1">Optional parameters</h4>
 
@@ -793,14 +793,14 @@ const SideBarForm = ({
               </label>
             </div>
 
-            {object.optionalParameter.find((p) => p.name === 'waypoints') && (
+            {object.optionalParameter.find((p) => p.name === "waypoints") && (
               <div className="flex items-center space-x-2 mt-2">
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     className="sr-only peer"
                     checked={startWayPoint}
-                    onChange={() => setOptionalParameter('waypoints')}
+                    onChange={() => setOptionalParameter("waypoints")}
                   />
                   <div
                     className="
@@ -833,7 +833,7 @@ const SideBarForm = ({
           </>
         )}
 
-        {object.type === 'geocoding' && selectedGeocoding !== 'reverse' && (
+        {object.type === "geocoding" && selectedGeocoding !== "reverse" && (
           <div className="border border-t-0 rounded-lg overflow-hidden">
             {apiResponse.data?.map((n, i) => (
               <div
@@ -842,7 +842,7 @@ const SideBarForm = ({
                 onClick={() => {
                   if (!mapRef.current) return;
 
-                  const marker = document.createElement('div');
+                  const marker = document.createElement("div");
                   marker.innerHTML = `
             <div class="relative">
                 <div class="absolute -top-8 -left-4">
@@ -851,10 +851,10 @@ const SideBarForm = ({
             </div>
         `;
 
-                  const existingMarkers = document.getElementsByClassName('map-marker');
+                  const existingMarkers = document.getElementsByClassName("map-marker");
                   Array.from(existingMarkers).forEach((marker) => marker.remove());
 
-                  marker.className = 'map-marker';
+                  marker.className = "map-marker";
 
                   mapRef.current.flyTo({
                     center: [n?.longitude, n?.latitude],
@@ -904,7 +904,7 @@ const SideBarForm = ({
   `}
           onClick={calculate}
         >
-          {object.type === 'geocoding' ? 'Search' : 'Calculate'}
+          {object.type === "geocoding" ? "Search" : "Calculate"}
         </button>
 
         <RequestSample

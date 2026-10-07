@@ -1,15 +1,15 @@
-'use client';
-import { ChevronRight, Menu } from 'lucide-react';
-import Link from 'next/link';
-import { createContext, Fragment, useContext, useState } from 'react';
+"use client";
+import { ChevronRight, Menu } from "lucide-react";
+import Link from "next/link";
+import { createContext, Fragment, useContext, useState } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/accordion";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface NavbarMobileContextProps {
   isOpen: boolean;
@@ -41,7 +41,7 @@ export const NavbarProvider = ({ children }: { children: React.ReactNode }) => {
 export const useNavbarMobile = (): NavbarMobileContextProps => {
   const context = useContext(NavbarContext);
   if (!context) {
-    throw new Error('useNavbarMobile must be used within a NavbarMobileProvider');
+    throw new Error("useNavbarMobile must be used within a NavbarMobileProvider");
   }
   return context;
 };
@@ -66,20 +66,20 @@ export const NavbarMobileBtn: React.FC = () => {
 export const NavbarMobile = () => {
   const { isOpen, toggleNavbar } = useNavbarMobile();
   const pathname = usePathname();
-  const isDocs = pathname.startsWith('/docs');
+  const isDocs = pathname.startsWith("/docs");
 
   return (
     <div
       className={cn(
-        'fixed top-[50px] inset-x-0 transform-gpu z-[100] bg-background grid grid-rows-[0fr] duration-300 transition-all md:hidden',
-        isOpen && 'shadow-lg border-b border-[rgba(255,255,255,.1)] grid-rows-[1fr]'
+        "fixed top-[50px] inset-x-0 transform-gpu z-[100] bg-background grid grid-rows-[0fr] duration-300 transition-all md:hidden",
+        isOpen && "shadow-lg border-b border-[rgba(255,255,255,.1)] grid-rows-[1fr]"
       )}
     >
       <div
         className={cn(
-          'px-9 min-h-0 overflow-y-auto max-h-[80vh] divide-y [mask-image:linear-gradient(to_top,transparent,white_40px)] transition-all duration-300',
-          isOpen ? 'py-5' : 'invisible',
-          isDocs && 'px-4'
+          "px-9 min-h-0 overflow-y-auto max-h-[80vh] divide-y [mask-image:linear-gradient(to_top,transparent,white_40px)] transition-all duration-300",
+          isOpen ? "py-5" : "invisible",
+          isDocs && "px-4"
         )}
       >
         {navMenu.map((menu) => (
@@ -88,7 +88,7 @@ export const NavbarMobile = () => {
               <Accordion type="single" collapsible>
                 <AccordionItem value={menu.name}>
                   <AccordionTrigger
-                    className={cn('font-normal text-foreground', !isDocs && 'text-2xl')}
+                    className={cn("font-normal text-foreground", !isDocs && "text-2xl")}
                   >
                     {menu.name}
                   </AccordionTrigger>
@@ -98,8 +98,8 @@ export const NavbarMobile = () => {
                         href={child.path}
                         key={child.name}
                         className={cn(
-                          'block py-2 border-b first:pt-0 last:pb-0 last:border-0 text-muted-foreground',
-                          !isDocs && 'text-xl'
+                          "block py-2 border-b first:pt-0 last:pb-0 last:border-0 text-muted-foreground",
+                          !isDocs && "text-xl"
                         )}
                         onClick={toggleNavbar}
                       >
@@ -113,8 +113,8 @@ export const NavbarMobile = () => {
               <Link
                 href={menu.path}
                 className={cn(
-                  'group flex items-center gap-2.5 first:pt-0 last:pb-0 text-2xl py-4',
-                  isDocs && 'text-base py-2'
+                  "group flex items-center gap-2.5 first:pt-0 last:pb-0 text-2xl py-4",
+                  isDocs && "text-base py-2"
                 )}
                 onClick={toggleNavbar}
               >
@@ -140,28 +140,28 @@ export const navMenu: {
   }[];
 }[] = [
   {
-    name: 'home',
-    path: '/',
+    name: "home",
+    path: "/",
   },
 
   {
-    name: 'docs',
-    path: '/docs',
+    name: "docs",
+    path: "/docs",
   },
   {
-    name: 'authentication',
-    path: '/authentication',
+    name: "authentication",
+    path: "/authentication",
   },
   {
-    name: 'api playground',
-    path: '/api-playground',
+    name: "api playground",
+    path: "/api-playground",
   },
   {
-    name: 'map playground',
-    path: '/map-playground',
+    name: "map playground",
+    path: "/map-playground",
   },
   {
-    name: 'community',
-    path: '/community',
+    name: "community",
+    path: "/community",
   },
 ];

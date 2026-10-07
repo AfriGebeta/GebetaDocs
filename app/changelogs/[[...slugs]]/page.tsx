@@ -1,29 +1,29 @@
 //@ts-nocheck
-import { notFound } from 'next/navigation';
-import { absoluteUrl, cn, formatDate } from '@/lib/utils';
-import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-import { TypeTable } from 'fumadocs-ui/components/type-table';
-import Link from 'next/link';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { File, Files, Folder } from 'fumadocs-ui/components/files';
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
-import { Pre } from 'fumadocs-ui/components/codeblock';
-import { DocsBody } from 'fumadocs-ui/page';
-import ChangelogPage, { Glow } from '../_components/default-changelog';
-import { IconLink } from '../_components/changelog-layout';
-import { BookIcon, GitHubIcon, XIcon } from '../_components/icons';
-import { DiscordLogoIcon } from '@radix-ui/react-icons';
-import { StarField } from '../_components/stat-field';
-import { CalendarClockIcon } from 'lucide-react';
-import Features from '@/app/(home)/_components/feature';
-import { AnimatePresence } from 'framer-motion';
-import DatabaseTable from '@/components/database-tables';
-import { changelogs } from '@/app/source';
+import { notFound } from "next/navigation";
+import { absoluteUrl, cn, formatDate } from "@/lib/utils";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import Link from "next/link";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import { File, Files, Folder } from "fumadocs-ui/components/files";
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+import { Pre } from "fumadocs-ui/components/codeblock";
+import { DocsBody } from "fumadocs-ui/page";
+import ChangelogPage, { Glow } from "../_components/default-changelog";
+import { IconLink } from "../_components/changelog-layout";
+import { BookIcon, GitHubIcon, XIcon } from "../_components/icons";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import { StarField } from "../_components/stat-field";
+import { CalendarClockIcon } from "lucide-react";
+import Features from "@/app/(home)/_components/feature";
+import { AnimatePresence } from "framer-motion";
+import DatabaseTable from "@/components/database-tables";
+import { changelogs } from "@/app/source";
 
-const metaTitle = 'Changelogs';
-const metaDescription = 'Latest changes , fixes and updates.';
-const ogImage = 'https://gebeta.app/og.png';
+const metaTitle = "Changelogs";
+const metaDescription = "Latest changes , fixes and updates.";
+const ogImage = "https://gebeta.app/og.png";
 
 export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
   const { slug } = await params;
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
               ...defaultMdxComponents,
               Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
                 <Link
-                  className={cn('font-medium underline underline-offset-4', className)}
+                  className={cn("font-medium underline underline-offset-4", className)}
                   {...props}
                 />
               ),
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
   const { slug } = await params;
   if (!slug) {
     return {
-      metadataBase: new URL('https://gebeta.app/changelogs'),
+      metadataBase: new URL("https://gebeta.app/changelogs"),
       title: metaTitle,
       description: metaDescription,
       openGraph: {
@@ -132,10 +132,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
             url: ogImage,
           },
         ],
-        url: 'https://gebeta.app/changelogs',
+        url: "https://gebeta.app/changelogs",
       },
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         title: metaTitle,
         description: metaDescription,
         images: [ogImage],
@@ -145,7 +145,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
   const page = changelogs.getPage(slug);
   if (page == null) notFound();
   const baseUrl = process.env.NEXT_PUBLIC_URL || process.env.VERCEL_URL;
-  const url = new URL(`${baseUrl}/release-og/${slug.join('')}.png`);
+  const url = new URL(`${baseUrl}/release-og/${slug.join("")}.png`);
   const { title, description } = page.data;
 
   return {
@@ -154,8 +154,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     openGraph: {
       title,
       description,
-      type: 'website',
-      url: absoluteUrl(`changelogs/${slug.join('')}`),
+      type: "website",
+      url: absoluteUrl(`changelogs/${slug.join("")}`),
       images: [
         {
           url: url.toString(),
@@ -166,7 +166,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       images: [url.toString()],
