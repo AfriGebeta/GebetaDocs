@@ -5,13 +5,21 @@
     "description": "",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://mapapi.gebeta.app",
+      "description": "Gebeta Maps API"
+    }
+  ],
   "tags": [],
   "paths": {
     "/api/route/onm/": {
       "get": {
         "summary": "Find Nearest Destination and Compare Routes",
         "description": "Calculates routes from a single origin to multiple destinations, returning travel times, distances, and paths. Helps determine which destination is nearest in terms of actual travel cost.",
-        "tags": ["ONM"],
+        "tags": [
+          "ONM"
+        ],
         "deprecated": false,
         "parameters": [
           {
@@ -86,11 +94,19 @@
                             }
                           }
                         },
-                        "required": ["msg", "timetaken", "totalDistance", "direction"]
+                        "required": [
+                          "msg",
+                          "timetaken",
+                          "totalDistance",
+                          "direction"
+                        ]
                       }
                     }
                   },
-                  "required": ["msg", "directions"]
+                  "required": [
+                    "msg",
+                    "directions"
+                  ]
                 },
                 "examples": {
                   "Success": {
@@ -103,11 +119,26 @@
                           "timetaken": 27145.13,
                           "totalDistance": 81435.39,
                           "direction": [
-                            [9.067654609680176, 38.75811004638672],
-                            [9.067713737487793, 38.75811767578125],
-                            [9.068061828613281, 38.758182525634766],
-                            [9.068098068237305, 38.75818634033203],
-                            [9.068119049072266, 38.758174896240234]
+                            [
+                              9.067654609680176,
+                              38.75811004638672
+                            ],
+                            [
+                              9.067713737487793,
+                              38.75811767578125
+                            ],
+                            [
+                              9.068061828613281,
+                              38.758182525634766
+                            ],
+                            [
+                              9.068098068237305,
+                              38.75818634033203
+                            ],
+                            [
+                              9.068119049072266,
+                              38.758174896240234
+                            ]
                           ]
                         }
                       ]
@@ -121,14 +152,15 @@
         "security": []
       }
     },
-
     "comment8": "Matrix",
     "comment7": "Matrix",
     "/api/route/matrix/": {
       "get": {
         "summary": "Compute Distance and Duration Matrix",
         "description": "Calculates a matrix of travel times and distances between multiple geographic points. This is useful for logistics, delivery optimization, or any application requiring pairwise route calculations between several origins and destinations.",
-        "tags": ["Matrix"],
+        "tags": [
+          "Matrix"
+        ],
         "deprecated": false,
         "parameters": [
           {
@@ -173,11 +205,20 @@
                           "duration": {
                             "type": "array",
                             "items": {
-                              "oneOf": [{ "type": "number" }, { "type": "integer" }]
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
                             }
                           }
                         },
-                        "required": ["duration"]
+                        "required": [
+                          "duration"
+                        ]
                       }
                     },
                     "distances": {
@@ -189,11 +230,20 @@
                           "duration": {
                             "type": "array",
                             "items": {
-                              "oneOf": [{ "type": "number" }, { "type": "integer" }]
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
                             }
                           }
                         },
-                        "required": ["duration"]
+                        "required": [
+                          "duration"
+                        ]
                       }
                     },
                     "destinations": {
@@ -205,13 +255,22 @@
                           "location": {
                             "type": "object",
                             "properties": {
-                              "lat": { "type": "number" },
-                              "lng": { "type": "number" }
+                              "lat": {
+                                "type": "number"
+                              },
+                              "lng": {
+                                "type": "number"
+                              }
                             },
-                            "required": ["lat", "lng"]
+                            "required": [
+                              "lat",
+                              "lng"
+                            ]
                           }
                         },
-                        "required": ["location"]
+                        "required": [
+                          "location"
+                        ]
                       }
                     },
                     "origins": {
@@ -223,32 +282,93 @@
                           "location": {
                             "type": "object",
                             "properties": {
-                              "lat": { "type": "number" },
-                              "lng": { "type": "number" }
+                              "lat": {
+                                "type": "number"
+                              },
+                              "lng": {
+                                "type": "number"
+                              }
                             },
-                            "required": ["lat", "lng"]
+                            "required": [
+                              "lat",
+                              "lng"
+                            ]
                           }
                         },
-                        "required": ["location"]
+                        "required": [
+                          "location"
+                        ]
                       }
                     }
                   },
-                  "required": ["msg", "durations", "distances", "destinations", "origins"]
+                  "required": [
+                    "msg",
+                    "durations",
+                    "distances",
+                    "destinations",
+                    "origins"
+                  ]
                 },
                 "examples": {
                   "Success": {
                     "summary": "Example matrix response",
                     "value": {
                       "msg": "Ok",
-                      "durations": [{ "duration": [0, 20.87] }, { "duration": [61.39, 0] }],
-                      "distances": [{ "duration": [0, 62.62] }, { "duration": [184.17, 0] }],
+                      "durations": [
+                        {
+                          "duration": [
+                            0,
+                            20.87
+                          ]
+                        },
+                        {
+                          "duration": [
+                            61.39,
+                            0
+                          ]
+                        }
+                      ],
+                      "distances": [
+                        {
+                          "duration": [
+                            0,
+                            62.62
+                          ]
+                        },
+                        {
+                          "duration": [
+                            184.17,
+                            0
+                          ]
+                        }
+                      ],
                       "destinations": [
-                        { "location": { "lat": 8.987685, "lng": 38.764793 } },
-                        { "location": { "lat": 8.987945, "lng": 38.76513 } }
+                        {
+                          "location": {
+                            "lat": 8.987685,
+                            "lng": 38.764793
+                          }
+                        },
+                        {
+                          "location": {
+                            "lat": 8.987945,
+                            "lng": 38.76513
+                          }
+                        }
                       ],
                       "origins": [
-                        { "location": { "lat": 8.987685, "lng": 38.764793 } },
-                        { "location": { "lat": 8.987945, "lng": 38.76513 } }
+                        {
+                          "location": {
+                            "lat": 8.987685,
+                            "lng": 38.764793
+                          }
+                        },
+                        {
+                          "location": {
+                            "lat": 8.987945,
+                            "lng": 38.76513
+                          }
+                        }
                       ]
                     }
                   }
@@ -267,7 +387,9 @@
         "summary": "Get Optimized Delivery Routes for Multiple Drivers",
         "deprecated": false,
         "description": "Calculates the most efficient delivery routes for multiple drivers based on depot, customer locations, and vehicle capacities. Useful for logistics, courier services, or any multi-stop delivery scenario.",
-        "tags": ["Optimization"],
+        "tags": [
+          "Optimization"
+        ],
         "parameters": [
           {
             "name": "apiKey",
@@ -300,7 +422,9 @@
                         "current_location": {
                           "type": "array",
                           "description": "Current location of the driver [longitude, latitude]",
-                          "items": { "type": "number" },
+                          "items": {
+                            "type": "number"
+                          },
                           "minItems": 2,
                           "maxItems": 2
                         },
@@ -330,7 +454,9 @@
                         "location": {
                           "type": "array",
                           "description": "Location of the customer [longitude, latitude]",
-                          "items": { "type": "number" },
+                          "items": {
+                            "type": "number"
+                          },
                           "minItems": 2,
                           "maxItems": 2
                         },
@@ -358,7 +484,9 @@
                         "location": {
                           "type": "array",
                           "description": "Depot location [longitude, latitude]",
-                          "items": { "type": "number" },
+                          "items": {
+                            "type": "number"
+                          },
                           "minItems": 2,
                           "maxItems": 2
                         }
@@ -366,7 +494,11 @@
                     }
                   }
                 },
-                "required": ["vehicles", "customers", "depots"]
+                "required": [
+                  "vehicles",
+                  "customers",
+                  "depots"
+                ]
               }
             }
           }
@@ -402,7 +534,9 @@
                                 "location": {
                                   "type": "array",
                                   "description": "Customer location [longitude, latitude]",
-                                  "items": { "type": "number" },
+                                  "items": {
+                                    "type": "number"
+                                  },
                                   "minItems": 2,
                                   "maxItems": 2
                                 },
@@ -424,7 +558,9 @@
                               "location": {
                                 "type": "array",
                                 "description": "Depot location [longitude, latitude]",
-                                "items": { "type": "number" },
+                                "items": {
+                                  "type": "number"
+                                },
                                 "minItems": 2,
                                 "maxItems": 2
                               }
@@ -434,7 +570,9 @@
                       }
                     }
                   },
-                  "required": ["routes"]
+                  "required": [
+                    "routes"
+                  ]
                 }
               }
             }
@@ -448,7 +586,9 @@
         "summary": "TSS",
         "deprecated": false,
         "description": "Solves a Traveling Salesman Problem (TSP) using the coordinates provided and returns the most optimal visiting order, original order, route geometry, and total distance and time taken. The route starts and ends at the first coordinate.",
-        "tags": ["Optimization"],
+        "tags": [
+          "Optimization"
+        ],
         "parameters": [
           {
             "name": "json",
@@ -530,14 +670,32 @@
                     "summary": "Successful Optimization",
                     "value": {
                       "msg": "Optimization completed successfully",
-                      "bestorder": [0, 2, 1, 0],
+                      "bestorder": [
+                        0,
+                        2,
+                        1,
+                        0
+                      ],
                       "timetaken": 10840.284,
                       "totalDistance": 32520.854,
-                      "originalorder": [0, 1, 2],
+                      "originalorder": [
+                        0,
+                        1,
+                        2
+                      ],
                       "direction": [
-                        [8.98755168914795, 38.764892578125],
-                        [8.987594604492188, 38.76495361328125],
-                        [8.987668991088867, 38.76502990722656]
+                        [
+                          8.98755168914795,
+                          38.764892578125
+                        ],
+                        [
+                          8.987594604492188,
+                          38.76495361328125
+                        ],
+                        [
+                          8.987668991088867,
+                          38.76502990722656
+                        ]
                       ]
                     }
                   }
@@ -549,15 +707,15 @@
         "security": []
       }
     },
-
     "comment5": "direction",
     "comment6": "direction",
-
     "/api/route/direction/": {
       "get": {
         "summary": "Get Route Directions",
         "description": "Calculates the optimal route between two geographic points, with optional waypoints, and returns essential routing details including travel time, total distance, and a series of geographic coordinates representing the route. Turn-by-turn instructions can also be requested.",
-        "tags": ["Direction"],
+        "tags": [
+          "Direction"
+        ],
         "deprecated": false,
         "parameters": [
           {
@@ -642,7 +800,12 @@
                       }
                     }
                   },
-                  "required": ["msg", "timetaken", "totalDistance", "direction"]
+                  "required": [
+                    "msg",
+                    "timetaken",
+                    "totalDistance",
+                    "direction"
+                  ]
                 },
                 "examples": {
                   "Success": {
@@ -652,18 +815,54 @@
                       "timetaken": 5102.905,
                       "totalDistance": 15308.715,
                       "direction": [
-                        [9.18759536743164, 38.763946533203125],
-                        [9.187566757202148, 38.763954162597656],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.187539100646973, 38.76198959350586],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.1871976852417, 38.76167678833008],
-                        [9.187050819396973, 38.76163101196289],
-                        [9.187050819396973, 38.76163101196289]
+                        [
+                          9.18759536743164,
+                          38.763946533203125
+                        ],
+                        [
+                          9.187566757202148,
+                          38.763954162597656
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.1875581741333,
+                          38.763362884521484
+                        ],
+                        [
+                          9.187539100646973,
+                          38.76198959350586
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.187505722045898,
+                          38.76165771484375
+                        ],
+                        [
+                          9.1871976852417,
+                          38.76167678833008
+                        ],
+                        [
+                          9.187050819396973,
+                          38.76163101196289
+                        ],
+                        [
+                          9.187050819396973,
+                          38.76163101196289
+                        ]
                       ]
                     }
                   }
@@ -675,17 +874,17 @@
         "security": []
       }
     },
-
     "comment": "Geocoding",
     "comment2": "Geocoding",
-
     "/api/v1/route/geocoding": {
       "get": {
         "summary": "Find Place by Name",
         "operationId": "findPlace",
         "deprecated": false,
         "description": "Search for a place by name. The endpoint returns a list of matching places with details such as location (latitude and longitude), city, country, and type (e.g., neighborhood, landmark).",
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -715,13 +914,23 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["data", "msg"],
+                  "required": [
+                    "data",
+                    "msg"
+                  ],
                   "properties": {
                     "data": {
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": ["city", "country", "lat", "lng", "name", "type"],
+                        "required": [
+                          "city",
+                          "country",
+                          "lat",
+                          "lng",
+                          "name",
+                          "type"
+                        ],
                         "properties": {
                           "city": {
                             "type": "string",
@@ -802,7 +1011,9 @@
         "operationId": "findPlacesByBound",
         "summary": "Find Places Within Geographic Bounds",
         "deprecated": false,
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "description": "Retrieves a list of places that match a specified name and are located within a defined geographic bounding box. Useful for limiting results to a specific area on a map.",
         "parameters": [
           {
@@ -843,7 +1054,9 @@
         "operationId": "filterPlaces",
         "summary": "Filter Places by Location",
         "deprecated": false,
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "description": "Retrieves a list of places that match a specified name and are located within a specified country and city. This endpoint allows clients to filter places using location-based attributes.",
         "parameters": [
           {
@@ -885,7 +1098,9 @@
         "operationId": "findOwned",
         "deprecated": false,
         "description": "Retrieve stored addresses from the Gebeta database that match a specific name and type. This endpoint allows users to query places they own or have registered.",
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "parameters": [
           {
             "name": "name",
@@ -925,7 +1140,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["msg", "data"],
+                  "required": [
+                    "msg",
+                    "data"
+                  ],
                   "properties": {
                     "msg": {
                       "type": "string",
@@ -1007,7 +1225,9 @@
         "operationId": "reverseGeocode",
         "deprecated": false,
         "description": "Retrieve place information based on latitude and longitude coordinates. This endpoint returns details such as place name, location, country, city, and type.",
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "parameters": [
           {
             "name": "lat",
@@ -1047,7 +1267,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["msg", "data"],
+                  "required": [
+                    "msg",
+                    "data"
+                  ],
                   "properties": {
                     "msg": {
                       "type": "string",
@@ -1058,7 +1281,14 @@
                       "description": "List of places corresponding to the provided coordinates.",
                       "items": {
                         "type": "object",
-                        "required": ["name", "latitude", "longitude", "Country", "City", "type"],
+                        "required": [
+                          "name",
+                          "latitude",
+                          "longitude",
+                          "Country",
+                          "City",
+                          "type"
+                        ],
                         "properties": {
                           "name": {
                             "type": "string",
@@ -1127,7 +1357,9 @@
         "summary": "Owned Reverse Geocoding",
         "description": "Performs reverse geocoding to retrieve nearby locations owned or managed by the service provider, based on geographic coordinates. Supports filtering by place type and level of detail.",
         "deprecated": false,
-        "tags": ["Places"],
+        "tags": [
+          "Places"
+        ],
         "parameters": [
           {
             "name": "lat",
@@ -1211,6 +1443,5 @@
   "components": {
     "schemas": {},
     "securitySchemes": {}
-  },
-  "servers": []
+  }
 }

@@ -1,4 +1,4 @@
-import RadioInputGeocoding from "app/(home)/map-playground/RadioInputGeocoding";
+import RadioInputGeocoding from "app/map-playground/RadioInputGeocoding";
 
 const GeocodingObject = {
   type: "geocoding",
