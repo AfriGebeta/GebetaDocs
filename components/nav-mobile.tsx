@@ -140,17 +140,8 @@ export const navMenu: {
   }[];
 }[] = [
   {
-    name: "home",
-    path: "/",
-  },
-
-  {
     name: "docs",
     path: "/docs",
-  },
-  {
-    name: "authentication",
-    path: "/authentication",
   },
   {
     name: "api playground",
@@ -159,9 +150,5 @@ export const navMenu: {
   {
     name: "map playground",
     path: "/map-playground",
-  },
-  {
-    name: "community",
-    path: "/community",
   },
 ];

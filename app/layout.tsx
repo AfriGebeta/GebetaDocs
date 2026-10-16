@@ -8,11 +8,8 @@ import { NavbarProvider } from "@/components/nav-mobile";
 import { Navbar } from "@/components/ui/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { baseUrl, createMetadata } from "@/lib/metadata";
-import { Plus_Jakarta_Sans } from "next/font/google";
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-});
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 export const metadata = createMetadata({
   title: {
@@ -30,12 +27,17 @@ export default function Layout({ children }: { children: ReactNode }) {
         <title>GebetaMaps Documentation</title>
         <link href="maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
       </head>
-      <body className={`${plusJakarta.className} antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
           <RootProvider
             theme={{
-              enableSystem: true,
-              defaultTheme: "dark",
+              enableSystem: false,
+              defaultTheme: "light",
             }}
           >
             <NavbarProvider>

@@ -39,9 +39,6 @@ export function ThemeToggle(props: ComponentProps<typeof Button>) {
         <DropdownMenuItem className="rounded-none" onClick={() => setTheme("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem className="rounded-none" onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

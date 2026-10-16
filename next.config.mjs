@@ -8,6 +8,13 @@ const config = {
   logging: {
     browserToTerminal: process.env.NODE_ENV === "production",
   },
+  async redirects() {
+    return ["/", "/changelogs/:path*", "/community", "/authentication"].map((source) => ({
+      source,
+      destination: "/docs",
+      permanent: false,
+    }));
+  },
 };
 
 export default withMDX(config);

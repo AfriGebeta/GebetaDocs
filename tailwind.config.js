@@ -1,6 +1,7 @@
 import { createPreset } from "fumadocs-ui/tailwind-plugin";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 import svgToDataUri from "mini-svg-data-uri";
+import gebetaPreset from "./design-kit/tailwind-preset.js";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -13,13 +14,9 @@ export default {
     "./mdx-components.{ts,tsx}",
     "./node_modules/fumadocs-ui/dist/**/*.js",
   ],
-  presets: [createPreset()],
+  presets: [createPreset(), gebetaPreset],
   theme: {
     extend: {
-      fontFamily: {
-        jakarta: ['Plus Jakarta Sans"', "sans-serif"],
-        zendots: ['Zen Dots"', "cursive"],
-      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

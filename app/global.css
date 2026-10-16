@@ -1,6 +1,3 @@
-@import "@fontsource/zen-dots";
-@import "@fontsource-variable/plus-jakarta-sans";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,10 +5,6 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: #c4c4c4 #f1f1f1;
-}
-
-body {
-  font-family: "Plus Jakarta Sans Variable", system-ui;
 }
 
 ::-webkit-scrollbar {
@@ -275,76 +268,190 @@ textarea {
   pointer-events: none;
 }
 
+/* Gebeta design tokens, from design-kit/gebeta-tokens.css (kept in sync with the marketing site). */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 32, 100%, 56%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    color-scheme: light;
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --chart-1: 35 100% 50%;
+    --chart-2: 35 100% 65%;
+    --chart-3: 35 100% 78%;
+    --chart-4: 35 100% 88%;
+    --chart-5: 35 100% 94%;
+    --chart-highlight: 29 100% 48%;
+    --shadow-color: oklch(0 0 0);
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --background: 0 0.0% 98.4%;
+    --foreground: 0 0.0% 8.6%;
+    --card: 0 0.0% 100.0%;
+    --card-foreground: 0 0.0% 8.6%;
+    --popover: 0 0.0% 100.0%;
+    --popover-foreground: 0 0.0% 8.6%;
+    --primary: 39 100.0% 50.0%;
+    --primary-foreground: 36 62.5% 6.3%;
+    --ink: 30 10.0% 9.0%;
+    --ink-foreground: 40 20.0% 98.0%;
+    --secondary: 0 0.0% 100.0%;
+    --secondary-foreground: 0 0.0% 8.6%;
+    --muted: 0 0.0% 94.5%;
+    --muted-foreground: 0 0.0% 42.0%;
+    --accent: 0 0.0% 94.5%;
+    --accent-foreground: 0 0.0% 8.6%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0.0% 100.0%;
+    --border: 0 0.0% 92.5%;
+    --input: 0 0.0% 86.3%;
+    --ring: 0 0.0% 63.9%;
+    --sidebar-background: 0 0.0% 96.5%;
+    --sidebar-foreground: 0 0.0% 42.0%;
+    --sidebar-primary: 0 0.0% 100.0%;
+    --sidebar-primary-foreground: 0 0.0% 8.6%;
+    --sidebar-accent: 0 0.0% 93.7%;
+    --sidebar-accent-foreground: 0 0.0% 8.6%;
+    --sidebar-border: 0 0.0% 91.0%;
+    --sidebar-ring: 0 0.0% 63.9%;
+    --ds-line-strong: 0 0.0% 86.3%;
+    --ds-subtle: 0 0.0% 54.1%;
+    --ds-faint: 0 0.0% 70.2%;
+    --ds-soft: 0 0.0% 32.2%;
+    --ds-chip: 0 0.0% 23.9%;
+    --ds-icon: 218 8.5% 25.3%;
+    --ds-success: 142 76.2% 36.3%;
+    --ds-warning: 32 94.6% 43.7%;
+    --ds-danger: 0 72.2% 50.6%;
+    --ds-trend: 161 93.5% 30.4%;
+    --ds-trend-muted: 153 38.6% 75.1%;
+    --ds-track: 0 0.0% 89.8%;
+    --ds-status: 166 83.8% 33.9%;
+    --ds-raised: 0 0.0% 95.7%;
+    --ds-raised-hover: 0 0.0% 92.2%;
+    --ds-hover: rgba(0, 0, 0, 0.04);
+    --ds-scrollbar: rgba(0, 0, 0, 0.2);
+    --ds-tag-blue-bg: #eff6ff;
+    --ds-tag-blue-border: #bfdbfe;
+    --ds-tag-blue-text: #1d4ed8;
+    --ds-tag-purple-bg: #f5f3ff;
+    --ds-tag-purple-border: #ddd6fe;
+    --ds-tag-purple-text: #6d28d9;
+    --ds-tag-green-bg: #f0fdf4;
+    --ds-tag-green-border: #bbf7d0;
+    --ds-tag-green-text: #15803d;
+    --ds-tag-red-bg: #fef2f2;
+    --ds-tag-red-border: #fecaca;
+    --ds-tag-red-text: #b91c1c;
+    --ds-tag-orange-bg: #fff7ed;
+    --ds-tag-orange-border: #fed7aa;
+    --ds-tag-orange-text: #c2410c;
+    --ds-tag-amber-bg: #fffbeb;
+    --ds-tag-amber-border: #fde68a;
+    --ds-tag-amber-text: #b45309;
+    --ds-tag-teal-bg: #f0fdfa;
+    --ds-tag-teal-border: #99f6e4;
+    --ds-tag-teal-text: #0f766e;
+    --ds-tag-yellow-bg: #fefce8;
+    --ds-tag-yellow-border: #fef08a;
+    --ds-tag-yellow-text: #a16207;
+    --ds-tag-neutral-bg: #f4f4f4;
+    --ds-tag-neutral-border: #e2e2e2;
+    --ds-tag-neutral-text: #3d3d3d;
+    --ds-shadow-overlay: 0px 16px 40px 0px rgba(0, 0, 0, 0.12), 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    --ds-shadow-btn-primary: 0px 1px 2px 0px rgba(150, 70, 0, 0.22), 0px 0px 0px 1px #e58a00, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.12), inset 0px -6px 12px 0px rgba(214, 100, 0, 0.22);
+    --ds-shadow-btn-ink: 0px 1px 2px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 1px hsl(30 10% 9%), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.14);
+    --ds-shadow-btn: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 1px rgba(0, 0, 0, 0.1), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.8);
+    --ds-shadow-btn-subtle: 0px 0px 0px 1px #e2e2e2;
+    --ds-shadow-card: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 0px 0px 1px rgba(0, 0, 0, 0.07);
+    --ds-shadow-badge: 0px 0px 0px 0.5px #d4d4d4;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 32, 100%, 56%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    color-scheme: dark;
+    --background: 0 0.0% 8.6%;
+    --foreground: 220 100.0% 98.8%;
+    --card: 216 8.5% 11.6%;
+    --card-foreground: 220 100.0% 98.8%;
+    --popover: 0 0.0% 8.6%;
+    --popover-foreground: 220 100.0% 98.8%;
+    --primary: 39 100.0% 50.0%;
+    --primary-foreground: 36 62.5% 6.3%;
+    --ink: 40 20.0% 96.0%;
+    --ink-foreground: 30 10.0% 9.0%;
+    --secondary: 0 0.0% 11.8%;
+    --secondary-foreground: 220 100.0% 98.8%;
+    --muted: 0 0.0% 16.5%;
+    --muted-foreground: 0 0.0% 49.8%;
+    --accent: 0 0.0% 16.5%;
+    --accent-foreground: 220 100.0% 98.8%;
+    --destructive: 0 91.8% 71.4%;
+    --destructive-foreground: 0 0.0% 8.6%;
+    --border: 0 0.0% 13.7%;
+    --input: 0 0.0% 22.4%;
+    --ring: 0 0.0% 40.4%;
+    --sidebar-background: 0 0.0% 9.0%;
+    --sidebar-foreground: 0 0.0% 49.8%;
+    --sidebar-primary: 0 0.0% 16.5%;
+    --sidebar-primary-foreground: 220 100.0% 98.8%;
+    --sidebar-accent: 0 0.0% 9.4%;
+    --sidebar-accent-foreground: 220 100.0% 98.8%;
+    --sidebar-border: 0 0.0% 13.7%;
+    --sidebar-ring: 0 0.0% 40.4%;
+    --ds-line-strong: 0 0.0% 22.4%;
+    --ds-subtle: 0 0.0% 40.4%;
+    --ds-faint: 0 0.0% 27.1%;
+    --ds-soft: 0 0.0% 64.3%;
+    --ds-chip: 0 0.0% 81.2%;
+    --ds-icon: 222 16.0% 84.1%;
+    --ds-success: 142 70.6% 45.3%;
+    --ds-warning: 43 96.4% 56.3%;
+    --ds-danger: 0 91.8% 71.4%;
+    --ds-trend: 152 100.0% 35.5%;
+    --ds-trend-muted: 152 24.5% 29.6%;
+    --ds-track: 0 0.0% 22.7%;
+    --ds-status: 166 80.2% 43.5%;
+    --ds-raised: 0 0.0% 13.7%;
+    --ds-raised-hover: 0 0.0% 20.0%;
+    --ds-hover: rgba(255, 255, 255, 0.06);
+    --ds-scrollbar: rgba(255, 255, 255, 0.2);
+    --ds-tag-blue-bg: #1d2b3e;
+    --ds-tag-blue-border: #23354c;
+    --ds-tag-blue-text: #bfdbfe;
+    --ds-tag-purple-bg: #231f3a;
+    --ds-tag-purple-border: #4b437b;
+    --ds-tag-purple-text: #b7aee9;
+    --ds-tag-green-bg: #1f3a2d;
+    --ds-tag-green-border: #275137;
+    --ds-tag-green-text: #b1ebc5;
+    --ds-tag-red-bg: #3e1d1e;
+    --ds-tag-red-border: #4c2324;
+    --ds-tag-red-text: #febfc6;
+    --ds-tag-orange-bg: #3e291d;
+    --ds-tag-orange-border: #764d35;
+    --ds-tag-orange-text: #eeb390;
+    --ds-tag-amber-bg: #31221b;
+    --ds-tag-amber-border: #6c4830;
+    --ds-tag-amber-text: #fed7aa;
+    --ds-tag-teal-bg: #102a27;
+    --ds-tag-teal-border: #3b6149;
+    --ds-tag-teal-text: #22c55e;
+    --ds-tag-yellow-bg: #33301a;
+    --ds-tag-yellow-border: #5a5228;
+    --ds-tag-yellow-text: #fde68a;
+    --ds-tag-neutral-bg: #2a2a2a;
+    --ds-tag-neutral-border: #363636;
+    --ds-tag-neutral-text: #cfcfcf;
+    --ds-shadow-overlay: 0px 16px 40px 0px rgba(0, 0, 0, 0.5), 0px 0px 0px 1px #0e0e0e;
+    --ds-shadow-btn-primary: 0px 4px 4px 0px rgba(0, 0, 0, 0.32), 0px 0px 0px 1px #0e0e0e, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.12), inset 0px -8px 14px 0px rgba(200, 90, 0, 0.28);
+    --ds-shadow-btn-ink: 0px 1px 2px 0px rgba(0, 0, 0, 0.32), 0px 0px 0px 1px rgba(255, 255, 255, 0.9), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.06);
+    --ds-shadow-btn: 0px 0px 0px 1px rgba(0, 0, 0, 0.4), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.1), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.06);
+    --ds-shadow-btn-subtle: 0px 0px 0px 1px #333333;
+    --ds-shadow-card: 0px 4px 4px 0px rgba(42, 42, 42, 0.32), 0px 0px 0px 1px #0e0e0e, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.08), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.08);
+    --ds-shadow-badge: 0px 0px 0px 0.5px #0e0e0e;
   }
 }
 
@@ -360,10 +467,10 @@ textarea {
 
 @layer components {
   .btn-orange {
-    @apply bg-[#FFA500] dark:bg-[#E59400] hover:bg-[#E59400] dark:hover:bg-[#CC8400];
+    @apply bg-primary text-primary-foreground shadow-btn-primary hover:bg-primary/90;
   }
 
   .btn-orange-focus {
-    @apply focus:ring-2 focus:ring-[#FFA500]/50;
+    @apply focus:ring-2 focus:ring-primary/50;
   }
 }

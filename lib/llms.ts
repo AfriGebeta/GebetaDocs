@@ -58,7 +58,6 @@ export function generateLlmsIndex(): string {
     "",
     `- API Playground: ${toAbsoluteUrl("/api-playground")}`,
     `- Map Playground: ${toAbsoluteUrl("/map-playground")}`,
-    `- Changelogs: ${toAbsoluteUrl("/changelogs")}`,
     ""
   );
 

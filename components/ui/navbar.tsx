@@ -53,7 +53,7 @@ export const Navbar = () => {
     <div className="flex flex-col sticky top-0 bg-background backdrop-blur-md z-30">
       <nav className="md:grid grid-cols-12 md:border-b top-0 flex items-center justify-between ">
         <Link
-          href="/"
+          href="/docs"
           className="md:px-5 px-2.5 py-4 text-foreground md:col-span-2 shrink-0 transition-colors md:w-[268px] lg:w-[286px]"
         >
           <div className="flex flex-col gap-2 w-full">
@@ -95,10 +95,6 @@ export const Navbar = () => {
 
 export const navMenu = [
   {
-    name: "home",
-    path: "/",
-  },
-  {
     name: "docs",
     path: "/docs",
   },
@@ -109,14 +105,5 @@ export const navMenu = [
   {
     name: "map playground",
     path: "/map-playground",
-  },
-
-  {
-    name: "changelogs",
-    path: "/changelogs",
-  },
-  {
-    name: "community",
-    path: "/community",
   },
 ];
