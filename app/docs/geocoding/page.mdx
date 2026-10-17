@@ -1,0 +1,106 @@
+---
+title: Geocoding API
+description: Turn place names into coordinates, and coordinates back into place names.
+order: 2
+icon: pin
+---
+
+# Geocoding API
+
+The Geocoding API works in both directions. Forward geocoding takes text like `Bole Road` and returns where it is. Reverse geocoding takes a point like `9.0192, 38.7578` and returns what is there, from a single address up to the city and country around it.
+
+<Cards>
+  <Card
+    title="Forward geocoding"
+    description="Search by name or address and get coordinates back."
+    href="/geocoding/geocoding-forward"
+  />
+  <Card
+    title="Reverse geocoding"
+    description="Send coordinates and get the place or address at that point."
+    href="/geocoding/geocoding-reverse"
+  />
+</Cards>
+
+## When to use it
+
+<Cards>
+  <Card icon={<MagnifyingGlassIcon />} title="Search boxes">
+    Turn what a user types into a point on the map, with autocomplete as they type.
+  </Card>
+  <Card icon={<SewingPinIcon />} title="Labels">
+    Show a readable address for a tapped point, a driver's location or a photo's coordinates.
+  </Card>
+  <Card icon={<BorderAllIcon />} title="Boundaries">
+    Find which city, region or country a point belongs to.
+  </Card>
+  <Card icon={<RulerHorizontalIcon />} title="Distances">
+    Geocode two places, then pass the coordinates to the [Directions](/direction) or
+    [Matrix](/matrix) API.
+  </Card>
+</Cards>
+
+## Feature types
+
+Results can be any of these feature types, from largest to smallest:
+
+| Type           | What it covers                                              |
+| -------------- | ----------------------------------------------------------- |
+| `country`      | Countries, such as Ethiopia.                                |
+| `region`       | Top-level regions, such as Oromia or Amhara.                |
+| `place`        | Cities, towns, villages and municipalities.                 |
+| `locality`     | Official parts of a city, such as sub-cities and districts. |
+| `neighborhood` | Informal areas and local quarters.                          |
+| `street`       | Streets with one or more addresses, such as Bole Road.      |
+| `address`      | A single home, business or point of interest.               |
+
+## Response
+
+Both directions return the same shape: the query you sent, and a list of matching features.
+
+```json
+{
+  "data": {
+    "query": "Bole Road",
+    "results": [
+      {
+        "id": "way:123456",
+        "name": "Bole Road",
+        "display_name": "Bole Road, Addis Ababa, Ethiopia",
+        "category": "highway",
+        "location": { "lat": 9.019185, "lng": 38.757812 },
+        "address": {
+          "city": "Addis Ababa",
+          "country": "Ethiopia",
+          "country_code": "ETH"
+        }
+      }
+    ]
+  }
+}
+```
+
+| Field                  | Type     | Description                                                                                            |
+| ---------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `data.query`           | `string` | The search text or coordinates you sent.                                                               |
+| `data.results`         | `array`  | Matching features. Forward results are sorted by relevance and distance, reverse results by proximity. |
+| `id`                   | `string` | A unique ID for the feature.                                                                           |
+| `name`                 | `string` | The feature's main name.                                                                               |
+| `display_name`         | `string` | The full label, combining the name, city and country.                                                  |
+| `category`             | `string` | What kind of feature it is, such as `highway`, `shop` or `amenity`.                                    |
+| `location.lat`         | `number` | Latitude of the feature's center.                                                                      |
+| `location.lng`         | `number` | Longitude of the feature's center.                                                                     |
+| `address.city`         | `string` | City, zone or locality.                                                                                |
+| `address.country`      | `string` | Country name.                                                                                          |
+| `address.country_code` | `string` | ISO country code, such as `ETH`.                                                                       |
+
+## Errors
+
+| Status | Body                                                                      | Cause                                                                    |
+| ------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `422`  | `{ "query": { "apiKey": ["missing api key"] } }`                          | No API key in the query string or `Authorization` header.                |
+| `422`  | `{ "query": { "limit": ["limit must be a number"] } }`                    | `limit` was sent but isn't a number.                                     |
+| `422`  | `{ "query": { "body": ["..."] } }`                                        | Another parameter is invalid, such as a malformed `bbox` or `proximity`. |
+| `400`  | `{ "error": { "status": 400, "code": "BAD_REQUEST", "message": "..." } }` | Reverse geocoding: `lat` or `lon` is missing, invalid or out of range.   |
+| `500`  | `{ "error": { "status": "500", "code": "HE00001", "message": "..." } }`   | An unexpected error in the geocoding service. Retry the request.         |
+| `500`  | `{ "error": { "status": "500", "code": "HE00002", "message": "..." } }`   | The service couldn't reach a backend it depends on. Retry the request.   |

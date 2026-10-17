@@ -1,58 +1,46 @@
 ---
 title: Embed Map
-description: Learn how to generate a shareable, embeddable map iframe from the Gebeta Maps dashboard with markers, bounding box restrictions, and a one-line paste into your site.
+description: Put an interactive Gebeta map on any website with one iframe, set up from the dashboard.
+order: 12
+icon: map
 ---
 
-Gebeta Maps lets you embed a fully interactive map on any website with a single `<iframe>` tag. No API key exposed, no SDK to install on the host site just a secure, token-protected URL you generate from the dashboard.
+# Embed Map
 
-This guide walks through the entire flow from the dashboard to a live embed.
+You can put an interactive Gebeta map on any website with a single `<iframe>`. You set it up in the dashboard, with a center, markers and an optional boundary, and get a snippet to paste. There's no SDK to install, and no API key in the page.
 
-## Prerequisites
+## Before you start
 
-Before you start, you need two things from your Gebeta service account:
+You need two tokens from a service account in your dashboard, under **Service Accounts**:
 
-- **Server Token** — generated with Admin ON
-- **Client Token** — generated with Admin OFF
+- **Server token:** created with Admin on.
+- **Client token:** created with Admin off.
 
-You can find both in your Gebeta developer dashboard under **Service Accounts**.
+## Set up the map
 
-## Step 1 — Open the Map Embed Page
+### 1. Open Map Embed
 
-In your dashboard, navigate to **Map Embed** from the sidebar. You'll land on a configuration page with two token inputs and an interactive map below.
+In the dashboard sidebar, go to **Map Embed**. The page has two token fields and a map.
 
-## Step 2 — Load the Map
+### 2. Load the map
 
-Paste your **Server Token** and **Client Token** into their respective fields, then click **Load Map to Configure**.
+Paste your server and client tokens, then click **Load Map to Configure**. The map opens on Addis Ababa at zoom 13, with a blue dot marking the center.
 
-The map will initialize centered on Addis Ababa at zoom 13. Once it loads you'll see a blue dot that's your draggable center marker.
+### 3. Set the center
 
-## Step 3 — Set the Map Center
+**Set Center** mode is on by default. Click the map, or drag the blue dot, to move the center. This is where the embed opens. The coordinates update below the map as you move it.
 
-By default the **Set Center** mode is active. Click anywhere on the map to move the center to that location, or drag the blue dot directly to reposition it. The coordinates update live below the map.
+### 4. Add markers (optional)
 
-The center you set is where the embed will open when someone loads it.
+Switch to **Drop Marker** in the toolbar and click the map to place orange markers, as many as you need. Each one appears in a list below the map, where you can give it a label. The label shows in a popup when someone clicks the marker. Click the trash icon to remove one.
 
-## Step 4 — Drop Markers (Optional)
+### 5. Limit the area (optional)
 
-Switch to **Drop Marker** mode using the toolbar above the map. Click any location to place an orange marker there. You can place as many as you need.
+To keep people within one city, campus or venue, click **Draw Bounds** and then click two opposite corners on the map. A dashed box shows the area. People can't pan outside it, and the minimum zoom is set so they can't zoom out past it. **Clear Bounds** removes it.
 
-After dropping markers, a list appears below the map where you can add a label to each one. Labels show up as popups when a user clicks the marker in the embed.
+### 6. Generate the embed
 
-To remove a marker, click the trash icon next to it in the list.
-
-## Step 5 — Draw a Bounding Box (Optional)
-
-If you want to restrict users from panning or zooming outside a specific area — useful for embedding a map of a single city, campus, or venue use the **Draw Bounds** button.
-
-Click it, then click two opposite corners on the map to define the rectangle. A dashed overlay will appear showing the restricted area. Users of the embed won't be able to pan outside this box, and the minimum zoom is automatically set so they can't zoom out past it either.
-
-To remove the restriction, click **Clear Bounds**.
-
-## Step 6 — Generate the Embed
-
-Once you're happy with the configuration, click **Generate Embed**.
-
-The page will scroll down to show a live preview of your embed and the iframe snippet ready to copy:
+Click **Generate Embed**. The page shows a live preview and the snippet to copy:
 
 ```html
 <iframe
@@ -65,18 +53,20 @@ The page will scroll down to show a live preview of your embed and the iframe sn
 ></iframe>
 ```
 
-The `t` parameter is an encrypted token that contains your map configuration. It does not expose your server or client tokens it is safe to paste publicly in any HTML page.
+<Callout title="Safe to publish">
+  The `t` parameter is an encrypted copy of your map settings. It doesn't contain your server or
+  client token, so the snippet is safe to put on a public page.
+</Callout>
 
-## Step 7 Paste It Anywhere
+## Add it to your site
 
-Copy the snippet and paste it into any HTML file, CMS, blog post, or website builder that accepts raw HTML. The map will render with your configured center, zoom, markers, and bounds no additional setup required on the host site.
+Paste the snippet into any page, CMS or site builder that accepts HTML. Set `width="100%"` to fill the space it's in:
 
 ```html
-<!-- Example: adding the embed to a plain HTML page -->
 <!DOCTYPE html>
 <html>
   <body>
-    <h1>Find Us</h1>
+    <h1>Find us</h1>
     <iframe
       src="https://maps.gebeta.app/embed/map?t=eyJ..."
       width="100%"
@@ -89,17 +79,17 @@ Copy the snippet and paste it into any HTML file, CMS, blog post, or website bui
 </html>
 ```
 
-## What the Embed Supports
+## What the embed includes
 
-| Feature             | Details                                             |
-| ------------------- | --------------------------------------------------- |
-| Center & zoom       | Saved from your configuration session               |
-| Markers             | Up to any number, each with an optional label popup |
-| Bounding box        | Hard panning and zoom-out restriction               |
-| Navigation controls | Zoom in/out buttons built in                        |
-| "View larger map"   | Opens the full Gebeta Maps app at the same location |
-| Token security      | No raw credentials in the iframe URL                |
+| Feature         | Details                                                  |
+| --------------- | -------------------------------------------------------- |
+| Center and zoom | Where you set them in the dashboard.                     |
+| Markers         | As many as you added, each with an optional label popup. |
+| Bounds          | A hard limit on panning and zooming out.                 |
+| Zoom buttons    | Built in.                                                |
+| View larger map | Opens the full Gebeta Maps app at the same place.        |
+| Security        | No tokens or keys in the iframe URL.                     |
 
-## Regenerating an Embed
+## Change an embed
 
-The embed URL is tied to a snapshot of your configuration at generation time. If you want to update the center, add markers, or change the bounds, go back to the Map Embed page, reconfigure, and click **Generate Embed** again to get a new URL.
+An embed is a snapshot of the settings when you generated it. To change the center, markers or bounds, set the map up again in **Map Embed** and generate a new snippet to replace the old one.

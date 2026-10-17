@@ -1,79 +1,57 @@
 ---
 title: Map Matching API
-description: A service that snaps GPS coordinates to the road network, providing accurate route reconstruction from noisy GPS data.
+description: Snap a noisy GPS trace to the roads it was actually driven on.
+order: 7
+icon: waypoints
 ---
 
-## Overview
+# Map Matching API
 
-The Map Matching API takes a series of GPS coordinates and matches them to the most likely path on the road network. This is particularly useful for cleaning up GPS traces that may have inaccuracies due to signal interference or device limitations.
+GPS points drift. A phone in a moving car can report positions in buildings, on the wrong side of the road or off the road entirely. The Map Matching API takes a trace of GPS points, works out which roads were most likely driven, and returns a clean path along them with its total distance.
 
-## Key Features
-
-- **GPS Trace Correction**: Automatically corrects GPS drift and inaccuracies
-- **Road Network Snapping**: Matches coordinates to actual road segments
-- **Route Reconstruction**: Rebuilds the most probable path taken
-- **Configurable Radius**: Adjust the search radius for matching
-
-## Use Cases
+## When to use it
 
 <Cards>
-  <Card title="GPS Trace Correction" description="Clean up GPS tracking data from mobile devices to remove drift and inaccuracies." icon="">
+  <Card icon={<MagicWandIcon />} title="Cleaning traces">
+    Remove drift from tracking data before you show it or store it.
   </Card>
-
-<Card
-  title="Route Reconstruction"
-  description="Reconstruct delivery or service routes from GPS logs for accurate analysis."
-  icon=""
-></Card>
-
-<Card
-  title="Movement Analysis"
-  description="Analyze vehicle movement patterns on road networks for optimization insights."
-  icon=""
-></Card>
-
-  <Card title="Location Analytics" description="Improve accuracy of location-based analytics by snapping coordinates to actual roads." icon="">
+  <Card icon={<CounterClockwiseClockIcon />} title="Rebuilding trips">
+    Reconstruct the route a delivery or service vehicle took from its GPS log.
+  </Card>
+  <Card icon={<RulerHorizontalIcon />} title="Accurate distances">
+    Measure the distance driven along roads instead of between noisy points.
+  </Card>
+  <Card icon={<ActivityLogIcon />} title="Movement analysis">
+    Find which roads your vehicles actually use.
   </Card>
 </Cards>
 
-## Usage
+## Request
 
 ```bash
-curl https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&apiKey={your-api-key}&radius=1
+GET https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&radius=1&apiKey={your-api-key}
 ```
 
-## Request Parameters
+| Parameter | Type     | Required | Description                                                         |
+| --------- | -------- | -------- | ------------------------------------------------------------------- |
+| `path`    | `string` | Yes      | The GPS points in the order they were recorded, as `[{lat,lng},…]`. |
+| `radius`  | `number` | Yes      | How far from each point, in meters, to look for a road.             |
+| `apiKey`  | `string` | Yes      | Your Gebeta Maps API key.                                           |
 
-| Parameter | Type     | Description                                                            | Required |
-| --------- | -------- | ---------------------------------------------------------------------- | -------- |
-| `path`    | `array`  | Array of coordinate objects in format `[{lat,lng},{lat,lng}]`          | `yes`    |
-| `apiKey`  | `string` | Your API key for accessing Gebeta Maps                                 | `yes`    |
-| `radius`  | `number` | Search radius in meters for matching coordinates to roads (default: 1) | `yes`    |
-
-## Response Codes
-
-<br />
-
-| Status Code | Message                          | Description                                                                               |
-| ----------- | -------------------------------- | ----------------------------------------------------------------------------------------- |
-| `200`       | `OK`                             | The request was successful. The system matched the path and returned the corrected route. |
-| `404`       | `NoRoute`                        | No matching route found for the provided coordinates.                                     |
-| `401`       | `Not Authorized - No Token`      | Authentication failed. No valid token was provided.                                       |
-| `401`       | `Not Authorized - Invalid Token` | The authentication token provided is either invalid or expired.                           |
-| `422`       | `InvalidInput`                   | The request parameters are incorrect. Review the input values and adjust as needed.       |
-
-## Request Example
+## Example
 
 ```bash
-curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&apiKey={your-api-key}&radius=1'
+curl -g "https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&radius=1&apiKey={your-api-key}"
 ```
 
-## Success Response Example
+<Callout title="Use -g with curl">
+  The brackets in `path` are curl's URL pattern syntax. `-g` turns that off so the URL is sent as
+  written.
+</Callout>
 
-<Accordions>
-<Accordion title="Success Response">
+## Response
 
-```
+```json
 {
   "coordinates": [
     [9.019822, 38.74364],
@@ -87,18 +65,21 @@ curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?
   ],
   "distance": 288.5191
 }
-
 ```
 
-</Accordion>
-</Accordions>
+| Field         | Description                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------- |
+| `coordinates` | The matched path as `[lat, lng]` points along the road. It can have more points than you sent, at turns. |
+| `distance`    | Length of the matched path.                                                                              |
 
-## Error Response Example
+## Errors
 
-<br />
-
-<Accordions>
-<Accordion title="Error Response">
+| Status | Message                          | What to do                                                           |
+| ------ | -------------------------------- | -------------------------------------------------------------------- |
+| `401`  | `Not Authorized - No Token`      | Add your API key as the `apiKey` parameter.                          |
+| `401`  | `Not Authorized - Invalid Token` | The key is wrong or expired. Copy a current key from your dashboard. |
+| `404`  | `NoRoute`                        | No road matches the trace. Check the points or increase `radius`.    |
+| `422`  | `InvalidInput`                   | Check that `path` is `[{lat,lng},…]` and `radius` is a number.       |
 
 ```json
 {
@@ -109,8 +90,3 @@ curl --location -g --request GET 'https://mapapi.gebeta.app/api/route/matching/?
   }
 }
 ```
-
-</Accordion>
-</Accordions>
-
-<br />

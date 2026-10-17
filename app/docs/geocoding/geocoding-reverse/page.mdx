@@ -1,40 +1,52 @@
 ---
 title: Reverse Geocoding
-description: Retrieve place names and address details from geographic coordinates, returning an array of matching locations.
+description: Send coordinates and get back the place or address at that point.
+order: 2
 ---
 
-## Reverse geocoding
+# Reverse Geocoding
 
-`GET https://mapapi.gebeta.app/v2/search/reverse-geocoding?lon={longitude}&lat={latitude}`
+Reverse geocoding takes a latitude and longitude and returns what is there: the nearest address, street or place, with its city and country.
 
-The reverse geocoding query type allows you to look up a pair of coordinates and returns the geographic features at that location.
+## Request
 
-### Required parameters
+```bash
+GET https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat={latitude}&lon={longitude}&apiKey={your-api-key}
+```
 
-| Required parameters | Type     | Description                                                                                                              |
-| :------------------ | :------- | :----------------------------------------------------------------------------------------------------------------------- |
-| **lat**             | `number` | The latitude decimal value from the geographic coordinate. Range: `-90` to `90`.                                         |
-| **lon**             | `number` | The longitude decimal value from the geographic coordinate. Range: `-180` to `180`.                                      |
-| **apiKey**          | `string` | A valid Gebeta API access token. Can also be supplied in the HTTP request as an `Authorization: Bearer <apiKey>` header. |
+| Parameter | Type     | Required | Description                                                                                |
+| --------- | -------- | -------- | ------------------------------------------------------------------------------------------ |
+| `lat`     | `number` | Yes      | Latitude, from `-90` to `90`.                                                              |
+| `lon`     | `number` | Yes      | Longitude, from `-180` to `180`.                                                           |
+| `apiKey`  | `string` | Yes      | Your API key. You can send it as an `Authorization: Bearer {your-api-key}` header instead. |
 
 ### Optional parameters
 
-| Optional parameters | Type      | Description                                                                                            |
-| :------------------ | :-------- | :----------------------------------------------------------------------------------------------------- |
-| **size**            | `integer` | Specify the maximum number of results to return. Default: `1`. Allowed range: `1` to `5`.              |
-| **category**        | `string`  | Filter results to include only a subset of feature categories. Comma-separated list of category terms. |
+| Parameter  | Type      | Description                                                   |
+| ---------- | --------- | ------------------------------------------------------------- |
+| `size`     | `integer` | How many results to return, from `1` to `5`. Defaults to `1`. |
+| `category` | `string`  | Only return these categories, as a comma-separated list.      |
 
-### Example requests
+## Examples
+
+<Tabs items={["Nearest place", "Several places"]}>
+<Tab value="Nearest place">
 
 ```bash
-# A basic reverse geocoding request
-curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&apiKey=YOUR_API_KEY"
-
-# Retrieve places near a specific location filtered by size
-curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&size=3&apiKey=YOUR_API_KEY"
+curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&apiKey={your-api-key}"
 ```
 
-### Response
+</Tab>
+<Tab value="Several places">
+
+```bash
+curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.7578&size=3&apiKey={your-api-key}"
+```
+
+</Tab>
+</Tabs>
+
+## Response
 
 ```json
 {
@@ -46,10 +58,7 @@ curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.75
         "name": "Bole Road",
         "display_name": "Bole Road, Addis Ababa, Ethiopia",
         "category": "highway",
-        "location": {
-          "lat": 9.019185,
-          "lng": 38.757812
-        },
+        "location": { "lat": 9.019185, "lng": 38.757812 },
         "address": {
           "city": "Addis Ababa",
           "country": "Ethiopia",
@@ -60,3 +69,5 @@ curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.75
   }
 }
 ```
+
+Results are sorted by distance from the point you sent. Every field is described in the [Geocoding overview](/geocoding#response), along with the [errors](/geocoding#errors) you can get back.

@@ -1,0 +1,66 @@
+---
+title: Map Tiles
+description: Vector map tiles with local data, and SDKs to show them on the web and on mobile.
+order: 11
+icon: layers
+---
+
+# Map Tiles
+
+Gebeta map tiles are detailed vector maps with strong local coverage, ready to drop into a web or mobile app. The SDKs handle the map itself and add what most apps need on top: markers, clustering, routes and shapes, all styled to fit your design.
+
+|            Web             |              Mobile              |
+| :------------------------: | :------------------------------: |
+| ![Web map](/tiles/web.png) | ![Mobile map](/tiles/mobile.png) |
+
+## Features
+
+<Cards>
+  <Card icon={<GlobeIcon />} title="Local detail">
+    Rich local data, down to streets, places and points of interest.
+  </Card>
+  <Card icon={<BlendingModeIcon />} title="Styles">
+    Standard, satellite and terrain styles, or customize the look to match your brand.
+  </Card>
+  <Card icon={<DrawingPinIcon />} title="Markers">
+    Interactive markers with your own images and click handlers.
+  </Card>
+  <Card icon={<GroupIcon />} title="Clustering">
+    Group nearby markers automatically so busy maps stay readable.
+  </Card>
+  <Card icon={<Pencil1Icon />} title="Shapes">
+    Draw routes as lines, and areas as polygons or circles.
+  </Card>
+  <Card icon={<LightningBoltIcon />} title="Fast">
+    Tile delivery is optimized for smooth panning and zooming.
+  </Card>
+</Cards>
+
+## Choose an SDK
+
+<Cards>
+  <Card
+    title="JavaScript"
+    description="@gebeta/js for any web page, built on MapLibre GL JS."
+    href="/tiles/js"
+  />
+  <Card
+    title="React"
+    description="@gebeta/react, a component that manages the map for you."
+    href="/tiles/react"
+  />
+  <Card
+    title="React Native"
+    description="@gebeta/tiles-react-native for iOS and Android, with navigation."
+    href="/tiles/react-native"
+  />
+  <Card
+    title="Flutter"
+    description="Native Flutter widgets for iOS and Android."
+    href="/tiles/flutter"
+  />
+</Cards>
+
+## Try it
+
+The [Tiles playground](https://playground.tiles.gebeta.app/) lets you try styles, markers and shapes in the browser before you write any code.

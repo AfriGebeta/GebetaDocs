@@ -1,118 +1,34 @@
 ---
 title: Tracking API
-description: Real-Time Vehicle & Asset Location Streaming via WebSockets
+description: Stream live driver locations to your office or dispatch screen over a WebSocket.
+order: 10
+icon: radio
 ---
 
-## **Overview**
+# Tracking API
 
-<br />
+The Tracking API streams live locations over one WebSocket connection. Drivers send their position every few seconds, and offices subscribe to one driver or the whole fleet and get each update as it arrives. Use it for fleet maps, delivery tracking and dispatch screens.
 
-The Tracking API enables real-time location streaming between drivers (or mobile agents) and offices (or control centers) using secure WebSocket connections.
+## How it works
 
-This API is designed for fleet tracking, delivery monitoring, dispatch systems, and live map visualization, allowing multiple roles to communicate through a single persistent connection.
+1. A client connects to `wss://track.gebeta.app/v1/track` and authenticates as a `driver` or an `office`.
+2. Drivers send `driver_location` messages while they're moving.
+3. Offices send `subscribe` for the drivers they want, then receive a `location_update` for every position those drivers send.
 
-With support for authentication, subscriptions, and continuous location updates, the Tracking API ensures low-latency, scalable, and reliable tracking across your organization.
+| Role     | What it does                      |
+| -------- | --------------------------------- |
+| `driver` | Sends its own location updates.   |
+| `office` | Subscribes to drivers' locations. |
 
-<br />
+Offices only ever receive locations from drivers in their own company.
 
----
-
-<br />
-
-## **Key Features**
-
-<br />
-
-- 🚗 **Real-time driver location updates**
-
-- 🏢 **Office subscriptions to specific drivers or all drivers**
-
-- 📡 **Low-latency WebSocket streaming**
-
-<br />
-
----
-
-<br />
-
-## **Connection Endpoint**
+## Connect and authenticate
 
 ```bash
 wss://track.gebeta.app/v1/track
 ```
 
-<br />
-
----
-
-<br />
-
-## **Roles**
-
-<br />
-
-| **Role** | **Description**                |
-| -------- | ------------------------------ |
-| `driver` | Sends live location updates    |
-| `office` | Subscribes to driver locations |
-
-<br />
-
----
-
-<br />
-
-## **Use Cases**
-
-<br />
-
-<Cards>
-  <Card title="Fleet Tracking" description="Monitor all active drivers in real time from a central office dashboard." icon="🚚">
-    - Live vehicle movement on maps
-    - Instant visibility into fleet status
-    - Improved operational awareness
-  </Card>
-
-<Card
-  title="Delivery Monitoring"
-  description="Track individual delivery drivers to ensure accurate ETAs and route compliance."
-  icon="📦"
->
-  - Subscribe to specific drivers - Detect delays or route deviations - Improve customer
-  satisfaction
-</Card>
-
-<Card
-  title="Dispatch & Control Centers"
-  description="Allow offices to observe and manage driver activity efficiently."
-  icon="🏢"
->
-  - Subscribe to all drivers or selected drivers - Real-time decision making - Seamless coordination
-  between teams
-</Card>
-
-  <Card title="Live Map Visualization" description="Integrate real-time location data into web or mobile maps." icon="🗺️">
-    - Smooth marker updates
-    - Accurate vehicle positioning
-    - Enhanced user experience
-  </Card>
-</Cards>
-
-<br />
-
----
-
-<br />
-
-## **Authentication Flow**
-
-<br />
-
-All clients must authenticate immediately after connection.
-
-### **Authenticate Message**
-
-<br />
+Send this as the first message after the connection opens:
 
 ```json
 {
@@ -125,33 +41,15 @@ All clients must authenticate immediately after connection.
 }
 ```
 
-<br />
+| Field     | Type     | Required | Description                            |
+| --------- | -------- | -------- | -------------------------------------- |
+| `user_id` | `string` | Yes      | A unique ID for this driver or office. |
+| `role`    | `string` | Yes      | `driver` or `office`.                  |
+| `token`   | `string` | Yes      | A valid JWT access token.              |
 
-### **Parameters**
+The connection closes when the token expires, so reconnect with a fresh token.
 
-<br />
-
-| Field     | Type     | Description                   | Required |
-| --------- | -------- | ----------------------------- | -------- |
-| `user_id` | `string` | Unique identifier of the user | `yes`    |
-| `role`    | `string` | `driver` or `office`          | `yes`    |
-| `token`   | `string` | Valid JWT access token        | `yes`    |
-
-<br />
-
----
-
-<br />
-
-## **Driver: Sending Location Updates**
-
-<br />
-
-Once authenticated, a driver can continuously send location updates.
-
-### **Location Update Message**
-
-<br />
+## Send locations (drivers)
 
 ```json
 {
@@ -166,67 +64,33 @@ Once authenticated, a driver can continuously send location updates.
 }
 ```
 
-<br />
+| Field     | Type     | Description                          |
+| --------- | -------- | ------------------------------------ |
+| `lat`     | `number` | Latitude.                            |
+| `lng`     | `number` | Longitude.                           |
+| `speed`   | `number` | Speed in km/h.                       |
+| `bearing` | `number` | Heading in degrees, `0` being north. |
 
-### **Payload Fields**
+<Callout title="Update every 2–5 seconds">
+  That keeps markers moving smoothly without wasting battery or data. The server accepts at most one
+  update per second per driver.
+</Callout>
 
-<br />
+## Subscribe (offices)
 
-| Field     | Type     | Description          |
-| --------- | -------- | -------------------- |
-| `lat`     | `number` | Latitude             |
-| `lng`     | `number` | Longitude            |
-| `speed`   | `number` | Speed (km/h)         |
-| `bearing` | `number` | Direction in degrees |
-
-<br />
-📌 **Recommended update interval:** 2–5 seconds
-
-<br />
-
----
-
-<br />
-
-## **Office: Subscribing to Drivers**
-
-<br />
-
-Offices can subscribe to specific drivers or all drivers.
-
-<br />
-
-### **Subscribe to a Specific Driver**
+To follow one driver:
 
 ```json
-{
-  "action": "subscribe",
-  "entity": "driver:DR_1"
-}
+{ "action": "subscribe", "entity": "driver:DR_1" }
 ```
 
-<br />
-
-### **Subscribe to All Drivers in the Company**
+To follow every driver in your company:
 
 ```json
-{
-  "action": "subscribe",
-  "entity": "company:drivers"
-}
+{ "action": "subscribe", "entity": "company:drivers" }
 ```
 
-<br />
-
----
-
-<br />
-
-## **Receiving Location Updates (Office)**
-
-<br />
-
-Subscribed offices receive real-time updates in the following format:
+Each location a subscribed driver sends then arrives as:
 
 ```json
 {
@@ -241,130 +105,89 @@ Subscribed offices receive real-time updates in the following format:
 }
 ```
 
-<br />
+## Keep the connection alive
 
----
-
-<br />
-
-## **Heartbeat (Ping / Pong)**
-
-<br />
-
-The server may send WebSocket ping frames to ensure connection health.
-
-Clients must respond with pong:
+The server sends WebSocket ping frames to check the connection. Answer each with a pong. Browsers do this for you; in Node.js with `ws`:
 
 ```javascript
-ws.on("ping", () => {
-  ws.pong();
-});
+ws.on("ping", () => ws.pong());
 ```
 
-<br />
+## Examples
 
----
+<Tabs items={["Driver (Node.js)", "Office (Node.js)"]}>
+<Tab value="Driver (Node.js)">
 
-<br />
-
-## **Example Implementations**
-
-<br />
-
-<Tabs items={['JavaScript (Driver)', 'JavaScript (Office)']}>
-  <Tab value="JavaScript (Driver)">
-  ```javascript
-  const WebSocket = require("ws");
-  const ws = new WebSocket("wss://track.gebeta.app/v1/track");
-
-ws.on("open", () => {
-ws.send(JSON.stringify({
-action: "authenticate",
-payload: {
-user_id: "DR_1",
-role: "driver",
-token: "<JWT_TOKEN>"
-}
-}));
-
-    setInterval(() => {
-      ws.send(JSON.stringify({
-        action: "driver_location",
-        id: "DR_1",
-        payload: {
-          lat: 9.01 + Math.random() * 0.01,
-          lng: 38.70 + Math.random() * 0.01,
-          speed: 12,
-          bearing: 90
-        }
-      }));
-    }, 3000);
-
-});
-
-````
-</Tab>
-
-<Tab value="JavaScript (Office)">
 ```javascript
-const WebSocket = require("ws");
+import WebSocket from "ws";
+
 const ws = new WebSocket("wss://track.gebeta.app/v1/track");
 
 ws.on("open", () => {
-  ws.send(JSON.stringify({
-    action: "authenticate",
-    payload: {
-      user_id: "office_1",
-      role: "office",
-      token: "<JWT_TOKEN>"
-    }
-  }));
+  ws.send(
+    JSON.stringify({
+      action: "authenticate",
+      payload: { user_id: "DR_1", role: "driver", token: "<JWT_TOKEN>" },
+    })
+  );
 
-  ws.send(JSON.stringify({
-    action: "subscribe",
-    entity: "driver:DR_1"
-  }));
+  setInterval(() => {
+    ws.send(
+      JSON.stringify({
+        action: "driver_location",
+        id: "DR_1",
+        payload: { lat: 9.01234, lng: 38.70321, speed: 12, bearing: 90 },
+      })
+    );
+  }, 3000);
 });
 
-ws.on("message", msg => {
-  console.log("UPDATE:", JSON.parse(msg));
-});
-````
+ws.on("ping", () => ws.pong());
+```
 
-  </Tab>
+</Tab>
+<Tab value="Office (Node.js)">
+
+```javascript
+import WebSocket from "ws";
+
+const ws = new WebSocket("wss://track.gebeta.app/v1/track");
+
+ws.on("open", () => {
+  ws.send(
+    JSON.stringify({
+      action: "authenticate",
+      payload: { user_id: "office_1", role: "office", token: "<JWT_TOKEN>" },
+    })
+  );
+
+  ws.send(JSON.stringify({ action: "subscribe", entity: "driver:DR_1" }));
+});
+
+ws.on("message", (message) => {
+  const update = JSON.parse(message);
+  if (update.type === "location_update") {
+    console.log(update.id, update.payload.lat, update.payload.lng);
+  }
+});
+
+ws.on("ping", () => ws.pong());
+```
+
+</Tab>
 </Tabs>
 
-<br />
+## Errors
 
----
+| Error           | Cause                                                                   |
+| --------------- | ----------------------------------------------------------------------- |
+| `Unauthorized`  | The token is missing, invalid or expired.                               |
+| `InvalidAction` | `action` isn't one of `authenticate`, `driver_location` or `subscribe`. |
+| `Forbidden`     | The subscription is for a driver outside your company.                  |
+| `BadPayload`    | A required field is missing or has the wrong type.                      |
 
-<br />
+## Limits
 
-## **Error Handling**
-
-<br />
-
-| Error           | Description                 |
-| --------------- | --------------------------- |
-| `Unauthorized`  | Invalid or missing token    |
-| `InvalidAction` | Unsupported action type     |
-| `Forbidden`     | Unauthorized subscription   |
-| `BadPayload`    | Missing or malformed fields |
-
-<br />
-
----
-
-<br />
-
-## **Limits & Restrictions**
-
-<br />
-
-- 🔄 **Max connections:** Configurable per company
-
-- 📡 **Location update rate:** Max 1 update per second per driver
-
-- 🔐 **Token expiration:** Connections close automatically on expiry
-
-- 🏢 **Company isolation:** Offices only receive data from their company
+- **Update rate:** At most one location per second per driver.
+- **Connections:** The maximum number of open connections is set per company.
+- **Tokens:** Connections close when their token expires.

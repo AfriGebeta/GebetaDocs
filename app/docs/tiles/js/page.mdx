@@ -1,11 +1,14 @@
 ---
 title: JavaScript SDK
-description: Initialize interactive maps with @gebeta/js and @gebeta/react — configure styles, controls, and access the underlying MapLibre instance.
+description: Show Gebeta maps on any web page with @gebeta/js, and drop down to MapLibre when you need to.
+order: 1
 ---
 
-## Map Setup
+# JavaScript SDK
 
-### Basic map
+`@gebeta/js` puts a Gebeta map on any web page. It's built on MapLibre GL JS, so everything MapLibre can do is still available. Using React? See the [React SDK](/tiles/react).
+
+## Create a map
 
 ```javascript
 import { GebetaMaps } from "@gebeta/js";
@@ -15,53 +18,46 @@ const gebetaMap = new GebetaMaps({
 });
 
 const map = gebetaMap.init({
-  container: "map", // DOM element ID or HTMLElement
-  center: [38.7685, 9.0161], // [lng, lat] — defaults to Addis Ababa
+  container: "map",
+  center: [38.7685, 9.0161],
   zoom: 12,
-  navigationControl: true, // adds zoom/compass controls
+  navigationControl: true,
 });
 ```
 
-### Map styles
+| Option              | Description                                                      |
+| ------------------- | ---------------------------------------------------------------- |
+| `container`         | The ID of the element to draw the map in, or the element itself. |
+| `center`            | Where the map starts, as `[lng, lat]`. Defaults to Addis Ababa.  |
+| `zoom`              | The starting zoom level.                                         |
+| `navigationControl` | Set `true` to show zoom and compass buttons.                     |
+| `style`             | The map style. Defaults to the standard style.                   |
+
+<Callout title="Longitude first">
+  `center` is `[lng, lat]`, the MapLibre order. The routing APIs use `{lat,lng}`, so swap the values when you pass a route's points to the map.
+</Callout>
+
+## Change the style
 
 ```javascript
 import { API } from "@gebeta/api";
 
 gebetaMap.init({
   container: "map",
-  style: API.Map.Constants.MAP_STYLES.STANDARD, // default
-  // style: API.Map.Constants.MAP_STYLES.SATELLITE,
-  // style: API.Map.Constants.MAP_STYLES.TERRAIN,
+  style: API.Map.Constants.MAP_STYLES.SATELLITE,
 });
 ```
 
-### Accessing the underlying MapLibre instance
+The styles are `STANDARD` (the default), `SATELLITE` and `TERRAIN`.
+
+## Use MapLibre directly
+
+`getMap()` returns the underlying MapLibre map, so you can use any MapLibre GL JS API on it.
 
 ```javascript
 const map = gebetaMap.getMap();
 
-// Now you can use any MapLibre GL JS API directly
-map.on("click", (e) => {
-  console.log(e.lngLat);
+map.on("click", (event) => {
+  console.log(event.lngLat);
 });
 ```
-
-## React
-
-```jsx
-import { GebetaMap } from "@gebeta/react";
-
-function App() {
-  return (
-    <GebetaMap
-      accessToken={accessToken}
-      refreshToken={refreshToken}
-      style={{ width: "100%", height: "400px" }}
-    />
-  );
-}
-```
-
-> **TIP**
->
-> The GebetaMap React component manages the map lifecycle automatically. Use the `onReady` callback to access the GebetaMaps instance and managers.

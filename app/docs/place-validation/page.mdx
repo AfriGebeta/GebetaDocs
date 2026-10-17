@@ -1,97 +1,69 @@
 ---
 title: Place Validation API
-description: A sophisticated geographic verification service designed to validate hierarchical address data using fuzzy matching and confidence scoring.
+description: Check that each part of an address exists and belongs to the part above it, with a confidence level.
+order: 9
+icon: check
 ---
 
-## **Overview**
+# Place Validation API
 
-<br />
+Addresses typed by people are messy, and in Ethiopia the official names of sub-cities and woredas vary between sources. The Place Validation API checks an address one level at a time, from country down to district. For each level it tells you whether the place exists, whether it really sits inside the level above, and how confident the match is.
 
-The Place Validation API ensures that user-provided addresses—from country level down to specific districts—are geographically consistent. Because address data in certain regions can be inconsistent, our API uses a probabilistic matching engine to provide a **"Confidence Level"** for each part of the address.
-
-<br />
-
----
-
-<br />
-
-## **The Probability Logic**
-
-<br />
-
-In regions like Ethiopia, geographic data can be scarce or inconsistently mapped. Our API doesn't just return a **"Yes/No"** answer. Instead:
-
-- **Similarity Scoring**: We calculate the phonetic and string similarity between the input and our database.
-
-- **Parent-Child Validation**: We verify that a sub-location (e.g., a Borough) actually belongs to the parent location (e.g., a Municipality).
-
-- **Confidence Levels**: We return **high**, **medium**, or **low** confidence. This allows developers to handle "fuzzy" matches gracefully rather than rejecting valid but slightly misspelled inputs.
-
-<br />
-
----
-
-<br />
-
-## **Use Cases**
-
-<br />
+## How it decides
 
 <Cards>
-  <Card title="Address Cleaning" description="Standardize messy user input into structured geographic data." icon="📍">
+  <Card icon={<MagnifyingGlassIcon />} title="Fuzzy matching">
+    Each name is compared by spelling and sound, so `Bole` and `bolle` can both match.
   </Card>
-
-<Card
-  title="Data Accuracy"
-  description="Verify if a specific Woreda (District) actually exists within a stated Borough or City."
-  icon="✅"
-></Card>
-
-<Card
-  title="Risk Mitigation"
-  description="Use confidence scores (high, medium, low) to decide whether to accept an address or flag it for manual review."
-  icon="📉"
-></Card>
-
-  <Card title="Regional Optimization" description="Specifically tuned for data-scarce regions where official naming conventions may vary." icon="🌍">
+  <Card icon={<LayersIcon />} title="Parent checks">
+    A level is only valid if it belongs to its parent. A woreda that exists but sits in a different
+    sub-city is marked invalid.
+  </Card>
+  <Card icon={<CheckCircledIcon />} title="Confidence">
+    Every level gets `high`, `medium` or `low` confidence, so you can accept close matches instead
+    of rejecting a correct address over a typo.
   </Card>
 </Cards>
 
-<br />
+## When to use it
 
----
+<Cards>
+  <Card icon={<Pencil2Icon />} title="Checkout and signup forms">
+    Catch mistakes in an address before you save it.
+  </Card>
+  <Card icon={<FileTextIcon />} title="Cleaning records">
+    Standardize addresses already in your database.
+  </Card>
+  <Card icon={<EyeOpenIcon />} title="Review queues">
+    Accept `high` matches automatically and send `low` ones to a person.
+  </Card>
+</Cards>
 
-<br />
-
-## **Usage**
-
-<br />
-
-To use the Place Validation API, send a POST request:
+## Request
 
 ```bash
-curl https://mapapi.gebeta.app/api/v1/place/validation
+POST https://mapapi.gebeta.app/api/v1/place/validation
+Content-Type: application/json
 ```
 
-<br />
+Send as many levels as you have, from the top down.
 
----
+| Field          | Description                                      |
+| -------------- | ------------------------------------------------ |
+| `country`      | Country, such as `Ethiopia`.                     |
+| `province`     | Region or chartered city, such as `Addis Ababa`. |
+| `county`       | County, such as `Addis Ababa`.                   |
+| `municipality` | City or town.                                    |
+| `borough`      | Sub-city, such as `Bole`.                        |
+| `district`     | Woreda, such as `woreda 14`.                     |
+| `village`      | Village.                                         |
 
-<br />
+## Example
 
----
-
-<br />
-
-### **Request Example (POST)**
-
-<Tabs items={['curl']}>
-  <Tab value="curl">
-  ```bash
-  curl --request POST \
-  --url 'https://mapapi.gebeta.app/api/v1/place/validation' \
-  --header 'Content-Type: application/json' \
-  --data '{
+```bash
+curl -X POST "https://mapapi.gebeta.app/api/v1/place/validation" \
+  -H "Content-Type: application/json" \
+  -d '{
     "country": "Ethiopia",
     "province": "Addis Ababa",
     "county": "Addis Ababa",
@@ -99,88 +71,38 @@ curl https://mapapi.gebeta.app/api/v1/place/validation
     "borough": "Bole",
     "district": "woreda 14"
   }'
-  ```
-  </Tab>
-</Tabs>
+```
 
-<br />
-
----
-
-<br />
-
-<Accordions>
-  <Accordion title="Success Response">
+## Response
 
 ```json
 {
+  "valid": false,
   "levels": {
-    "country": {
-      "valid": true,
-      "confidence": "high"
-    },
-    "province": {
-      "valid": true,
-      "confidence": "high"
-    },
-    "county": {
-      "valid": true,
-      "confidence": "high"
-    },
-    "municipality": {
-      "valid": true,
-      "confidence": "high"
-    },
-    "borough": {
-      "valid": true,
-      "confidence": "high"
-    },
-    "district": {
-      "valid": false,
-      "confidence": "low"
-    },
-    "village": {
-      "valid": false,
-      "confidence": ""
-    }
-  },
-  "valid": false
+    "country": { "valid": true, "confidence": "high" },
+    "province": { "valid": true, "confidence": "high" },
+    "county": { "valid": true, "confidence": "high" },
+    "municipality": { "valid": true, "confidence": "high" },
+    "borough": { "valid": true, "confidence": "high" },
+    "district": { "valid": false, "confidence": "low" },
+    "village": { "valid": false, "confidence": "" }
+  }
 }
 ```
 
-  </Accordion>
-</Accordions>
+`valid` at the top is `true` only when every level you sent is valid. In this example the woreda didn't match inside Bole, so the address as a whole is invalid. `village` wasn't sent, so its confidence is empty.
 
-<br />
+| Confidence | Meaning                                                                       |
+| ---------- | ----------------------------------------------------------------------------- |
+| `high`     | A close match, with little or no difference from our data.                    |
+| `medium`   | A probable match, with small spelling differences or a recently changed name. |
+| `low`      | A weak match. Ask the user to check it, or review it by hand.                 |
 
----
+<Callout title="Woredas can come back medium">
+  Some woreda boundaries and names have changed recently, so a correctly spelled woreda can still
+  return `medium`. Treat `medium` as a match unless you need to be strict.
+</Callout>
 
-<br />
+## Limits
 
-## **Confidence Levels Explained**
-
-<br />
-
-| Confidence Level | Description                                                                                    |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| `high`           | Strong match found. The input closely matches our database with minimal variation              |
-| `medium`         | Probable match. There may be slight spelling differences or evolving administrative boundaries |
-| `low`            | Weak match. The input has significant differences from our database. Manual review recommended |
-
-<br />
-
----
-
-<br />
-
-<br />
-
-## **API Limits and Restrictions**
-
-<br />
-
-The Place Validation API follows the standard Gebeta Maps rate limits:
-
-Rate Limit: 50 requests per second per token.
-
-- **Data Note**: For certain districts in Ethiopia, confidence may be "Medium" even with correct spelling due to evolving administrative boundaries.
+- **Rate:** 50 requests per second per API key. Requests above that are rejected, so throttle or batch them.
