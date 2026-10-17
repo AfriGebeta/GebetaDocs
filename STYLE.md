@@ -1,49 +1,16 @@
 # Gebeta style for the docs
 
-The docs should look like the same product as [gebeta.app](https://gebeta.app). This folder carries the marketing site's design tokens, its Tailwind extensions and the rules behind them.
+The docs should look like the same product as [gebeta.app](https://gebeta.app). Everything below is already set up in this repo.
 
-| File                 | What it is                                                                                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `gebeta-tokens.css`  | Colours, surfaces and shadows for light and dark mode                                                         |
-| `tailwind-preset.js` | Tailwind classes for those tokens (`bg-ink`, `text-soft`, `shadow-card`, …), the Geist font and easing curves |
-| `STYLE.md`           | This guide                                                                                                    |
+## Where the styles live
 
-## Setup
+All of it is in `app/global.css`:
 
-1. **Tokens.** In `app/global.css`, replace the existing `@layer base { :root { … } .dark { … } }` block with the contents of `gebeta-tokens.css`.
+- **Tokens:** colours, surfaces and shadows for light and dark mode, in the `@layer base` block. They are bare HSL channels, used as `hsl(var(--token))`, and match the marketing site.
+- **Tailwind classes:** the `@theme inline` block turns the tokens into classes such as `bg-ink`, `text-soft`, `shadow-card` and `ease-power3-out`. This is Tailwind 4, so there is no `tailwind.config.js`.
+- **Docs UI:** the `--color-fd-*` variables point Farming Labs and Fumadocs at the same tokens, so the sidebar, search, cards and code blocks follow them in both modes.
 
-   Paste it there rather than `@import`-ing it at the top of the file. The `addVariablesForColors` plugin in `tailwind.config.js` writes a CSS variable for every Tailwind colour into Tailwind's base layer (for example `--ink: hsl(var(--ink))`). The tokens must come after that, and they only do when they sit below `@tailwind base`.
-
-   Fumadocs reads the same variables (`--background`, `--primary`, `--muted-foreground`, …), so the sidebar, search, TOC and code blocks take the new colours with no further changes.
-
-2. **Tailwind preset.** In `tailwind.config.js`:
-
-   ```js
-   import gebetaPreset from "./design-kit/tailwind-preset.js";
-
-   export default {
-     presets: [createPreset(), gebetaPreset],
-     // …
-   };
-   ```
-
-3. **Font.** Geist replaces Plus Jakarta Sans:
-
-   ```bash
-   pnpm add geist
-   ```
-
-   ```tsx
-   // app/layout.tsx
-   import { GeistSans } from "geist/font/sans";
-   import { GeistMono } from "geist/font/mono";
-
-   <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
-   ```
-
-   Then remove the `body { font-family: "Plus Jakarta Sans Variable", … }` rule and the `@fontsource` imports from `app/global.css`.
-
-4. **Check** a docs page, the API reference and search in both light and dark mode.
+The font is Geist (`geist/font/sans` and `geist/font/mono`), loaded in `app/layout.tsx`.
 
 ## Colour
 

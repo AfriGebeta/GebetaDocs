@@ -12,6 +12,8 @@ const config = {
       // Docs used to live under /docs; they're served from / now.
       { source: "/docs", destination: "/", permanent: true },
       { source: "/docs/:path*", destination: "/:path*", permanent: true },
+      { source: "/geocoding/geocoding", destination: "/geocoding", permanent: true },
+      { source: "/tiles/overview", destination: "/tiles", permanent: true },
       ...["/changelogs/:path*", "/community", "/authentication"].map((source) => ({
         source,
         destination: "/",

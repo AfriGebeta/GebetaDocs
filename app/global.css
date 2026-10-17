@@ -1,9 +1,195 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@farming-labs/theme/shadcn/css";
-@import "../design-kit/gebeta-tokens.css";
+@import "@farming-labs/theme/pixel-border/css";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Gebeta design tokens, the same as gebeta.app. Bare HSL channels: use as hsl(var(--token)). */
+@layer base {
+  :root {
+    color-scheme: light;
+    --radius: 0.5rem;
+    --chart-1: 35 100% 50%;
+    --chart-2: 35 100% 65%;
+    --chart-3: 35 100% 78%;
+    --chart-4: 35 100% 88%;
+    --chart-5: 35 100% 94%;
+    --chart-highlight: 29 100% 48%;
+    --shadow-color: oklch(0 0 0);
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --background: 0 0.0% 98.4%;
+    --foreground: 0 0.0% 8.6%;
+    --card: 0 0.0% 100.0%;
+    --card-foreground: 0 0.0% 8.6%;
+    --popover: 0 0.0% 100.0%;
+    --popover-foreground: 0 0.0% 8.6%;
+    --primary: 39 100.0% 50.0%;
+    --primary-foreground: 36 62.5% 6.3%;
+    --ink: 30 10.0% 9.0%;
+    --ink-foreground: 40 20.0% 98.0%;
+    --secondary: 0 0.0% 100.0%;
+    --secondary-foreground: 0 0.0% 8.6%;
+    --muted: 0 0.0% 94.5%;
+    --muted-foreground: 0 0.0% 42.0%;
+    --accent: 0 0.0% 94.5%;
+    --accent-foreground: 0 0.0% 8.6%;
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0.0% 100.0%;
+    --border: 0 0.0% 92.5%;
+    --input: 0 0.0% 86.3%;
+    --ring: 0 0.0% 63.9%;
+    --sidebar-background: 0 0.0% 96.5%;
+    --sidebar-foreground: 0 0.0% 42.0%;
+    --sidebar-primary: 0 0.0% 100.0%;
+    --sidebar-primary-foreground: 0 0.0% 8.6%;
+    --sidebar-accent: 0 0.0% 93.7%;
+    --sidebar-accent-foreground: 0 0.0% 8.6%;
+    --sidebar-border: 0 0.0% 91.0%;
+    --sidebar-ring: 0 0.0% 63.9%;
+    --ds-line-strong: 0 0.0% 86.3%;
+    --ds-subtle: 0 0.0% 54.1%;
+    --ds-faint: 0 0.0% 70.2%;
+    --ds-soft: 0 0.0% 32.2%;
+    --ds-chip: 0 0.0% 23.9%;
+    --ds-icon: 218 8.5% 25.3%;
+    --ds-success: 142 76.2% 36.3%;
+    --ds-warning: 32 94.6% 43.7%;
+    --ds-danger: 0 72.2% 50.6%;
+    --ds-trend: 161 93.5% 30.4%;
+    --ds-trend-muted: 153 38.6% 75.1%;
+    --ds-track: 0 0.0% 89.8%;
+    --ds-status: 166 83.8% 33.9%;
+    --ds-raised: 0 0.0% 95.7%;
+    --ds-raised-hover: 0 0.0% 92.2%;
+    --ds-hover: rgba(0, 0, 0, 0.04);
+    --ds-scrollbar: rgba(0, 0, 0, 0.2);
+    --ds-tag-blue-bg: #eff6ff;
+    --ds-tag-blue-border: #bfdbfe;
+    --ds-tag-blue-text: #1d4ed8;
+    --ds-tag-purple-bg: #f5f3ff;
+    --ds-tag-purple-border: #ddd6fe;
+    --ds-tag-purple-text: #6d28d9;
+    --ds-tag-green-bg: #f0fdf4;
+    --ds-tag-green-border: #bbf7d0;
+    --ds-tag-green-text: #15803d;
+    --ds-tag-red-bg: #fef2f2;
+    --ds-tag-red-border: #fecaca;
+    --ds-tag-red-text: #b91c1c;
+    --ds-tag-orange-bg: #fff7ed;
+    --ds-tag-orange-border: #fed7aa;
+    --ds-tag-orange-text: #c2410c;
+    --ds-tag-amber-bg: #fffbeb;
+    --ds-tag-amber-border: #fde68a;
+    --ds-tag-amber-text: #b45309;
+    --ds-tag-teal-bg: #f0fdfa;
+    --ds-tag-teal-border: #99f6e4;
+    --ds-tag-teal-text: #0f766e;
+    --ds-tag-yellow-bg: #fefce8;
+    --ds-tag-yellow-border: #fef08a;
+    --ds-tag-yellow-text: #a16207;
+    --ds-tag-neutral-bg: #f4f4f4;
+    --ds-tag-neutral-border: #e2e2e2;
+    --ds-tag-neutral-text: #3d3d3d;
+    --ds-shadow-overlay: 0px 16px 40px 0px rgba(0, 0, 0, 0.12), 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+    --ds-shadow-btn-primary: 0px 1px 2px 0px rgba(150, 70, 0, 0.22), 0px 0px 0px 1px #e58a00, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.12), inset 0px -6px 12px 0px rgba(214, 100, 0, 0.22);
+    --ds-shadow-btn-ink: 0px 1px 2px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 1px hsl(30 10% 9%), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.14);
+    --ds-shadow-btn: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 1px rgba(0, 0, 0, 0.1), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.8);
+    --ds-shadow-btn-subtle: 0px 0px 0px 1px #e2e2e2;
+    --ds-shadow-card: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 0px 0px 1px rgba(0, 0, 0, 0.07);
+    --ds-shadow-badge: 0px 0px 0px 0.5px #d4d4d4;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 0 0.0% 8.6%;
+    --foreground: 220 100.0% 98.8%;
+    --card: 216 8.5% 11.6%;
+    --card-foreground: 220 100.0% 98.8%;
+    --popover: 0 0.0% 8.6%;
+    --popover-foreground: 220 100.0% 98.8%;
+    --primary: 39 100.0% 50.0%;
+    --primary-foreground: 36 62.5% 6.3%;
+    --ink: 40 20.0% 96.0%;
+    --ink-foreground: 30 10.0% 9.0%;
+    --secondary: 0 0.0% 11.8%;
+    --secondary-foreground: 220 100.0% 98.8%;
+    --muted: 0 0.0% 16.5%;
+    --muted-foreground: 0 0.0% 49.8%;
+    --accent: 0 0.0% 16.5%;
+    --accent-foreground: 220 100.0% 98.8%;
+    --destructive: 0 91.8% 71.4%;
+    --destructive-foreground: 0 0.0% 8.6%;
+    --border: 0 0.0% 13.7%;
+    --input: 0 0.0% 22.4%;
+    --ring: 0 0.0% 40.4%;
+    --sidebar-background: 0 0.0% 9.0%;
+    --sidebar-foreground: 0 0.0% 49.8%;
+    --sidebar-primary: 0 0.0% 16.5%;
+    --sidebar-primary-foreground: 220 100.0% 98.8%;
+    --sidebar-accent: 0 0.0% 9.4%;
+    --sidebar-accent-foreground: 220 100.0% 98.8%;
+    --sidebar-border: 0 0.0% 13.7%;
+    --sidebar-ring: 0 0.0% 40.4%;
+    --ds-line-strong: 0 0.0% 22.4%;
+    --ds-subtle: 0 0.0% 40.4%;
+    --ds-faint: 0 0.0% 27.1%;
+    --ds-soft: 0 0.0% 64.3%;
+    --ds-chip: 0 0.0% 81.2%;
+    --ds-icon: 222 16.0% 84.1%;
+    --ds-success: 142 70.6% 45.3%;
+    --ds-warning: 43 96.4% 56.3%;
+    --ds-danger: 0 91.8% 71.4%;
+    --ds-trend: 152 100.0% 35.5%;
+    --ds-trend-muted: 152 24.5% 29.6%;
+    --ds-track: 0 0.0% 22.7%;
+    --ds-status: 166 80.2% 43.5%;
+    --ds-raised: 0 0.0% 13.7%;
+    --ds-raised-hover: 0 0.0% 20.0%;
+    --ds-hover: rgba(255, 255, 255, 0.06);
+    --ds-scrollbar: rgba(255, 255, 255, 0.2);
+    --ds-tag-blue-bg: #1d2b3e;
+    --ds-tag-blue-border: #23354c;
+    --ds-tag-blue-text: #bfdbfe;
+    --ds-tag-purple-bg: #231f3a;
+    --ds-tag-purple-border: #4b437b;
+    --ds-tag-purple-text: #b7aee9;
+    --ds-tag-green-bg: #1f3a2d;
+    --ds-tag-green-border: #275137;
+    --ds-tag-green-text: #b1ebc5;
+    --ds-tag-red-bg: #3e1d1e;
+    --ds-tag-red-border: #4c2324;
+    --ds-tag-red-text: #febfc6;
+    --ds-tag-orange-bg: #3e291d;
+    --ds-tag-orange-border: #764d35;
+    --ds-tag-orange-text: #eeb390;
+    --ds-tag-amber-bg: #31221b;
+    --ds-tag-amber-border: #6c4830;
+    --ds-tag-amber-text: #fed7aa;
+    --ds-tag-teal-bg: #102a27;
+    --ds-tag-teal-border: #3b6149;
+    --ds-tag-teal-text: #22c55e;
+    --ds-tag-yellow-bg: #33301a;
+    --ds-tag-yellow-border: #5a5228;
+    --ds-tag-yellow-text: #fde68a;
+    --ds-tag-neutral-bg: #2a2a2a;
+    --ds-tag-neutral-border: #363636;
+    --ds-tag-neutral-text: #cfcfcf;
+    --ds-shadow-overlay: 0px 16px 40px 0px rgba(0, 0, 0, 0.5), 0px 0px 0px 1px #0e0e0e;
+    --ds-shadow-btn-primary: 0px 4px 4px 0px rgba(0, 0, 0, 0.32), 0px 0px 0px 1px #0e0e0e, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.12), inset 0px -8px 14px 0px rgba(200, 90, 0, 0.28);
+    --ds-shadow-btn-ink: 0px 1px 2px 0px rgba(0, 0, 0, 0.32), 0px 0px 0px 1px rgba(255, 255, 255, 0.9), inset 0px -2px 4px 0px rgba(0, 0, 0, 0.06);
+    --ds-shadow-btn: 0px 0px 0px 1px rgba(0, 0, 0, 0.4), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.1), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.06);
+    --ds-shadow-btn-subtle: 0px 0px 0px 1px #333333;
+    --ds-shadow-card: 0px 4px 4px 0px rgba(42, 42, 42, 0.32), 0px 0px 0px 1px #0e0e0e, inset 0px 1px 0px 0px rgba(255, 255, 255, 0.08), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.08);
+    --ds-shadow-badge: 0px 0px 0px 0.5px #0e0e0e;
+  }
+}
 
 /* Tailwind classes for the Gebeta tokens, the same names and values as the gebeta.app site. */
 @theme inline {
@@ -92,6 +278,23 @@
   --fd-banner-height: 4rem;
 }
 
+/* pixel-border pulls sidebar items 1rem left but its !important padding (0.625rem) doesn't compensate. */
+aside .overscroll-contain > div > a[data-active],
+aside .overscroll-contain > div > div > a[data-active],
+aside .overscroll-contain > div > div > button[aria-expanded] {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+aside .overscroll-contain div.overflow-hidden[data-state] a[data-active] {
+  padding-left: 2.5rem !important;
+}
+
+/* The API reference uses fumadocs' centered notebook layout; let its page column fill the width so it lines up with the docs. */
+.fd-api-reference-route #nd-notebook-layout {
+  --fd-layout-width: 100%;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -102,279 +305,7 @@
   }
 }
 
-@layer components {
-  .btn-orange {
-    @apply bg-primary text-primary-foreground shadow-btn-primary hover:bg-primary/90;
-  }
-
-  .btn-orange-focus {
-    @apply focus:ring-2 focus:ring-primary/50;
-  }
-}
-
-/* Map playground */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #c4c4c4 #f1f1f1;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c4c4c4;
-  border-radius: 10px;
-  transition: background 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a0a0a0;
-}
-
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-track {
-    background: #2d3748;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #4a5568;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #718096;
-  }
-
-  * {
-    scrollbar-color: #4a5568 #2d3748;
-  }
-}
-
-.map-marker {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.marker-inner {
-  border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 12px;
-  transition: all 0.3s ease;
-}
-
-.marker-start {
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  width: 25px;
-  height: 25px;
-}
-
-.marker-end {
-  border-radius: 50% 50% 0 50%;
-  transform: rotate(45deg);
-  width: 25px;
-  height: 25px;
-}
-
-.marker-waypoint {
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  position: relative;
-}
-
-.marker-waypoint:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  height: 60%;
-  background-color: white;
-  border-radius: 50%;
-}
-
-.marker-pulse {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background-color: currentColor;
-  border-radius: 50%;
-  opacity: 0;
-  animation: pulse 2s infinite;
-  z-index: 0;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.3);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-}
-
-.instruction-marker-circle {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid #3b82f6;
-  color: #3b82f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.instruction-marker-circle.active {
-  background: #3b82f6;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-.instruction-marker-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-bottom: 10px;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.instruction-marker-tooltip:after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: white transparent transparent transparent;
-}
-
-.instruction-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.instruction-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.instruction-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-}
-
-.instruction-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-input,
-textarea {
-  outline: none;
-  border-radius: 4px;
-  background-color: white;
-  color: #333333;
-  border: 1px solid #ddd;
-}
-
-@media (prefers-color-scheme: dark) {
-  input,
-  textarea {
-    background-color: #2d3748;
-    color: #ffffff;
-    border-color: #4a5568;
-  }
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.instruction-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.instruction-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.instruction-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 2px;
-}
-
-.instruction-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
-.driver-marker {
-  z-index: 10;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.customer-marker {
-  z-index: 9;
-  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
-}
-
-.driver-marker text,
-.customer-marker text {
-  font-family: Arial, sans-serif;
-  user-select: none;
-  pointer-events: none;
+  scrollbar-color: var(--ds-scrollbar) transparent;
 }

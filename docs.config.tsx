@@ -1,6 +1,6 @@
 import { defineDocs } from "@farming-labs/docs";
-import { shadcn } from "@farming-labs/theme/shadcn";
-import { Accordion, Accordions } from "./components/mdx/accordion";
+import { pixelBorder } from "@farming-labs/theme/pixel-border";
+import * as RadixIcons from "@radix-ui/react-icons";
 import {
   BookOpen,
   Boxes,
@@ -21,7 +21,7 @@ import {
 export default defineDocs({
   entry: "docs",
   docsPath: "",
-  theme: shadcn({ ui: { radius: "0.5rem" } }),
+  theme: pixelBorder(),
   nav: {
     title: "Documentation",
     url: "/",
@@ -50,10 +50,11 @@ export default defineDocs({
   },
   apiReference: {
     enabled: true,
+    renderer: "fumadocs",
     path: "api-playground",
     specUrl: "./public/gebeta-api.openapi.json",
   },
-  components: { Accordion, Accordions },
+  components: { ...RadixIcons },
   icons: {
     book: <BookOpen size={16} />,
     boxes: <Boxes size={16} />,
@@ -72,6 +73,7 @@ export default defineDocs({
   },
   metadata: {
     titleTemplate: "%s | Gebeta Maps Docs",
-    description: "Maps, geocoding, routing and optimization APIs for Africa, with SDKs for web and mobile.",
+    description:
+      "Maps, geocoding, routing and optimization APIs for Africa, with SDKs for web and mobile.",
   },
 });
