@@ -276,6 +276,9 @@
   --fd-font-mono: var(--font-geist-mono), ui-monospace, monospace;
   /* The site header sits above the docs layout. */
   --fd-banner-height: 4rem;
+  /* Menus appear instantly (STYLE.md, Motion); the theme scaled popovers in. */
+  --animate-fd-popover-in: none;
+  --animate-fd-popover-out: none;
 }
 
 /* pixel-border pulls sidebar items 1rem left but its !important padding (0.625rem) doesn't compensate. */
