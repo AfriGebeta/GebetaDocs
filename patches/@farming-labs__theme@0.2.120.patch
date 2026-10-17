@@ -1,0 +1,51 @@
+diff --git a/dist/docs-page-client.mjs b/dist/docs-page-client.mjs
+index 8ac96c717d3d5fc9c01259af4b315039bb98725e..817bd9721c74e9fa5d9b3625221890e9d9773e41 100644
+--- a/dist/docs-page-client.mjs
++++ b/dist/docs-page-client.mjs
+@@ -326,7 +326,11 @@ function DocsPageClient({ tocEnabled, showLlmsInHeader = false, tocStyle = "defa
+ 		if (!container) return;
+ 		const headings = container.querySelectorAll("h2[id], h3[id], h4[id]");
+ 		setToc(Array.from(headings).map((el) => ({
+-			title: el.textContent?.replace(/^#\s*/, "") || "",
++			title: (() => {
++				const clone = el.cloneNode(true);
++				clone.querySelectorAll(".sr-only").forEach((node) => node.remove());
++				return clone.textContent?.replace(/^#\s*/, "") || "";
++			})(),
+ 			url: `#${el.id}`,
+ 			depth: parseInt(el.tagName[1], 10)
+ 		})));
+diff --git a/styles/bundles/browser-framework.css b/styles/bundles/browser-framework.css
+index bcce5162db16f0cf7bc5d0471f482ff7a32f27b4..56eba03645ecd484368c2ba48e5528e2df190389 100644
+--- a/styles/bundles/browser-framework.css
++++ b/styles/bundles/browser-framework.css
+@@ -3112,12 +3112,6 @@ button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-se
+       --fd-toc-width: 268px;
+     }
+   }
+-.\[\&_\:\:highlight\(fd-search\)\]\:text-fd-primary ::highlight(fd-search) {
+-    color: var(--color-fd-primary);
+-  }
+-.\[\&_\:\:highlight\(fd-search\)\]\:underline ::highlight(fd-search) {
+-    text-decoration-line: underline;
+-  }
+ .\[\&_svg\]\:size-3\.5 svg {
+     width: calc(var(--spacing) * 3.5);
+     height: calc(var(--spacing) * 3.5);
+diff --git a/styles/bundles/shared-framework.css b/styles/bundles/shared-framework.css
+index 33baf592cdaa890e92947d0f94a2045764a94a27..6ea07ea49e9a414dd5dbe9e915e34697de05e1a4 100644
+--- a/styles/bundles/shared-framework.css
++++ b/styles/bundles/shared-framework.css
+@@ -3119,12 +3119,6 @@
+       --fd-toc-width: 268px;
+     }
+   }
+-  .\[\&_\:\:highlight\(fd-search\)\]\:text-fd-primary ::highlight(fd-search) {
+-    color: var(--color-fd-primary);
+-  }
+-  .\[\&_\:\:highlight\(fd-search\)\]\:underline ::highlight(fd-search) {
+-    text-decoration-line: underline;
+-  }
+   .\[\&_svg\]\:size-3\.5 svg {
+     width: calc(var(--spacing) * 3.5);
+     height: calc(var(--spacing) * 3.5);

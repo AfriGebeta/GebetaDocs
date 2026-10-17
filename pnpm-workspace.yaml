@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@farming-labs/theme@0.2.120': patches/@farming-labs__theme@0.2.120.patch

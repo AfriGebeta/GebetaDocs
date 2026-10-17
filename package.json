@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "cross-env PORT=4000 next dev",
     "start": "PORT=4000 next start",
-        "prepare": "husky || true"
+    "prepare": "husky || true"
   },
   "dependencies": {
     "@better-fetch/fetch": "^1.1.18",
