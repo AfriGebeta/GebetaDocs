@@ -561,9 +561,9 @@
           {
             "name": "json",
             "in": "query",
-            "description": "A JSON-formatted string representing a list of geographic coordinates (longitude, latitude). The first coordinate is considered the start and end point of the round trip. e.g [[8.987685259188599, 38.764792722654455], [8.9879443, 38.7651287], [9.087685259188599, 38.764792722654455]]",
+            "description": "The stops, as `[{lat,lng},{lat,lng},…]`. The first stop is where the round trip starts and ends. Up to 10 stops.",
             "required": true,
-            "example": "[[8.987685259188599, 38.764792722654455], [8.9879443, 38.7651287], [9.087685259188599, 38.764792722654455]]",
+            "example": "[{8.987685259188599,38.764792722654455},{8.9879443,38.7651287},{9.087685259188599,38.764792722654455}]",
             "schema": {
               "type": "string"
             }
