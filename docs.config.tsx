@@ -1,4 +1,5 @@
 import { defineDocs } from "@farming-labs/docs";
+import { fumadocsRenderer } from "@farming-labs/next/fumadocs-renderer";
 import { pixelBorder } from "@farming-labs/theme/pixel-border";
 import * as RadixIcons from "@radix-ui/react-icons";
 import {
@@ -17,6 +18,14 @@ import {
   Truck,
   Waypoints,
 } from "lucide-react";
+
+// Browsers can't send a body with GET (Map Matching needs one); app/api/playground-proxy turns this back into a GET.
+function sendGetBodyAsPost(init: RequestInit): RequestInit {
+  if (init.method !== "GET" || !init.body) return init;
+  const headers = new Headers(init.headers);
+  headers.set("X-HTTP-Method-Override", "GET");
+  return { ...init, method: "POST", headers };
+}
 
 export default defineDocs({
   entry: "docs",
@@ -50,9 +59,12 @@ export default defineDocs({
   },
   apiReference: {
     enabled: true,
-    renderer: "fumadocs",
     path: "api-playground",
     specUrl: "./public/gebeta-api.openapi.json",
+    renderer: fumadocsRenderer({
+      proxyUrl: "/api/playground-proxy",
+      playground: { fetchOptions: { proxyForwardCookie: false, onRequestInit: sendGetBodyAsPost } },
+    }),
   },
   components: { ...RadixIcons },
   icons: {
