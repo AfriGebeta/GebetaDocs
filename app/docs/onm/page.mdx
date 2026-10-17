@@ -31,7 +31,7 @@ For distances between every pair of points, not just from one origin, use the [M
 ## Request
 
 ```bash
-GET https://mapapi.gebeta.app/api/route/onm/?origin={lat,lng}&json=[{lat,lng},{lat,lng}]&apiKey={your-api-key}
+GET https://mapapi.gebeta.app/api/route/onm?origin={lat,lng}&json=[{lat,lng},{lat,lng}]&apiKey={your-api-key}
 ```
 
 | Parameter | Type     | Required | Description                                              |
@@ -46,7 +46,7 @@ GET https://mapapi.gebeta.app/api/route/onm/?origin={lat,lng}&json=[{lat,lng},{l
 <Tab value="cURL">
 
 ```bash
-curl "https://mapapi.gebeta.app/api/route/onm/?origin={9.0105,38.7613}&json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}"
+curl "https://mapapi.gebeta.app/api/route/onm?origin={9.0105,38.7613}&json=[{8.989022,38.79036},{9.03045,38.76530}]&apiKey={your-api-key}"
 ```
 
 </Tab>
@@ -55,7 +55,7 @@ curl "https://mapapi.gebeta.app/api/route/onm/?origin={9.0105,38.7613}&json=[{8.
 ```javascript
 const origin = "{9.0105,38.7613}";
 const destinations = "{8.989022,38.79036},{9.03045,38.76530}";
-const url = `https://mapapi.gebeta.app/api/route/onm/?origin=${origin}&json=[${destinations}]&apiKey=${apiKey}`;
+const url = `https://mapapi.gebeta.app/api/route/onm?origin=${origin}&json=[${destinations}]&apiKey=${apiKey}`;
 
 const response = await fetch(url);
 const { origin_to_destination: trips } = await response.json();
@@ -70,7 +70,7 @@ import requests
 
 origin = "{9.0105,38.7613}"
 destinations = "{8.989022,38.79036},{9.03045,38.76530}"
-url = f"https://mapapi.gebeta.app/api/route/onm/?origin={origin}&json=[{destinations}]&apiKey={api_key}"
+url = f"https://mapapi.gebeta.app/api/route/onm?origin={origin}&json=[{destinations}]&apiKey={api_key}"
 
 trips = requests.get(url).json()["origin_to_destination"]
 print([trip["time"] for trip in trips])
@@ -92,7 +92,7 @@ func main() {
 	apiKey := "{your-api-key}"
 	origin := "{9.0105,38.7613}"
 	destinations := "{8.989022,38.79036},{9.03045,38.76530}"
-	url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm/?origin=%s&json=[%s]&apiKey=%s", origin, destinations, apiKey)
+	url := fmt.Sprintf("https://mapapi.gebeta.app/api/route/onm?origin=%s&json=[%s]&apiKey=%s", origin, destinations, apiKey)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -114,7 +114,7 @@ func main() {
 $apiKey = "{your-api-key}";
 $origin = "{9.0105,38.7613}";
 $destinations = "{8.989022,38.79036},{9.03045,38.76530}";
-$url = "https://mapapi.gebeta.app/api/route/onm/?origin=$origin&json=[$destinations]&apiKey=$apiKey";
+$url = "https://mapapi.gebeta.app/api/route/onm?origin=$origin&json=[$destinations]&apiKey=$apiKey";
 
 $result = json_decode(file_get_contents($url), true);
 print_r(array_column($result["origin_to_destination"], "time"));
@@ -130,7 +130,7 @@ require "json"
 api_key = "{your-api-key}"
 origin = "{9.0105,38.7613}"
 destinations = "{8.989022,38.79036},{9.03045,38.76530}"
-url = URI("https://mapapi.gebeta.app/api/route/onm/?origin=#{origin}&json=[#{destinations}]&apiKey=#{api_key}")
+url = URI("https://mapapi.gebeta.app/api/route/onm?origin=#{origin}&json=[#{destinations}]&apiKey=#{api_key}")
 
 trips = JSON.parse(Net::HTTP.get(url))["origin_to_destination"]
 puts trips.map { |trip| trip["time"] }
@@ -147,7 +147,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let origin = "{9.0105,38.7613}";
     let destinations = "{8.989022,38.79036},{9.03045,38.76530}";
     let url = format!(
-        "https://mapapi.gebeta.app/api/route/onm/?origin={origin}&json=[{destinations}]&apiKey={api_key}"
+        "https://mapapi.gebeta.app/api/route/onm?origin={origin}&json=[{destinations}]&apiKey={api_key}"
     );
 
     let result: Value = reqwest::blocking::get(url)?.json()?;
@@ -168,7 +168,7 @@ Future<void> main() async {
   const origin = '{9.0105,38.7613}';
   const destinations = '{8.989022,38.79036},{9.03045,38.76530}';
   final url = Uri.parse(
-    'https://mapapi.gebeta.app/api/route/onm/?origin=$origin&json=[$destinations]&apiKey=$apiKey',
+    'https://mapapi.gebeta.app/api/route/onm?origin=$origin&json=[$destinations]&apiKey=$apiKey',
   );
 
   final result = jsonDecode((await http.get(url)).body);

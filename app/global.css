@@ -290,6 +290,12 @@ aside .overscroll-contain div.overflow-hidden[data-state] a[data-active] {
   padding-left: 2.5rem !important;
 }
 
+/* The theme fades the copy button in on hover but leaves its blurred backing visible, which showed as an empty square. */
+figure.shiki > button,
+figure.shiki > div:first-child button {
+  opacity: 1;
+}
+
 /* The API reference uses fumadocs' centered notebook layout; let its page column fill the width so it lines up with the docs. */
 .fd-api-reference-route #nd-notebook-layout {
   --fd-layout-width: 100%;

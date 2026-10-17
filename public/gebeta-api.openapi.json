@@ -13,7 +13,7 @@
   ],
   "tags": [],
   "paths": {
-    "/api/route/onm/": {
+    "/api/route/onm": {
       "get": {
         "summary": "Find Nearest Destination and Compare Routes",
         "description": "Calculates routes from a single origin to multiple destinations, returning travel times, distances, and paths. Helps determine which destination is nearest in terms of actual travel cost.",
@@ -166,7 +166,7 @@
         "security": []
       }
     },
-    "/api/route/matrix/": {
+    "/api/route/matrix": {
       "get": {
         "summary": "Compute Distance and Duration Matrix",
         "description": "Calculates a matrix of travel times and distances between multiple geographic points. This is useful for logistics, delivery optimization, or any application requiring pairwise route calculations between several origins and destinations.",
