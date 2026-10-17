@@ -1,69 +1,68 @@
-//@ts-nocheck
 "use client";
-import React, { createContext, useContext, useState } from "react";
 
-const ToastContext = createContext();
+import { X } from "lucide-react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-export const ToastProvider = ({ children }) => {
-  const [toasts, setToasts] = useState([]);
+type ToastType = "success" | "error" | "info";
+type Toast = { id: number; message: string; type: ToastType };
+type ToastContextValue = { addToast: (message: string, type?: ToastType) => void };
 
-  const addToast = (message, type = "success") => {
-    console.log("copying for real");
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, message, type }]);
+const ToastContext = createContext<ToastContextValue | null>(null);
 
-    setTimeout(() => {
-      removeToast(id);
-    }, 5000);
-  };
+const DOT: Record<ToastType, string> = {
+  success: "bg-success",
+  error: "bg-danger",
+  info: "bg-soft",
+};
 
-  const removeToast = (id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const removeToast = useCallback((id: number) => {
+    setToasts((current) => current.filter((toast) => toast.id !== id));
+  }, []);
+
+  const addToast = useCallback(
+    (message: string, type: ToastType = "success") => {
+      const id = Date.now() + Math.random();
+      setToasts((current) => [...current, { id, message, type }]);
+      setTimeout(() => removeToast(id), 5000);
+    },
+    [removeToast]
+  );
+
+  const value = useMemo(() => ({ addToast }), [addToast]);
 
   return (
-    <ToastContext.Provider value={{ addToast }}>
+    <ToastContext.Provider value={value}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 space-y-2">
+      <div aria-live="polite" className="fixed right-4 bottom-4 z-50 flex flex-col gap-2">
         {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} onClose={() => removeToast(toast.id)} />
+          <div
+            key={toast.id}
+            role={toast.type === "error" ? "alert" : "status"}
+            className="flex min-w-[240px] max-w-sm items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 text-[14px] text-foreground animate-in fade-in slide-in-from-bottom-2 duration-150"
+          >
+            <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", DOT[toast.type])} />
+            <span className="flex-1">{toast.message}</span>
+            <button
+              type="button"
+              aria-label="Dismiss"
+              onClick={() => removeToast(toast.id)}
+              className="rounded-full p-0.5 text-subtle transition-colors duration-150 hover:text-foreground"
+            >
+              <X className="size-3.5" />
+            </button>
+          </div>
         ))}
       </div>
     </ToastContext.Provider>
   );
-};
+}
 
-const Toast = ({ message, type, onClose }) => {
-  const bgColor = {
-    success: "bg-green-500",
-    error: "bg-red-500",
-    info: "bg-blue-500",
-    warning: "bg-yellow-500",
-  }[type];
-
-  return (
-    <div
-      className={`${bgColor}  text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between gap-4 min-w-[200px] animate-fade-in`}
-    >
-      <span className="text-sm font-medium">{message}</span>
-      <button onClick={onClose} className="text-white hover:text-gray-200 focus:outline-none">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
-  );
-};
-
-export const useToast = () => {
+export function useToast() {
   const context = useContext(ToastContext);
-  if (!context) {
-    throw new Error("useToast must be used within a ToastProvider");
-  }
+  if (!context) throw new Error("useToast must be used within a ToastProvider");
   return context;
-};
+}
