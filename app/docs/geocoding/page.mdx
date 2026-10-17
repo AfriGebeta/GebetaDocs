@@ -64,16 +64,17 @@ Both directions return the same shape: the query you sent, and a list of matchin
     "query": "Bole Road",
     "results": [
       {
-        "id": "way:123456",
+        "id": "forge-416190",
         "name": "Bole Road",
         "display_name": "Bole Road, Addis Ababa, Ethiopia",
-        "category": "highway",
-        "location": { "lat": 9.019185, "lng": 38.757812 },
+        "category": "establishment",
+        "location": { "lat": 9.007932, "lng": 38.765386 },
         "address": {
           "city": "Addis Ababa",
           "country": "Ethiopia",
-          "country_code": "ETH"
-        }
+          "country_code": "ET"
+        },
+        "neighborhood": "OLYMPIA"
       }
     ]
   }
@@ -87,20 +88,32 @@ Both directions return the same shape: the query you sent, and a list of matchin
 | `id`                   | `string` | A unique ID for the feature.                                                                           |
 | `name`                 | `string` | The feature's main name.                                                                               |
 | `display_name`         | `string` | The full label, combining the name, city and country.                                                  |
-| `category`             | `string` | What kind of feature it is, such as `highway`, `shop` or `amenity`.                                    |
+| `category`             | `string` | What kind of place it is, such as `establishment`, `Coffee shop` or `Store`.                           |
 | `location.lat`         | `number` | Latitude of the feature's center.                                                                      |
 | `location.lng`         | `number` | Longitude of the feature's center.                                                                     |
 | `address.city`         | `string` | City, zone or locality.                                                                                |
 | `address.country`      | `string` | Country name.                                                                                          |
-| `address.country_code` | `string` | ISO country code, such as `ETH`.                                                                       |
+| `address.country_code` | `string` | Two-letter ISO country code, such as `ET`.                                                             |
+| `neighborhood`         | `string` | The neighborhood the feature is in, such as `OLYMPIA`.                                                 |
 
 ## Errors
 
-| Status | Body                                                                      | Cause                                                                    |
-| ------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `422`  | `{ "query": { "apiKey": ["missing api key"] } }`                          | No API key in the query string or `Authorization` header.                |
-| `422`  | `{ "query": { "limit": ["limit must be a number"] } }`                    | `limit` was sent but isn't a number.                                     |
-| `422`  | `{ "query": { "body": ["..."] } }`                                        | Another parameter is invalid, such as a malformed `bbox` or `proximity`. |
-| `400`  | `{ "error": { "status": 400, "code": "BAD_REQUEST", "message": "..." } }` | Reverse geocoding: `lat` or `lon` is missing, invalid or out of range.   |
-| `500`  | `{ "error": { "status": "500", "code": "HE00001", "message": "..." } }`   | An unexpected error in the geocoding service. Retry the request.         |
-| `500`  | `{ "error": { "status": "500", "code": "HE00002", "message": "..." } }`   | The service couldn't reach a backend it depends on. Retry the request.   |
+Errors come back as an `error` object. Validation errors list the problem for each parameter in `fields`.
+
+```json
+{
+  "error": {
+    "code": "INVALID_INPUT",
+    "fields": { "limit": ["limit must be a number"] },
+    "message": "validation failed",
+    "status": 400
+  }
+}
+```
+
+| Status | `code`          | Cause                                                                                                                                              |
+| ------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `401`  | `HE00004`       | The `apiKey` parameter is missing or the key is invalid (`Invalid token!`).                                                                        |
+| `400`  | `INVALID_INPUT` | A parameter is invalid. `fields` says which, for example `limit must be between 1 and 10` or `bbox must be in format minLng,minLat,maxLng,maxLat`. |
+| `400`  | `INVALID_INPUT` | Reverse geocoding: `lat` or `lon` is missing or out of range (`ReverseGeocoding: loading lat/lon`).                                                |
+| `5xx`  |                 | A problem on our side. Retry the request.                                                                                                          |

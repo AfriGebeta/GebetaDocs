@@ -14,10 +14,10 @@ Forward geocoding looks up a place from text, such as an address, a street, a ci
 GET https://mapapi.gebeta.app/v2/search/geocode?query={search-text}&apiKey={your-api-key}
 ```
 
-| Parameter | Type     | Required | Description                                                                                |
-| --------- | -------- | -------- | ------------------------------------------------------------------------------------------ |
-| `query`   | `string` | Yes      | What to look up: an address, street, city or place name. URL-encode it.                    |
-| `apiKey`  | `string` | Yes      | Your API key. You can send it as an `Authorization: Bearer {your-api-key}` header instead. |
+| Parameter | Type     | Required | Description                                                                                           |
+| --------- | -------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `query`   | `string` | Yes      | What to look up: an address, street, city or place name. URL-encode it.                               |
+| `apiKey`  | `string` | Yes      | Your Gebeta Maps API key. It has to be in the query string; an `Authorization` header isn't accepted. |
 
 ### Optional parameters
 
@@ -27,7 +27,7 @@ GET https://mapapi.gebeta.app/v2/search/geocode?query={search-text}&apiKey={your
 | `bbox`         | `string`  | Only return results inside this box, as `minLng,minLat,maxLng,maxLat`. For example `38.7,8.9,38.8,9.1`.       |
 | `country`      | `string`  | Only return results in these countries, as comma-separated ISO codes. For example `et` or `et,ke`.            |
 | `language`     | `string`  | The language for the text in the response.                                                                    |
-| `limit`        | `integer` | How many results to return, from `1` to `10`.                                                                 |
+| `limit`        | `integer` | How many results to return, from `1` to `10`. Defaults to `10`.                                               |
 | `proximity`    | `string`  | Prefer results near a point, as `lng,lat` (for example `38.75,9.02`), or `ip` to use the caller's IP address. |
 | `category`     | `string`  | Only return these categories, as a comma-separated list.                                                      |
 
@@ -77,16 +77,17 @@ curl "https://mapapi.gebeta.app/v2/search/geocode?query=Bole&limit=2&apiKey={you
     "query": "Bole Road",
     "results": [
       {
-        "id": "way:123456",
+        "id": "forge-416190",
         "name": "Bole Road",
         "display_name": "Bole Road, Addis Ababa, Ethiopia",
-        "category": "highway",
-        "location": { "lat": 9.019185, "lng": 38.757812 },
+        "category": "establishment",
+        "location": { "lat": 9.007932, "lng": 38.765386 },
         "address": {
           "city": "Addis Ababa",
           "country": "Ethiopia",
-          "country_code": "ETH"
-        }
+          "country_code": "ET"
+        },
+        "neighborhood": "OLYMPIA"
       }
     ]
   }

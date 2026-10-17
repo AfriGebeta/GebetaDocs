@@ -53,72 +53,111 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the computed travel times, distances, and path coordinates for each destination route from the origin.",
+            "description": "Travel time and distance from the origin to each destination.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "msg": {
-                      "type": "string",
-                      "description": "Status message (e.g., 'Ok')"
-                    },
-                    "directions": {
+                    "origins": {
                       "type": "array",
-                      "description": "Array of route summaries from origin to each destination.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "msg": {
-                            "type": "string",
-                            "description": "Route computation status (e.g., 'Ok')"
+                          "lat": {
+                            "type": "number"
                           },
-                          "timetaken": {
+                          "lon": {
+                            "type": "number"
+                          },
+                          "radius": {
                             "type": "number",
-                            "description": "Time taken in seconds to reach the destination"
-                          },
-                          "totalDistance": {
-                            "type": "number",
-                            "description": "Total distance in meters to reach the destination"
-                          },
-                          "direction": {
-                            "type": "array",
-                            "description": "Path geometry as an array of [longitude, latitude] coordinate pairs",
-                            "items": {
-                              "type": "array",
-                              "items": {
-                                "type": "number"
-                              }
-                            }
+                            "nullable": true
                           }
-                        },
-                        "required": ["msg", "timetaken", "totalDistance", "direction"]
+                        }
+                      },
+                      "description": "The origins, snapped to the nearest road."
+                    },
+                    "destinations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          },
+                          "radius": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        }
+                      },
+                      "description": "The destinations, snapped to the nearest road."
+                    },
+                    "origin_to_destination": {
+                      "type": "array",
+                      "description": "One entry per origin and destination pair.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "from": {
+                            "type": "integer",
+                            "description": "Position of the origin in the list you sent."
+                          },
+                          "to": {
+                            "type": "integer",
+                            "description": "Position of the destination in the list you sent."
+                          },
+                          "distance": {
+                            "type": "number",
+                            "description": "Road distance in kilometers."
+                          },
+                          "time": {
+                            "type": "number",
+                            "description": "Travel time in seconds."
+                          }
+                        }
                       }
                     }
-                  },
-                  "required": ["msg", "directions"]
-                },
-                "examples": {
-                  "Success": {
-                    "summary": "Successful Route Computation",
-                    "value": {
-                      "msg": "Ok",
-                      "directions": [
-                        {
-                          "msg": "Ok",
-                          "timetaken": 27145.13,
-                          "totalDistance": 81435.39,
-                          "direction": [
-                            [9.067654609680176, 38.75811004638672],
-                            [9.067713737487793, 38.75811767578125],
-                            [9.068061828613281, 38.758182525634766],
-                            [9.068098068237305, 38.75818634033203],
-                            [9.068119049072266, 38.758174896240234]
-                          ]
-                        }
-                      ]
-                    }
                   }
+                },
+                "example": {
+                  "origins": [
+                    {
+                      "lat": 9.052066,
+                      "lon": 38.710815,
+                      "radius": null
+                    }
+                  ],
+                  "destinations": [
+                    {
+                      "lat": 9.04128,
+                      "lon": 38.721692,
+                      "radius": null
+                    },
+                    {
+                      "lat": 9.048567,
+                      "lon": 38.73236,
+                      "radius": null
+                    }
+                  ],
+                  "origin_to_destination": [
+                    {
+                      "from": 0,
+                      "to": 0,
+                      "distance": 4.008,
+                      "time": 611
+                    },
+                    {
+                      "from": 0,
+                      "to": 1,
+                      "distance": 4.164,
+                      "time": 719
+                    }
+                  ]
                 }
               }
             }
@@ -157,160 +196,168 @@
         ],
         "responses": {
           "200": {
-            "description": "A matrix containing pairwise travel durations and distances between the provided coordinates.",
+            "description": "Travel time and distance between every pair of points.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "msg": {
-                      "type": "string",
-                      "description": "Response status message (e.g., 'Ok')."
-                    },
-                    "durations": {
+                    "origins": {
                       "type": "array",
-                      "description": "2D array where each item represents travel durations (in seconds) from one origin to each destination.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "duration": {
-                            "type": "array",
-                            "items": {
-                              "oneOf": [
-                                {
-                                  "type": "number"
-                                },
-                                {
-                                  "type": "integer"
-                                }
-                              ]
-                            }
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          },
+                          "radius": {
+                            "type": "number",
+                            "nullable": true
                           }
-                        },
-                        "required": ["duration"]
-                      }
-                    },
-                    "distances": {
-                      "type": "array",
-                      "description": "2D array where each item represents travel distances (in meters) from one origin to each destination.",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "duration": {
-                            "type": "array",
-                            "items": {
-                              "oneOf": [
-                                {
-                                  "type": "number"
-                                },
-                                {
-                                  "type": "integer"
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        "required": ["duration"]
-                      }
+                        }
+                      },
+                      "description": "The origins, snapped to the nearest road."
                     },
                     "destinations": {
                       "type": "array",
-                      "description": "List of destination points used in the matrix.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "location": {
-                            "type": "object",
-                            "properties": {
-                              "lat": {
-                                "type": "number"
-                              },
-                              "lng": {
-                                "type": "number"
-                              }
-                            },
-                            "required": ["lat", "lng"]
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          },
+                          "radius": {
+                            "type": "number",
+                            "nullable": true
                           }
-                        },
-                        "required": ["location"]
-                      }
+                        }
+                      },
+                      "description": "The destinations, snapped to the nearest road."
                     },
-                    "origins": {
+                    "origin_to_destination": {
                       "type": "array",
-                      "description": "List of origin points used in the matrix.",
+                      "description": "One entry per origin and destination pair.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "location": {
-                            "type": "object",
-                            "properties": {
-                              "lat": {
-                                "type": "number"
-                              },
-                              "lng": {
-                                "type": "number"
-                              }
-                            },
-                            "required": ["lat", "lng"]
+                          "from": {
+                            "type": "integer",
+                            "description": "Position of the origin in the list you sent."
+                          },
+                          "to": {
+                            "type": "integer",
+                            "description": "Position of the destination in the list you sent."
+                          },
+                          "distance": {
+                            "type": "number",
+                            "description": "Road distance in kilometers."
+                          },
+                          "time": {
+                            "type": "number",
+                            "description": "Travel time in seconds."
                           }
-                        },
-                        "required": ["location"]
+                        }
                       }
-                    }
-                  },
-                  "required": ["msg", "durations", "distances", "destinations", "origins"]
-                },
-                "examples": {
-                  "Success": {
-                    "summary": "Example matrix response",
-                    "value": {
-                      "msg": "Ok",
-                      "durations": [
-                        {
-                          "duration": [0, 20.87]
-                        },
-                        {
-                          "duration": [61.39, 0]
-                        }
-                      ],
-                      "distances": [
-                        {
-                          "duration": [0, 62.62]
-                        },
-                        {
-                          "duration": [184.17, 0]
-                        }
-                      ],
-                      "destinations": [
-                        {
-                          "location": {
-                            "lat": 8.987685,
-                            "lng": 38.764793
-                          }
-                        },
-                        {
-                          "location": {
-                            "lat": 8.987945,
-                            "lng": 38.76513
-                          }
-                        }
-                      ],
-                      "origins": [
-                        {
-                          "location": {
-                            "lat": 8.987685,
-                            "lng": 38.764793
-                          }
-                        },
-                        {
-                          "location": {
-                            "lat": 8.987945,
-                            "lng": 38.76513
-                          }
-                        }
-                      ]
                     }
                   }
+                },
+                "example": {
+                  "origins": [
+                    {
+                      "lat": 9.055978,
+                      "lon": 38.704943,
+                      "radius": null
+                    },
+                    {
+                      "lat": 9.030787,
+                      "lon": 38.730911,
+                      "radius": null
+                    },
+                    {
+                      "lat": 9.047874,
+                      "lon": 38.756519,
+                      "radius": null
+                    }
+                  ],
+                  "destinations": [
+                    {
+                      "lat": 9.055978,
+                      "lon": 38.704943,
+                      "radius": null
+                    },
+                    {
+                      "lat": 9.030787,
+                      "lon": 38.730911,
+                      "radius": null
+                    },
+                    {
+                      "lat": 9.047874,
+                      "lon": 38.756519,
+                      "radius": null
+                    }
+                  ],
+                  "origin_to_destination": [
+                    {
+                      "from": 0,
+                      "to": 0,
+                      "distance": 0,
+                      "time": 0
+                    },
+                    {
+                      "from": 0,
+                      "to": 1,
+                      "distance": 6.067,
+                      "time": 878
+                    },
+                    {
+                      "from": 0,
+                      "to": 2,
+                      "distance": 9.547,
+                      "time": 1264
+                    },
+                    {
+                      "from": 1,
+                      "to": 0,
+                      "distance": 6.795,
+                      "time": 971
+                    },
+                    {
+                      "from": 1,
+                      "to": 1,
+                      "distance": 0,
+                      "time": 0
+                    },
+                    {
+                      "from": 1,
+                      "to": 2,
+                      "distance": 4.393,
+                      "time": 641
+                    },
+                    {
+                      "from": 2,
+                      "to": 0,
+                      "distance": 8.699,
+                      "time": 1144
+                    },
+                    {
+                      "from": 2,
+                      "to": 1,
+                      "distance": 4.307,
+                      "time": 614
+                    },
+                    {
+                      "from": 2,
+                      "to": 2,
+                      "distance": 0,
+                      "time": 0
+                    }
+                  ]
                 }
               }
             }
@@ -364,14 +411,8 @@
                           "maxItems": 2
                         },
                         "capacities": {
-                          "type": "object",
-                          "description": "Maximum load the vehicle can carry",
-                          "properties": {
-                            "boxes": {
-                              "type": "number",
-                              "description": "Number of boxes the vehicle can carry"
-                            }
-                          }
+                          "type": "integer",
+                          "description": "How many boxes the vehicle can carry."
                         }
                       }
                     }
@@ -540,74 +581,127 @@
         ],
         "responses": {
           "200": {
-            "description": "A successful response containing the optimized route information.",
+            "description": "The best visiting order as a round trip from the first stop.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "msg": {
-                      "type": "string",
-                      "description": "A status or informational message."
+                      "type": "string"
                     },
-                    "bestorder": {
+                    "best_order": {
                       "type": "array",
-                      "description": "The optimal visiting order of the input coordinates including the return to the starting point.",
                       "items": {
-                        "type": "integer"
-                      }
+                        "type": "object",
+                        "properties": {
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          },
+                          "index": {
+                            "type": "integer"
+                          },
+                          "original_index": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "description": "Stops in visiting order, starting and ending at the first stop. original_index is the position in the list you sent."
                     },
-                    "timetaken": {
-                      "type": "number",
-                      "description": "Total estimated travel time (in seconds) for the optimized route."
-                    },
-                    "totalDistance": {
-                      "type": "number",
-                      "description": "Total estimated travel distance (in meters) for the optimized route."
-                    },
-                    "originalorder": {
+                    "original_order": {
                       "type": "array",
-                      "description": "The original order indices of the input coordinates.",
                       "items": {
-                        "type": "integer"
-                      }
+                        "type": "object",
+                        "properties": {
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          },
+                          "index": {
+                            "type": "integer"
+                          },
+                          "original_index": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "description": "Stops in the order you sent them."
                     },
-                    "direction": {
+                    "total_distance": {
+                      "type": "number",
+                      "description": "Length of the round trip in kilometers."
+                    },
+                    "time_taken": {
+                      "type": "number",
+                      "description": "Travel time for the round trip in seconds."
+                    },
+                    "Direction": {
                       "type": "array",
-                      "description": "The geographical path (route geometry) of the optimized trip. Each element is a [longitude, latitude] pair.",
                       "items": {
                         "type": "array",
                         "items": {
                           "type": "number"
                         }
-                      }
-                    }
-                  },
-                  "required": [
-                    "msg",
-                    "bestorder",
-                    "timetaken",
-                    "totalDistance",
-                    "originalorder",
-                    "direction"
-                  ]
-                },
-                "examples": {
-                  "success": {
-                    "summary": "Successful Optimization",
-                    "value": {
-                      "msg": "Optimization completed successfully",
-                      "bestorder": [0, 2, 1, 0],
-                      "timetaken": 10840.284,
-                      "totalDistance": 32520.854,
-                      "originalorder": [0, 1, 2],
-                      "direction": [
-                        [8.98755168914795, 38.764892578125],
-                        [8.987594604492188, 38.76495361328125],
-                        [8.987668991088867, 38.76502990722656]
-                      ]
+                      },
+                      "description": "The route as [lat, lng] points. Note the capital D."
                     }
                   }
+                },
+                "example": {
+                  "msg": "Ok",
+                  "best_order": [
+                    {
+                      "lat": 9.056218,
+                      "lon": 38.705173
+                    },
+                    {
+                      "lat": 9.030789,
+                      "lon": 38.730922,
+                      "index": 1,
+                      "original_index": 1
+                    },
+                    {
+                      "lat": 9.047741,
+                      "lon": 38.756671,
+                      "index": 2,
+                      "original_index": 2
+                    },
+                    {
+                      "lat": 9.056218,
+                      "lon": 38.705173,
+                      "index": 3,
+                      "original_index": 3
+                    }
+                  ],
+                  "original_order": [
+                    {
+                      "lat": 9.056218147277832,
+                      "lon": 38.70517349243164
+                    },
+                    {
+                      "lat": 9.030789375305176,
+                      "lon": 38.73092269897461,
+                      "index": 1
+                    },
+                    {
+                      "lat": 9.047741889953613,
+                      "lon": 38.75667190551758,
+                      "index": 2
+                    },
+                    {
+                      "lat": 9.056218147277832,
+                      "lon": 38.70517349243164,
+                      "index": 3
+                    }
+                  ],
+                  "total_distance": 19.698,
+                  "time_taken": 2774.798,
+                  "Direction": [[9.055978, 38.704943]]
                 }
               }
             }
@@ -619,7 +713,7 @@
     "/api/route/direction/": {
       "get": {
         "summary": "Get Route Directions",
-        "description": "Calculates the optimal route between two geographic points, with optional waypoints, and returns essential routing details including travel time, total distance, and a series of geographic coordinates representing the route. Turn-by-turn instructions can also be requested.",
+        "description": "Calculates the best driving route between two points, with optional waypoints, and returns the travel time, total distance and the route as coordinates. With `alternative=t`, other possible routes come back in `alternates`.",
         "tags": ["Direction"],
         "deprecated": false,
         "parameters": [
@@ -644,16 +738,6 @@
             }
           },
           {
-            "name": "instruction",
-            "in": "query",
-            "description": "If set to `1`, turn-by-turn navigation instructions will be included in the response. Default is `0` (no instructions).",
-            "required": false,
-            "example": "0",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "apiKey",
             "in": "query",
             "description": "API key used to authenticate the request.",
@@ -672,64 +756,96 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "alternative",
+            "in": "query",
+            "required": false,
+            "description": "Set to `t` to also get other possible routes, in `alternates`.",
+            "schema": {
+              "type": "string",
+              "enum": ["t"]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful response containing routing information.",
+            "description": "The route, and alternatives if requested.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "msg": {
-                      "type": "string",
-                      "description": "Response message, e.g., 'Ok' if successful."
+                      "type": "string"
                     },
                     "timetaken": {
                       "type": "number",
-                      "description": "Estimated travel time in seconds."
+                      "description": "Travel time in seconds."
                     },
                     "totalDistance": {
                       "type": "number",
-                      "description": "Total distance of the route in meters."
+                      "description": "Route length in meters."
                     },
                     "direction": {
                       "type": "array",
-                      "description": "List of geographic coordinates (latitude, longitude) forming the route geometry.",
                       "items": {
                         "type": "array",
                         "items": {
                           "type": "number"
                         }
-                      }
-                    }
-                  },
-                  "required": ["msg", "timetaken", "totalDistance", "direction"]
-                },
-                "examples": {
-                  "Success": {
-                    "summary": "Example of a successful route response",
-                    "value": {
-                      "msg": "Ok",
-                      "timetaken": 5102.905,
-                      "totalDistance": 15308.715,
-                      "direction": [
-                        [9.18759536743164, 38.763946533203125],
-                        [9.187566757202148, 38.763954162597656],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.1875581741333, 38.763362884521484],
-                        [9.187539100646973, 38.76198959350586],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.187505722045898, 38.76165771484375],
-                        [9.1871976852417, 38.76167678833008],
-                        [9.187050819396973, 38.76163101196289],
-                        [9.187050819396973, 38.76163101196289]
-                      ]
+                      },
+                      "description": "The route as [lat, lng] points."
+                    },
+                    "alternates": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "timetaken": {
+                            "type": "number",
+                            "description": "Travel time in seconds."
+                          },
+                          "totalDistance": {
+                            "type": "number",
+                            "description": "Route length in meters."
+                          },
+                          "direction": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            "description": "The route as [lat, lng] points."
+                          }
+                        }
+                      },
+                      "description": "Other possible routes. Only present with alternative=t."
                     }
                   }
+                },
+                "example": {
+                  "msg": "Ok",
+                  "timetaken": 1275.631,
+                  "totalDistance": 8895,
+                  "direction": [
+                    [9.055978, 38.704943],
+                    [9.056214, 38.704691]
+                  ],
+                  "alternates": [
+                    {
+                      "timetaken": 1182.037,
+                      "totalDistance": 8425,
+                      "direction": [[9.055978, 38.704943]]
+                    },
+                    {
+                      "timetaken": 1404.338,
+                      "totalDistance": 10585,
+                      "direction": [[9.055978, 38.704943]]
+                    }
+                  ]
                 }
               }
             }
@@ -742,8 +858,8 @@
       "get": {
         "summary": "Find Place by Name",
         "operationId": "findPlace",
-        "deprecated": false,
-        "description": "Search for a place by name. The endpoint returns a list of matching places with details such as location (latitude and longitude), city, country, and type (e.g., neighborhood, landmark).",
+        "deprecated": true,
+        "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Search for a place by name. The endpoint returns a list of matching places with details such as location (latitude and longitude), city, country, and type (e.g., neighborhood, landmark).",
         "tags": ["Places"],
         "parameters": [
           {
@@ -860,9 +976,9 @@
       "get": {
         "operationId": "findPlacesByBound",
         "summary": "Find Places Within Geographic Bounds",
-        "deprecated": false,
+        "deprecated": true,
         "tags": ["Places"],
-        "description": "Retrieves a list of places that match a specified name and are located within a defined geographic bounding box. Useful for limiting results to a specific area on a map.",
+        "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Retrieves a list of places that match a specified name and are located within a defined geographic bounding box. Useful for limiting results to a specific area on a map.",
         "parameters": [
           {
             "name": "name",
@@ -901,9 +1017,9 @@
       "get": {
         "operationId": "filterPlaces",
         "summary": "Filter Places by Location",
-        "deprecated": false,
+        "deprecated": true,
         "tags": ["Places"],
-        "description": "Retrieves a list of places that match a specified name and are located within a specified country and city. This endpoint allows clients to filter places using location-based attributes.",
+        "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Retrieves a list of places that match a specified name and are located within a specified country and city. This endpoint allows clients to filter places using location-based attributes.",
         "parameters": [
           {
             "name": "name",
@@ -1064,8 +1180,8 @@
       "get": {
         "summary": "Reverse Geocodes",
         "operationId": "reverseGeocode",
-        "deprecated": false,
-        "description": "Retrieve place information based on latitude and longitude coordinates. This endpoint returns details such as place name, location, country, city, and type.",
+        "deprecated": true,
+        "description": "Older endpoint. Use `GET /v2/search/reverse-geocoding` instead. Retrieve place information based on latitude and longitude coordinates. This endpoint returns details such as place name, location, country, city, and type.",
         "tags": ["Places"],
         "parameters": [
           {
@@ -1264,6 +1380,478 @@
           }
         },
         "security": []
+      }
+    },
+    "/v2/search/geocode": {
+      "get": {
+        "tags": ["Places"],
+        "summary": "Forward geocoding",
+        "security": [],
+        "description": "Search for a place by name or address and get its coordinates and address.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "What to look up. URL-encode it.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bole Road"
+          },
+          {
+            "name": "autocomplete",
+            "in": "query",
+            "required": false,
+            "description": "Match partial words. Defaults to true.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "required": false,
+            "description": "Only results inside minLng,minLat,maxLng,maxLat.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated ISO country codes, such as et.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "description": "Language for the text in the response.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "How many results, from 1 to 10. Defaults to 10.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          },
+          {
+            "name": "proximity",
+            "in": "query",
+            "required": false,
+            "description": "Prefer results near lng,lat, or `ip`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated categories to include.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "required": true,
+            "description": "Your API key. It has to be in the query string.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching places, sorted by relevance and distance.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "query": {
+                          "type": "string"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "lat": {
+                                    "type": "number"
+                                  },
+                                  "lng": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  },
+                                  "country_code": {
+                                    "type": "string",
+                                    "description": "Two-letter ISO code, such as ET."
+                                  }
+                                }
+                              },
+                              "neighborhood": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "query": "Bole Road",
+                    "results": [
+                      {
+                        "id": "forge-416190",
+                        "name": "Bole Road",
+                        "display_name": "Bole Road, Addis Ababa, Ethiopia",
+                        "category": "establishment",
+                        "location": {
+                          "lat": 9.007932,
+                          "lng": 38.765386
+                        },
+                        "address": {
+                          "city": "Addis Ababa",
+                          "country": "Ethiopia",
+                          "country_code": "ET"
+                        },
+                        "neighborhood": "OLYMPIA"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/search/reverse-geocoding": {
+      "get": {
+        "tags": ["Places"],
+        "summary": "Reverse geocoding",
+        "security": [],
+        "description": "Send coordinates and get the places at that point, nearest first.",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "description": "Latitude, -90 to 90.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 9.0192
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "description": "Longitude, -180 to 180.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 38.7578
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "How many results, from 1 to 5. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated categories to include.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiKey",
+            "in": "query",
+            "required": true,
+            "description": "Your API key. It has to be in the query string.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Places at the point, sorted by distance.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "query": {
+                          "type": "string"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "display_name": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "lat": {
+                                    "type": "number"
+                                  },
+                                  "lng": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  },
+                                  "country_code": {
+                                    "type": "string",
+                                    "description": "Two-letter ISO code, such as ET."
+                                  }
+                                }
+                              },
+                              "neighborhood": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "query": "9.019200,38.757800",
+                    "results": [
+                      {
+                        "id": "forge-249006",
+                        "name": "Gemechis Firomse And Friends Construction And Desi",
+                        "display_name": "Gemechis Firomse And Friends Construction And Desi, Addis Ababa, Ethiopia",
+                        "category": "establishment",
+                        "location": {
+                          "lat": 9.019141,
+                          "lng": 38.757735
+                        },
+                        "address": {
+                          "city": "Addis Ababa",
+                          "country": "Ethiopia",
+                          "country_code": "ET"
+                        },
+                        "neighborhood": "FIL WUHA"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/route/matching": {
+      "get": {
+        "tags": ["Matching"],
+        "summary": "Map matching",
+        "security": [],
+        "description": "Snap a GPS trace to the roads it was driven on. The trace goes in a JSON body on a GET request, so browsers and fetch can't call it; use a server, script or cURL.",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "query",
+            "required": true,
+            "description": "Your API key. It has to be in the query string.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["path"],
+                "properties": {
+                  "path": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "object",
+                      "required": ["lat", "lon", "timestamp"],
+                      "properties": {
+                        "lat": {
+                          "type": "number"
+                        },
+                        "lon": {
+                          "type": "number"
+                        },
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "When the point was recorded, ISO 8601."
+                        }
+                      }
+                    }
+                  },
+                  "mode": {
+                    "type": "string",
+                    "description": "Defaults to auto. pedestrian is also accepted."
+                  },
+                  "shape_match": {
+                    "type": "string",
+                    "description": "Defaults to map_snap. walk_or_snap is also accepted."
+                  }
+                }
+              },
+              "example": {
+                "path": [
+                  {
+                    "lat": 9.021175,
+                    "lon": 38.683022,
+                    "timestamp": "2026-05-28T10:30:00Z"
+                  },
+                  {
+                    "lat": 9.0209432,
+                    "lon": 38.6817064,
+                    "timestamp": "2026-05-28T10:30:05Z"
+                  },
+                  {
+                    "lat": 9.0205533,
+                    "lon": 38.6823806,
+                    "timestamp": "2026-05-28T10:30:10Z"
+                  }
+                ],
+                "mode": "auto",
+                "shape_match": "map_snap"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The matched route.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lat": {
+                            "type": "number"
+                          },
+                          "lon": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "distance": {
+                      "type": "number",
+                      "description": "Length of the matched route in meters."
+                    }
+                  }
+                },
+                "example": {
+                  "path": [
+                    {
+                      "lat": 9.021378,
+                      "lon": 38.683007
+                    },
+                    {
+                      "lat": 9.021341,
+                      "lon": 38.682509
+                    },
+                    {
+                      "lat": 9.021336,
+                      "lon": 38.682277
+                    }
+                  ],
+                  "distance": 1599.9125
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

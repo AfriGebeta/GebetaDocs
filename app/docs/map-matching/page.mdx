@@ -28,65 +28,115 @@ GPS points drift. A phone in a moving car can report positions in buildings, on 
 
 ## Request
 
+Send the trace as a JSON body on a `GET` request, with your key in the query string.
+
 ```bash
-GET https://mapapi.gebeta.app/api/route/matching/?path=[{lat,lng},{lat,lng}]&radius=1&apiKey={your-api-key}
+GET https://mapapi.gebeta.app/api/route/matching?apiKey={your-api-key}
+Content-Type: application/json
 ```
 
-| Parameter | Type     | Required | Description                                                         |
-| --------- | -------- | -------- | ------------------------------------------------------------------- |
-| `path`    | `string` | Yes      | The GPS points in the order they were recorded, as `[{lat,lng},…]`. |
-| `radius`  | `number` | Yes      | How far from each point, in meters, to look for a road.             |
-| `apiKey`  | `string` | Yes      | Your Gebeta Maps API key.                                           |
+| Field              | Type     | Required | Description                                                                               |
+| ------------------ | -------- | -------- | ----------------------------------------------------------------------------------------- |
+| `path`             | `array`  | Yes      | The GPS points in the order they were recorded. At least two different locations.         |
+| `path[].lat`       | `number` | Yes      | Latitude.                                                                                 |
+| `path[].lon`       | `number` | Yes      | Longitude. Note the name: `lon`, not `lng`.                                               |
+| `path[].timestamp` | `string` | Yes      | When the point was recorded, in ISO 8601, such as `2026-05-28T10:30:00Z`.                 |
+| `mode`             | `string` | No       | How the trace was travelled. Defaults to `auto` (driving); `pedestrian` is also accepted. |
+| `shape_match`      | `string` | No       | How to match the points. Defaults to `map_snap`; `walk_or_snap` is also accepted.         |
+
+<Callout title="Not callable from a browser">
+  Browsers and the standard `fetch` API don't allow a body on a `GET` request, so call this endpoint
+  from your server, a script or cURL.
+</Callout>
 
 ## Example
 
+<Tabs items={["cURL", "Python"]}>
+<Tab value="cURL">
+
 ```bash
-curl -g "https://mapapi.gebeta.app/api/route/matching/?path=[{9.019797,38.743688},{9.020316,38.74401},{9.020571,38.743619},{9.020883,38.743538},{9.020799,38.743876},{9.020952,38.744177}]&radius=1&apiKey={your-api-key}"
+curl -X GET "https://mapapi.gebeta.app/api/route/matching?apiKey={your-api-key}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "path": [
+      { "lat": 9.021175, "lon": 38.683022, "timestamp": "2026-05-28T10:30:00Z" },
+      { "lat": 9.0209432, "lon": 38.6817064, "timestamp": "2026-05-28T10:30:05Z" },
+      { "lat": 9.0205533, "lon": 38.6823806, "timestamp": "2026-05-28T10:30:10Z" },
+      { "lat": 9.0200333, "lon": 38.6825528, "timestamp": "2026-05-28T10:30:15Z" },
+      { "lat": 9.0195164, "lon": 38.6826264, "timestamp": "2026-05-28T10:30:20Z" },
+      { "lat": 9.0190145, "lon": 38.6827177, "timestamp": "2026-05-28T10:30:25Z" },
+      { "lat": 9.0184856, "lon": 38.6827672, "timestamp": "2026-05-28T10:30:30Z" },
+      { "lat": 9.017605, "lon": 38.6836847, "timestamp": "2026-05-28T10:30:35Z" },
+      { "lat": 9.0171966, "lon": 38.6836529, "timestamp": "2026-05-28T10:30:40Z" },
+      { "lat": 9.017539, "lon": 38.683811, "timestamp": "2026-05-28T10:30:45Z" },
+      { "lat": 9.0176591, "lon": 38.6837819, "timestamp": "2026-05-28T10:30:50Z" },
+      { "lat": 9.016998960505316, "lon": 38.681870728177095, "timestamp": "2026-05-28T10:30:55Z" }
+    ],
+    "mode": "auto",
+    "shape_match": "map_snap"
+  }'
 ```
 
-<Callout title="Use -g with curl">
-  The brackets in `path` are curl's URL pattern syntax. `-g` turns that off so the URL is sent as
-  written.
-</Callout>
+</Tab>
+<Tab value="Python">
+
+```python
+import requests
+
+trace = {
+    "path": [
+        {"lat": 9.021175, "lon": 38.683022, "timestamp": "2026-05-28T10:30:00Z"},
+        {"lat": 9.0209432, "lon": 38.6817064, "timestamp": "2026-05-28T10:30:05Z"},
+        {"lat": 9.0205533, "lon": 38.6823806, "timestamp": "2026-05-28T10:30:10Z"},
+    ],
+    "mode": "auto",
+    "shape_match": "map_snap",
+}
+
+response = requests.get(
+    "https://mapapi.gebeta.app/api/route/matching",
+    params={"apiKey": api_key},
+    json=trace,
+)
+print(response.json()["distance"])
+```
+
+</Tab>
+</Tabs>
 
 ## Response
 
 ```json
 {
-  "coordinates": [
-    [9.019822, 38.74364],
-    [9.019915, 38.74369],
-    [9.020158, 38.743841],
-    [9.020444, 38.74401],
-    [9.020767, 38.743394],
-    [9.021026, 38.743539],
-    [9.020723, 38.74414],
-    [9.020915, 38.744249]
+  "path": [
+    { "lat": 9.021378, "lon": 38.683007 },
+    { "lat": 9.021341, "lon": 38.682509 },
+    { "lat": 9.021336, "lon": 38.682277 }
   ],
-  "distance": 288.5191
+  "distance": 1599.9125
 }
 ```
 
-| Field         | Description                                                                                              |
-| ------------- | -------------------------------------------------------------------------------------------------------- |
-| `coordinates` | The matched path as `[lat, lng]` points along the road. It can have more points than you sent, at turns. |
-| `distance`    | Length of the matched path.                                                                              |
+| Field      | Description                                                                                                                                                                             |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `path`     | The matched route as `{ lat, lon }` points along the road. It usually has more points than you sent; the full response to the example above has 43. This example shows the first three. |
+| `distance` | Length of the matched route, in meters.                                                                                                                                                 |
 
 ## Errors
 
-| Status | Message                          | What to do                                                           |
-| ------ | -------------------------------- | -------------------------------------------------------------------- |
-| `401`  | `Not Authorized - No Token`      | Add your API key as the `apiKey` parameter.                          |
-| `401`  | `Not Authorized - Invalid Token` | The key is wrong or expired. Copy a current key from your dashboard. |
-| `404`  | `NoRoute`                        | No road matches the trace. Check the points or increase `radius`.    |
-| `422`  | `InvalidInput`                   | Check that `path` is `[{lat,lng},…]` and `radius` is a number.       |
+| Status | `code`          | Cause                                                                                                                                                                                                                         |
+| ------ | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `401`  | `HE00004`       | The `apiKey` parameter is missing or the key is invalid.                                                                                                                                                                      |
+| `400`  | `INVALID_INPUT` | The body is missing or invalid. `fields` says which part, for example `path must contain at least 2 distinct locations` or `invalid timestamp`.                                                                               |
+| `503`  | `HE0000B`       | The trace couldn't be matched to roads. The real reason is in `error.additional.raw_body`, for example `map_snap algorithm failed to snap the shape points`. Check the points follow a road and the timestamps are realistic. |
 
 ```json
 {
   "error": {
-    "code": "InvalidInput",
-    "message": "Invalid path format. Please provide coordinates in the correct format.",
-    "status": 422
+    "code": "INVALID_INPUT",
+    "fields": { "input": ["path must contain at least 2 distinct locations"] },
+    "message": "validation failed",
+    "status": 400
   }
 }
 ```

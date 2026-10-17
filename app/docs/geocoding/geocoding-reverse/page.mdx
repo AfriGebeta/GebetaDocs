@@ -14,11 +14,11 @@ Reverse geocoding takes a latitude and longitude and returns what is there: the 
 GET https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat={latitude}&lon={longitude}&apiKey={your-api-key}
 ```
 
-| Parameter | Type     | Required | Description                                                                                |
-| --------- | -------- | -------- | ------------------------------------------------------------------------------------------ |
-| `lat`     | `number` | Yes      | Latitude, from `-90` to `90`.                                                              |
-| `lon`     | `number` | Yes      | Longitude, from `-180` to `180`.                                                           |
-| `apiKey`  | `string` | Yes      | Your API key. You can send it as an `Authorization: Bearer {your-api-key}` header instead. |
+| Parameter | Type     | Required | Description                                                                                           |
+| --------- | -------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `lat`     | `number` | Yes      | Latitude, from `-90` to `90`.                                                                         |
+| `lon`     | `number` | Yes      | Longitude, from `-180` to `180`.                                                                      |
+| `apiKey`  | `string` | Yes      | Your Gebeta Maps API key. It has to be in the query string; an `Authorization` header isn't accepted. |
 
 ### Optional parameters
 
@@ -54,16 +54,17 @@ curl "https://mapapi.gebeta.app/v2/search/reverse-geocoding?lat=9.0192&lon=38.75
     "query": "9.019200,38.757800",
     "results": [
       {
-        "id": "way:123456",
-        "name": "Bole Road",
-        "display_name": "Bole Road, Addis Ababa, Ethiopia",
-        "category": "highway",
-        "location": { "lat": 9.019185, "lng": 38.757812 },
+        "id": "forge-249006",
+        "name": "Gemechis Firomse And Friends Construction And Desi",
+        "display_name": "Gemechis Firomse And Friends Construction And Desi, Addis Ababa, Ethiopia",
+        "category": "establishment",
+        "location": { "lat": 9.019141, "lng": 38.757735 },
         "address": {
           "city": "Addis Ababa",
           "country": "Ethiopia",
-          "country_code": "ETH"
-        }
+          "country_code": "ET"
+        },
+        "neighborhood": "FIL WUHA"
       }
     ]
   }

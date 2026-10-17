@@ -36,11 +36,11 @@ The body has three lists, all required.
 
 ### `vehicles`
 
-| Field              | Type     | Description                                         |
-| ------------------ | -------- | --------------------------------------------------- |
-| `name`             | `string` | The driver or vehicle name. Returned in the result. |
-| `current_location` | `array`  | Where the vehicle is now, as `[lat, lng]`.          |
-| `capacities.boxes` | `number` | How many boxes the vehicle can carry.               |
+| Field              | Type      | Description                                              |
+| ------------------ | --------- | -------------------------------------------------------- |
+| `name`             | `string`  | The driver or vehicle name. Returned in the result.      |
+| `current_location` | `array`   | Where the vehicle is now, as `[lat, lng]`.               |
+| `capacities`       | `integer` | How many boxes the vehicle can carry, as a whole number. |
 
 ### `customers`
 
@@ -65,8 +65,8 @@ curl -X POST "https://mapapi.gebeta.app/api/optimized-trip?apiKey={your-api-key}
   -H "Content-Type: application/json" \
   -d '{
     "vehicles": [
-      { "name": "driver 1", "current_location": [9.020929, 38.801699], "capacities": { "boxes": 3 } },
-      { "name": "driver 2", "current_location": [9.020929, 38.801699], "capacities": { "boxes": 3 } }
+      { "name": "driver 1", "current_location": [9.020929, 38.801699], "capacities": 3 },
+      { "name": "driver 2", "current_location": [9.020929, 38.801699], "capacities": 3 }
     ],
     "customers": [
       { "name": "a", "location": [9.022359, 38.799478], "demand": 1, "requested_from_depot": "bole-warehouse" },
