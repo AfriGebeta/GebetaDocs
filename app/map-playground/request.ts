@@ -71,8 +71,8 @@ export function buildRequest(input: PlaygroundInput): PlaygroundRequest {
         method: "GET",
         url:
           input.geocodeDirection === "forward"
-            ? `${API_BASE_URL}/api/v1/route/geocoding?name=${encodeURIComponent(input.query.trim())}&${key}`
-            : `${API_BASE_URL}/api/v1/route/revgeocoding?lat=${input.origin?.lat ?? ""}&lon=${input.origin?.lng ?? ""}&${key}`,
+            ? `${API_BASE_URL}/v2/search/geocode?query=${encodeURIComponent(input.query.trim())}&${key}`
+            : `${API_BASE_URL}/v2/search/reverse-geocoding?lat=${input.origin?.lat ?? ""}&lon=${input.origin?.lng ?? ""}&${key}`,
       };
     case "direction": {
       const options = [
@@ -259,15 +259,18 @@ export function readResult(input: PlaygroundInput, data: unknown): PlaygroundRes
 
   switch (input.mode) {
     case "geocoding": {
-      const places = records(body.data).flatMap((item): Place[] => {
+      const results = isRecord(body.data) ? body.data.results : body.data;
+      const places = records(results).flatMap((item): Place[] => {
         const point = toPoint(item);
         if (!point) return [];
+        const address = typeof item.display_name === "string" ? item.display_name : item.address;
+        const type = item.category ?? item.type;
         return [
           {
             name: String(item.name ?? "Unnamed place"),
             point,
-            address: typeof item.address === "string" ? item.address : undefined,
-            type: typeof item.type === "string" ? item.type : undefined,
+            address: typeof address === "string" ? address : undefined,
+            type: typeof type === "string" ? type : undefined,
           },
         ];
       });

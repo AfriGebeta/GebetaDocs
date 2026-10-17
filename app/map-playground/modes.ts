@@ -80,8 +80,8 @@ export function pickTargets(
 export const EXAMPLE_TRIP = JSON.stringify(
   {
     vehicles: [
-      { name: "driver 1", current_location: [9.020929, 38.801699], capacities: { boxes: 3 } },
-      { name: "driver 2", current_location: [9.020929, 38.801699], capacities: { boxes: 3 } },
+      { name: "driver 1", current_location: [9.020929, 38.801699], capacities: 3 },
+      { name: "driver 2", current_location: [9.020929, 38.801699], capacities: 3 },
     ],
     customers: [
       {
