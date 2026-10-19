@@ -1,0 +1,114 @@
+---
+title: Directions
+description: Get a driving route, draw it on the map, and read its turn-by-turn steps.
+order: 6
+---
+
+# Directions
+
+`getDirections()` asks the [Direction API](/direction) for a driving route, and `displayRoute()` draws it. Call them once the map has loaded.
+
+## Show a route
+
+```javascript
+map.on("load", async () => {
+  const route = await gebeta.getDirections(
+    { lat: 8.989022, lng: 38.79036 },
+    { lat: 9.03045, lng: 38.7653 }
+  );
+
+  gebeta.displayRoute(route);
+  console.log(route.distance, route.duration); // "7.24 km" "17 min"
+});
+```
+
+`displayRoute()` draws the route as a line, puts markers on its start and end, and moves the map to show it. [Try it](/examples/show-route), or [pick the points by clicking](/examples/route-on-click).
+
+<Callout title="Points are objects here">
+  `getDirections()` takes `{ lat, lng }` objects, so a MapLibre `event.lngLat` works as is. `center` and the route's `geometry` use `[lng, lat]` arrays.
+</Callout>
+
+## Stops
+
+Pass `waypoints` to route through stops in the order you give them:
+
+```javascript
+const route = await gebeta.getDirections(origin, destination, {
+  waypoints: [
+    { lat: 9.0102, lng: 38.7612 },
+    { lat: 9.0201, lng: 38.7701 },
+  ],
+});
+```
+
+`displayRoute()` marks the start and end but not the stops; add your own markers for them, as in [Route through stops](/examples/route-with-stops). To have the best order chosen for you, use the [Route Optimization API](/route-optimization).
+
+## The route
+
+| Field          | Example                         | Description                                                     |
+| -------------- | ------------------------------- | --------------------------------------------------------------- |
+| `distance`     | `"7.24 km"`                     | Total distance, ready to show.                                  |
+| `duration`     | `"17 min"`                      | Total driving time, ready to show.                              |
+| `summary`      | `{ length: 7.236, time: 1009 }` | The same as numbers: `length` in kilometers, `time` in seconds. |
+| `geometry`     | GeoJSON `LineString`            | The path, as `[lng, lat]` coordinates.                          |
+| `instructions` | Array                           | The turn-by-turn steps. See below.                              |
+| `origin`       | `{ lat, lng }`                  | The start you asked for.                                        |
+| `destination`  | `{ lat, lng }`                  | The end you asked for.                                          |
+
+## Instructions
+
+Each step in `route.instructions` describes one maneuver:
+
+```json
+{
+  "type": 24,
+  "instruction": "Keep left to take Africa Avenue / Bole Road.",
+  "verbal_pre_transition_instruction": "Keep left to take Africa Avenue / Bole Road.",
+  "verbal_post_transition_instruction": "Continue for 4 kilometers.",
+  "bearing_after": 279,
+  "time": 520.593,
+  "length": 3.899,
+  "coord": [38.777098, 8.992864],
+  "index": 2
+}
+```
+
+| Field                                | Description                                                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `instruction`                        | What to do, as a sentence.                                                                                                            |
+| `verbal_pre_transition_instruction`  | A longer version to read out before the turn.                                                                                         |
+| `verbal_post_transition_instruction` | What to read out after the turn.                                                                                                      |
+| `length`                             | Length of this step in kilometers.                                                                                                    |
+| `time`                               | Time for this step in seconds.                                                                                                        |
+| `coord`                              | Where the step starts, as `[lng, lat]`.                                                                                               |
+| `bearing_after`                      | Heading after the turn, in degrees from north.                                                                                        |
+| `type`                               | The maneuver type, as a [Valhalla maneuver code](https://valhalla.github.io/valhalla/api/turn-by-turn/api-reference/#maneuver-types). |
+
+[Turn-by-turn instructions](/examples/route-instructions) lists them next to the map.
+
+## Style the route
+
+Set the style when you draw the route, or change it later:
+
+```javascript
+gebeta.displayRoute(route, {
+  showMarkers: false,
+  routeStyle: { "line-color": "#f97316", "line-width": 6 },
+});
+
+gebeta.updateRouteStyle({ "line-opacity": 0.5 });
+```
+
+| Option                          | Default   | Description                               |
+| ------------------------------- | --------- | ----------------------------------------- |
+| `routeStyle["line-color"]`      | `#007cbf` | The line's color.                         |
+| `routeStyle["line-width"]`      | `4`       | The line's width in pixels.               |
+| `routeStyle["line-opacity"]`    | `0.8`     | From 0 to 1.                              |
+| `showMarkers`                   | `true`    | Whether to mark the start and end.        |
+| `originIcon`, `destinationIcon` |           | Image URLs for the start and end markers. |
+
+[Try it](/examples/route-style). `clearRoute()` removes the line and its markers.
+
+## Errors
+
+`getDirections()` throws a `ValidationError` when a point is missing `lat` or `lng`, a `RoutingError` when no route is found, and an `ApiError` or `NetworkError` when the request fails. See [Errors](/sdk/errors).

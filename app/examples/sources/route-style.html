@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Style the route line</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+
+      .panel { position: absolute; top: 12px; left: 12px; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; max-width: calc(100% - 24px); }
+      button { border: 0; border-radius: 999px; padding: 8px 14px; background: #fff; color: #161616; font: 500 13px Geist, system-ui, sans-serif; cursor: pointer; box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 0 0 1px rgb(0 0 0 / 0.1); transition: background-color 150ms cubic-bezier(0.215, 0.61, 0.355, 1); }
+      button:hover { background: #f4f4f4; }
+      button[aria-pressed="true"] { background: #191715; color: #faf9f7; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="panel">
+      <button data-color="#191715" data-width="5" data-opacity="1" aria-pressed="true">Ink</button>
+      <button data-color="#2563eb" data-width="5" data-opacity="1">Blue</button>
+      <button data-color="#191715" data-width="9" data-opacity="1">Thick</button>
+      <button data-color="#191715" data-width="5" data-opacity="0.35">Faded</button>
+    </div>
+    <script>
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7785, 9.0098],
+        zoom: 12.5,
+      });
+
+      function fitRoute(route) {
+        const bounds = new maplibregl.LngLatBounds();
+        route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
+        map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left: 64, right: 64 }, maxZoom: 16, duration: 800 });
+      }
+
+      map.on("load", async () => {
+        const route = await gebeta.getDirections(
+          { lat: 8.989022, lng: 38.79036 },
+          { lat: 9.03045, lng: 38.7653 }
+        );
+
+        gebeta.displayRoute(route, {
+          showMarkers: false,
+          routeStyle: { "line-color": "#191715", "line-width": 5, "line-opacity": 1 },
+        });
+        fitRoute(route);
+      });
+
+      const buttons = document.querySelectorAll(".panel button");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          gebeta.updateRouteStyle({
+            "line-color": button.dataset.color,
+            "line-width": Number(button.dataset.width),
+            "line-opacity": Number(button.dataset.opacity),
+          });
+          buttons.forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+        });
+      });
+    </script>
+  </body>
+</html>

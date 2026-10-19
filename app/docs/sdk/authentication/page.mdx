@@ -1,0 +1,89 @@
+---
+title: Authentication
+description: Sign SDK requests with short-lived tokens from your backend, or with an API key.
+order: 1
+---
+
+# Authentication
+
+Every map tile and API request the SDK makes is signed. You give the SDK either an `auth` pair of tokens or an `apiKey`, never both. Passing both, or neither, throws a `ValidationError`.
+
+| Option   | What it is                                                           | Use it for                              |
+| -------- | -------------------------------------------------------------------- | --------------------------------------- |
+| `auth`   | `{ accessToken, refreshToken }` issued by your backend.              | Live apps. Tokens expire after minutes. |
+| `apiKey` | Your API key from the [dashboard](https://gebeta.app/auth/register). | Prototypes, internal tools, examples.   |
+
+## Tokens from your backend
+
+Your backend holds a secret **server token** and swaps it, together with your app's **client token**, for an access token and a refresh token. Only those two reach the browser, so nothing long-lived is exposed.
+
+### 1. Issue tokens on your server
+
+```bash
+npm install @gebeta/node
+```
+
+```typescript
+import express from "express";
+import { GebetaAuth } from "@gebeta/node";
+
+const app = express();
+app.use(express.json());
+
+const gebetaAuth = new GebetaAuth({ serverToken: process.env.GEBETA_SERVER_TOKEN! });
+
+app.post("/gebeta-token", async (req, res) => {
+  try {
+    const credentials = await gebetaAuth.authenticate(req.body.clientToken);
+    res.json(credentials);
+  } catch {
+    res.status(401).json({ error: "Couldn't get Gebeta tokens" });
+  }
+});
+```
+
+`authenticate()` returns `{ accessToken, refreshToken }`. It throws an `UnauthorizedError` if Gebeta rejects the tokens, and a `NetworkError` if the request doesn't go through. Check who is asking before you hand out tokens, the same way you protect your other endpoints.
+
+### 2. Pass them to the SDK
+
+```javascript
+const { accessToken, refreshToken } = await fetch("/gebeta-token", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ clientToken: "{your-client-token}" }),
+}).then((response) => response.json());
+
+const gebeta = new GebetaMaps({ auth: { accessToken, refreshToken } });
+```
+
+In React, pass the same object as the `auth` prop of [`GebetaMap`](/sdk/react).
+
+<Callout title="Keep the server token on the server">
+  `GEBETA_SERVER_TOKEN` must never be sent to a browser or bundled into an app. Anyone with it can
+  issue tokens on your account.
+</Callout>
+
+### Refreshing
+
+Access tokens last about 7 minutes. When an API request (directions, geocoding, navigation) comes back `401`, the SDK uses the refresh token to get a new access token and retries the request once. If the retry also fails, the call throws an `UnauthorizedError`; fetch new tokens from your backend and create the map again.
+
+## API key
+
+```javascript
+const gebeta = new GebetaMaps({ apiKey: "{your-api-key}" });
+```
+
+The SDK adds the key to every tile and API request. It also logs a console warning that API key auth is deprecated. That's expected: keys still work, but anyone who views your page can read the key, so move live apps to tokens.
+
+## Standalone managers
+
+`GeocodingManager` and the other managers accept either an API key string or an `AuthManager`, which holds tokens and refreshes them:
+
+```javascript
+import { GeocodingManager, AuthManager } from "@gebeta/js/geocoding";
+
+const withKey = new GeocodingManager("{your-api-key}");
+const withTokens = new GeocodingManager(new AuthManager({ accessToken, refreshToken }));
+```
+
+See [Geocoding](/sdk/geocoding#without-a-map) and [Server-side](/sdk/node).

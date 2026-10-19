@@ -858,7 +858,7 @@
       "get": {
         "summary": "Find Place by Name",
         "operationId": "findPlace",
-        "deprecated": true,
+        "deprecated": false,
         "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Search for a place by name. The endpoint returns a list of matching places with details such as location (latitude and longitude), city, country, and type (e.g., neighborhood, landmark).",
         "tags": ["Places"],
         "parameters": [
@@ -976,7 +976,7 @@
       "get": {
         "operationId": "findPlacesByBound",
         "summary": "Find Places Within Geographic Bounds",
-        "deprecated": true,
+        "deprecated": false,
         "tags": ["Places"],
         "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Retrieves a list of places that match a specified name and are located within a defined geographic bounding box. Useful for limiting results to a specific area on a map.",
         "parameters": [
@@ -1017,7 +1017,7 @@
       "get": {
         "operationId": "filterPlaces",
         "summary": "Filter Places by Location",
-        "deprecated": true,
+        "deprecated": false,
         "tags": ["Places"],
         "description": "Older endpoint. Use `GET /v2/search/geocode` instead. Retrieves a list of places that match a specified name and are located within a specified country and city. This endpoint allows clients to filter places using location-based attributes.",
         "parameters": [
@@ -1180,7 +1180,7 @@
       "get": {
         "summary": "Reverse Geocodes",
         "operationId": "reverseGeocode",
-        "deprecated": true,
+        "deprecated": false,
         "description": "Older endpoint. Use `GET /v2/search/reverse-geocoding` instead. Retrieve place information based on latitude and longitude coordinates. This endpoint returns details such as place name, location, country, city, and type.",
         "tags": ["Places"],
         "parameters": [

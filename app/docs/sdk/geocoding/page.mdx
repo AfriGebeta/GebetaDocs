@@ -1,0 +1,85 @@
+---
+title: Geocoding
+description: Find places by name, or what's at a point, from the map or from your server.
+order: 5
+---
+
+# Geocoding
+
+The geocoding manager turns place names into coordinates (forward geocoding) and coordinates into nearby places (reverse geocoding). It's on every `GebetaMaps` instance once the map has loaded, and you can also use it [without a map](#without-a-map).
+
+## Forward geocoding
+
+```javascript
+map.on("load", async () => {
+  const places = await gebeta.geocodingManager.geocode("Bole");
+  map.flyTo({ center: places[0].lngLat, zoom: 15 });
+});
+```
+
+`geocode()` takes a name and resolves to a list of matching places.
+
+## Reverse geocoding
+
+```javascript
+map.on("click", async (event) => {
+  const places = await gebeta.geocodingManager.reverseGeocode(event.lngLat);
+  console.log(places[0]?.name);
+});
+```
+
+`reverseGeocode()` takes `{ lat, lng }` and resolves to up to 50 places around that point. [Try it](/examples/reverse-geocode).
+
+## Results
+
+Both methods resolve to an array of places like this:
+
+```json
+{
+  "name": "bole",
+  "lngLat": { "lng": 38.79036, "lat": 8.989022 },
+  "City": "Addis Ababa",
+  "Country": "Ethiopia",
+  "type": "neighborhood"
+}
+```
+
+| Field     | Description                                                                   |
+| --------- | ----------------------------------------------------------------------------- |
+| `name`    | The place's name.                                                             |
+| `lngLat`  | Where it is, as `{ lng, lat }`. Pass it straight to MapLibre or a marker.     |
+| `City`    | The city it's in.                                                             |
+| `Country` | The country it's in.                                                          |
+| `type`    | What kind of place it is, such as `neighborhood`, `establishment` or `Store`. |
+
+`City` and `Country` are capitalized because that's how the API returns them.
+
+## Without a map
+
+Import `GeocodingManager` from `@gebeta/js/geocoding` to geocode without loading the map renderer. It works in the browser and in Node 18 or later:
+
+```javascript
+import { GeocodingManager, AuthManager } from "@gebeta/js/geocoding";
+
+const geocoder = new GeocodingManager(new AuthManager({ accessToken, refreshToken }));
+
+const places = await geocoder.reverseGeocode({ lat: 9.0192, lng: 38.7578 });
+```
+
+Pass an API key string instead of the `AuthManager` if you use one.
+
+## Errors
+
+| Error               | When                                                   |
+| ------------------- | ------------------------------------------------------ |
+| `ValidationError`   | The name is empty, or the point has no `lat` or `lng`. |
+| `UnauthorizedError` | The API key or token was rejected.                     |
+| `NetworkError`      | The request didn't reach the API.                      |
+| `GeocodingError`    | The API answered, but not with results.                |
+
+See [Errors](/sdk/errors) for how to tell them apart.
+
+<Callout title="Need more search options?">
+  The SDK searches by name only. For autocomplete, a bounding box, a country filter or categories,
+  call the [Geocoding API](/geocoding) directly.
+</Callout>

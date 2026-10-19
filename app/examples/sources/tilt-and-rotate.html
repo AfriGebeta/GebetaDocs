@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tilt and rotate the map</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7613, 9.0106],
+        zoom: 15.5,
+        pitch: 55,
+        bearing: -20,
+        navigationControl: true,
+      });
+
+      function rotate(timestamp) {
+        map.rotateTo((timestamp / 150) % 360, { duration: 0 });
+        requestAnimationFrame(rotate);
+      }
+
+      map.on("load", () => requestAnimationFrame(rotate));
+    </script>
+  </body>
+</html>

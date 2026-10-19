@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add a GeoJSON layer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7613, 9.0106],
+        zoom: 14,
+      });
+
+      map.on("load", () => {
+        map.addSource("delivery-area", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Polygon",
+              coordinates: [[
+                [38.752, 9.004], [38.768, 9.003], [38.773, 9.012],
+                [38.766, 9.021], [38.751, 9.019], [38.752, 9.004],
+              ]],
+            },
+          },
+        });
+
+        map.addLayer({
+          id: "delivery-area-fill",
+          type: "fill",
+          source: "delivery-area",
+          paint: { "fill-color": "#2563eb", "fill-opacity": 0.2 },
+        });
+
+        map.addLayer({
+          id: "delivery-area-outline",
+          type: "line",
+          source: "delivery-area",
+          paint: { "line-color": "#2563eb", "line-width": 2 },
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+---
+title: Markers and clustering
+description: Add markers with popups, and group many markers into clusters that split apart as you zoom in.
+order: 7
+---
+
+# Markers and clustering
+
+A few markers can go straight on the map with MapLibre. For many markers, turn on clustering: nearby markers merge into one circle with a count, and split apart as you zoom in.
+
+## Single markers
+
+Use MapLibre's `Marker` and `Popup`. From npm, import them from `maplibre-gl`; with the CDN script, they're on `window.maplibregl`:
+
+```javascript
+const popup = new maplibregl.Popup({ offset: 25 }).setHTML("<strong>Meskel Square</strong>");
+
+new maplibregl.Marker({ color: "#f97316" }).setLngLat([38.7613, 9.0106]).setPopup(popup).addTo(map);
+```
+
+[Try it](/examples/add-marker).
+
+## Clustering
+
+Turn clustering on when you create the instance. It can't be turned on later:
+
+```javascript
+const gebeta = new GebetaMaps({
+  auth: { accessToken, refreshToken },
+  clustering: { enabled: true, showClusterCount: true },
+});
+
+const map = gebeta.init({ container: "map", center: [38.7578, 9.0192], zoom: 12 });
+
+map.on("load", () => {
+  stores.forEach((store) => {
+    gebeta.clustering.addMarker({
+      id: store.id,
+      lngLat: store.lngLat,
+      imageUrl: "/pin.svg",
+    });
+  });
+});
+```
+
+`gebeta.clustering` is `null` if clustering is off. Clicking a cluster zooms in until it splits. [Try it](/examples/cluster-markers).
+
+### Clustering options
+
+| Option             | Default | Description                                                        |
+| ------------------ | ------- | ------------------------------------------------------------------ |
+| `enabled`          | `false` | Turns clustering on.                                               |
+| `radius`           | `50`    | How close markers must be, in pixels, to merge.                    |
+| `maxZoom`          | `16`    | Above this zoom, markers never merge.                              |
+| `showClusterCount` | `false` | Shows how many markers each cluster holds.                         |
+| `clusterImage`     |         | An image URL for clusters, instead of the default circle.          |
+| `clusterOnClick`   |         | `(cluster, event) => void`. Replaces the default zoom-in on click. |
+
+Change `radius`, `maxZoom` and the others later with `gebeta.clustering.updateOptions({ radius: 80 })`.
+
+## Marker options
+
+| Field          | Type                              | Description                                               |
+| -------------- | --------------------------------- | --------------------------------------------------------- |
+| `id`           | `string`                          | Required. Use it to remove or look up the marker.         |
+| `lngLat`       | `[lng, lat]` or `{ lng, lat }`    | Required. Where the marker goes.                          |
+| `imageUrl`     | `string`                          | The marker's image. Without one, the marker is invisible. |
+| `size`         | `[width, height]`                 | Size in pixels. Defaults to `[30, 30]`.                   |
+| `popupContent` | `string \| HTMLElement`           | HTML shown in a popup when the marker is clicked.         |
+| `onClick`      | `(lngLat, marker, event) => void` | Called when the marker is clicked.                        |
+
+The image fills the marker box and is centered on `lngLat`. For a pin whose tip should touch the point, use an image twice as tall with the pin in its top half, as [Custom marker images](/examples/marker-popups) does.
+
+## Methods
+
+| Method                   | Description                                     |
+| ------------------------ | ----------------------------------------------- |
+| `addMarker(marker)`      | Adds a marker.                                  |
+| `removeMarker(id)`       | Removes a marker. Returns `false` if not found. |
+| `clearMarkers()`         | Removes every marker.                           |
+| `getMarkers()`           | All markers.                                    |
+| `getMarker(id)`          | One marker, or `undefined`.                     |
+| `updateOptions(options)` | Changes clustering options and redraws.         |
+| `getOptions()`           | The current options.                            |
+
+In React, the same methods come from [`useClustering()`](/sdk/react#clustered-markers).

@@ -1,0 +1,161 @@
+---
+title: JavaScript
+description: Create a Gebeta map with @gebeta/js, pick a style, add controls, and use MapLibre underneath.
+order: 2
+---
+
+# JavaScript
+
+`@gebeta/js` creates the map and gives you managers for directions, geocoding, clustering, geofencing and navigation. Using React? See [React](/sdk/react).
+
+## Create a map
+
+```javascript
+import "maplibre-gl/dist/maplibre-gl.css";
+import { GebetaMaps } from "@gebeta/js";
+
+const gebeta = new GebetaMaps({ auth: { accessToken, refreshToken } });
+
+const map = gebeta.init({
+  container: "map",
+  center: [38.7578, 9.0192],
+  zoom: 13,
+});
+```
+
+Creating the map takes two steps. The constructor sets up auth and options; `init()` draws the map and returns the [MapLibre map](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/).
+
+### Constructor options
+
+| Option           | Type                            | Description                                                                                            |
+| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `auth`           | `{ accessToken, refreshToken }` | Tokens from your backend. See [Authentication](/sdk/authentication).                                   |
+| `apiKey`         | `string`                        | Your API key, instead of `auth`.                                                                       |
+| `clustering`     | `object`                        | Turns on [marker clustering](/sdk/markers). It can only be set here.                                   |
+| `enableClientId` | `boolean`                       | Sends a stable `X-Device-ID` header with every request, stored in `localStorage`. Defaults to `false`. |
+
+### `init()` options
+
+| Option                      | Type                    | Description                                                                   |
+| --------------------------- | ----------------------- | ----------------------------------------------------------------------------- |
+| `container`                 | `string \| HTMLElement` | The element's id, without `#`, or the element itself. Give it a height.       |
+| `center`                    | `[lng, lat]`            | Where the map starts. Longitude first. Without it the map starts at `[0, 0]`. |
+| `zoom`                      | `number`                | The starting zoom, from 0 to 22.                                              |
+| `styleUrl`                  | `string`                | A style URL. Defaults to the standard style. See [Map styles](#map-styles).   |
+| `style`                     | `object`                | A whole style object, instead of `styleUrl`.                                  |
+| `navigationControl`         | `boolean`               | Shows zoom and compass buttons. Defaults to `false`.                          |
+| `navigationControlPosition` | `string`                | `top-left`, `top-right` (the default), `bottom-left` or `bottom-right`.       |
+
+Any other [MapLibre map option](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MapOptions/), such as `pitch`, `bearing`, `minZoom` or `maxBounds`, is passed through to MapLibre.
+
+## Wait for the map to load
+
+The managers (`gebeta.fencing`, `gebeta.clustering`, `gebeta.geocodingManager`, directions and navigation) are created once the style has loaded. Before that, they throw a `PlatformError`, or return `null` for directions methods. Put your code in the map's `load` event:
+
+```javascript
+const map = gebeta.init({ container: "map", center: [38.7578, 9.0192], zoom: 13 });
+
+map.on("load", async () => {
+  const route = await gebeta.getDirections(
+    { lat: 8.989022, lng: 38.79036 },
+    { lat: 9.03045, lng: 38.7653 }
+  );
+  gebeta.displayRoute(route);
+});
+```
+
+## Map styles
+
+| Style     | URL                                                             |
+| --------- | --------------------------------------------------------------- |
+| Standard  | `https://tiles.gebeta.app/styles/standard/style.json`           |
+| Satellite | `https://tiles.gebeta.app/styles/raster/raster.json`            |
+| Terrain   | `https://tiles.gebeta.app/styles/standard/terrain/terrain.json` |
+
+Pick one when you create the map:
+
+```javascript
+import { API } from "@gebeta/api";
+
+gebeta.init({
+  container: "map",
+  styleUrl: API.Map.Constants.STYLES.satellite.url,
+});
+```
+
+To switch later, call MapLibre's `setStyle()`. Requests keep their auth:
+
+```javascript
+map.setStyle(API.Map.Constants.STYLES.terrain.url);
+```
+
+[Try it](/examples/map-styles).
+
+## Controls
+
+Pass `navigationControl: true` to `init()`, or add the buttons later:
+
+```javascript
+gebeta.addNavigationControls("bottom-right");
+```
+
+Other MapLibre controls work as usual:
+
+```javascript
+import maplibregl from "maplibre-gl";
+
+map.addControl(new maplibregl.ScaleControl(), "bottom-left");
+map.addControl(new maplibregl.FullscreenControl(), "top-left");
+```
+
+With the CDN script, use `window.maplibregl` instead of importing it. [Try it](/examples/navigation-controls).
+
+## Use MapLibre directly
+
+`init()` returns the MapLibre map, and `gebeta.getMap()` returns it again later (or `null` before `init()`). Camera moves, events, sources and layers all work as they do in MapLibre:
+
+```javascript
+map.on("click", (event) => {
+  console.log(event.lngLat);
+});
+
+map.flyTo({ center: [38.7613, 9.0106], zoom: 15 });
+```
+
+The [examples](/examples) include [flying to a place](/examples/fly-to), [tilting the map](/examples/tilt-and-rotate), [reading coordinates on click](/examples/click-coordinates) and [adding a GeoJSON layer](/examples/geojson-layer).
+
+## Methods
+
+| Member                                         | Description                                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `init(options)`                                | Draws the map and returns the MapLibre map.                                          |
+| `getMap()`                                     | The MapLibre map, or `null` before `init()`.                                         |
+| `addNavigationControls(position?)`             | Adds zoom and compass buttons.                                                       |
+| `getDirections(origin, destination, options?)` | Gets a route. See [Directions](/sdk/directions).                                     |
+| `displayRoute(route, options?)`                | Draws a route and fits the map to it.                                                |
+| `updateRouteStyle(style)`                      | Changes the drawn route's color, width or opacity.                                   |
+| `clearRoute()`                                 | Removes the drawn route and its markers.                                             |
+| `getCurrentRoute()`                            | The last route from `getDirections()`, or `null`.                                    |
+| `geocodingManager`                             | Forward and reverse geocoding. See [Geocoding](/sdk/geocoding).                      |
+| `clustering`                                   | The clustering manager, or `null` if clustering is off. See [Markers](/sdk/markers). |
+| `fencing`                                      | Draw and show geofences. See [Geofencing](/sdk/fencing).                             |
+| `navigation`                                   | Turn-by-turn navigation. See [Navigation](/sdk/navigation).                          |
+
+## Smaller bundles
+
+The full package includes the map renderer. If you only need geocoding, import it from its own subpath and your bundler leaves the map out. It doesn't need a browser, so it also runs in Node:
+
+```javascript
+import { GeocodingManager, AuthManager } from "@gebeta/js/geocoding";
+```
+
+| Import                  | Exports                                                         |
+| ----------------------- | --------------------------------------------------------------- |
+| `@gebeta/js`            | `GebetaMaps`, `BrowserLocationProvider` and every manager class |
+| `@gebeta/js/geocoding`  | `GeocodingManager`, `AuthManager`                               |
+| `@gebeta/js/directions` | `DirectionsManager`                                             |
+| `@gebeta/js/clustering` | `ClusteringManager`                                             |
+| `@gebeta/js/fencing`    | `FenceManager`                                                  |
+| `@gebeta/js/navigation` | `NavigationManager`, `BrowserLocationProvider`                  |
+
+The directions, clustering, fencing and navigation classes draw on a map, so they take the map adapters from `gebeta.getPlatform()`. Most apps use the managers on a `GebetaMaps` instance instead.

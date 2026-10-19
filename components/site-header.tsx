@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
 
 const SITE_URL = "https://gebeta.app";
 
-const PLAYGROUNDS = ["/api-playground", "/map-playground"];
+const SECTIONS = ["/sdk", "/examples", "/api-playground", "/map-playground"];
 
 const LINKS = [
   { label: "Home", href: "/" },
+  { label: "SDK", href: "/sdk" },
+  { label: "Examples", href: "/examples" },
   { label: "API playground", href: "/api-playground" },
   { label: "Map playground", href: "/map-playground" },
 ];
@@ -19,8 +21,7 @@ const LINKS = [
 export function SiteHeader() {
   const pathname = usePathname();
   const inSection = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
-  const isActive = (href: string) =>
-    href === "/" ? !PLAYGROUNDS.some(inSection) : inSection(href);
+  const isActive = (href: string) => (href === "/" ? !SECTIONS.some(inSection) : inSection(href));
 
   return (
     <header className="site-header sticky top-0 z-50 h-16 bg-background shadow-[0_1px_0_hsl(var(--border))]">
@@ -35,7 +36,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <ul className="ml-auto flex items-center gap-6">
+        <ul className="ml-auto flex min-w-0 items-center gap-4 overflow-x-auto whitespace-nowrap [scrollbar-width:none] sm:gap-6">
           {LINKS.map((link) => (
             <li key={link.href}>
               <Link

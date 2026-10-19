@@ -1,0 +1,137 @@
+---
+title: React Native
+description: A GebetaMap component and hooks for directions, clustering, geofencing, navigation and location on iOS and Android.
+order: 4
+---
+
+# React Native
+
+`@gebeta/react-native` brings the SDK to iOS and Android. It's built on [MapLibre React Native](https://github.com/maplibre/maplibre-react-native) and uses the same managers as the web SDK, so routes, markers and fences work the same way.
+
+<Callout title="Two React Native packages">
+  This page is about `@gebeta/react-native`, the SDK package.
+  [`@gebeta/tiles-react-native`](/tiles/react-native) is a separate, older package for showing
+  tiles.
+</Callout>
+
+## Install
+
+```bash
+npm install @gebeta/react-native @maplibre/maplibre-react-native
+```
+
+It needs React 19.1, React Native 0.80 and MapLibre React Native 11 or later. On iOS, run the setup script once. It adds static framework linking and MapLibre's post-install step to your Podfile, and is safe to run again. Then install pods:
+
+```bash
+npx @gebeta/react-native setup-ios
+cd ios && pod install
+```
+
+## Show a map
+
+```jsx
+import { GebetaMap } from "@gebeta/react-native";
+
+export function StoreMap({ auth }) {
+  return <GebetaMap auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ flex: 1 }} />;
+}
+```
+
+| Prop                | Description                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| `auth` or `apiKey`  | Tokens from your backend, or an API key. See [Authentication](/sdk/authentication). |
+| `center`            | Where the map starts, as `[lng, lat]`.                                              |
+| `zoom`              | The starting zoom.                                                                  |
+| `styleUrl`          | A style URL. See [Map styles](/sdk/js#map-styles).                                  |
+| `style`             | The view style. Give the map a size, for example `{ flex: 1 }`.                     |
+| `onLoad`, `onError` | Called when the map has loaded, or fails to.                                        |
+| `children`          | Components that use the hooks below.                                                |
+
+## Hooks
+
+Each hook must be called from a component rendered inside `GebetaMap`. They return `null` managers until the map is ready, so check before you call them.
+
+| Hook                                | Returns                                           |
+| ----------------------------------- | ------------------------------------------------- |
+| `useDirections({ auth })`           | `{ directions }`                                  |
+| `useClustering(options, markers?)`  | `{ clustering }`                                  |
+| `useFencing(options?)`              | `{ fencing }`                                     |
+| `useNavigation({ auth }, options?)` | `{ navigation, isNavigating, progress, arrived }` |
+| `useUserLocation(enabled?)`         | `{ location }`                                    |
+
+Pass `useDirections` and `useNavigation` the same `auth` or `apiKey` you gave the map, as `{ auth }` or `{ apiKey }`.
+
+### Directions
+
+```jsx
+import { GebetaMap, useDirections } from "@gebeta/react-native";
+import { Button } from "react-native";
+
+function RouteButton({ auth }) {
+  const { directions } = useDirections({ auth });
+
+  async function showRoute() {
+    const route = await directions.getDirections(
+      { lat: 8.989022, lng: 38.79036 },
+      { lat: 9.03045, lng: 38.7653 }
+    );
+    directions.displayRoute(route);
+  }
+
+  return <Button title="Show route" onPress={showRoute} disabled={!directions} />;
+}
+
+export function RouteMap({ auth }) {
+  return (
+    <GebetaMap auth={auth} center={[38.7785, 9.0098]} zoom={12} style={{ flex: 1 }}>
+      <RouteButton auth={auth} />
+    </GebetaMap>
+  );
+}
+```
+
+`directions` has the same `getDirections()`, `displayRoute()` and `clearRoute()` as the [web SDK](/sdk/directions).
+
+### Clustering
+
+```jsx
+import { useMemo } from "react";
+import { useClustering } from "@gebeta/react-native";
+
+function Stores({ stores }) {
+  const markers = useMemo(
+    () => stores.map((store) => ({ id: store.id, lngLat: store.lngLat, imageUrl: store.icon })),
+    [stores]
+  );
+  useClustering({ radius: 60 }, markers);
+  return null;
+}
+```
+
+The markers are added when the map is ready and replaced whenever the `markers` array changes, so memoize it. Marker fields are the same as on the web; see [Markers](/sdk/markers#marker-options).
+
+### Location
+
+`useUserLocation()` asks for location permission and returns the device's latest position. Declare `ACCESS_FINE_LOCATION` on Android and `NSLocationWhenInUseUsageDescription` on iOS. To draw the location dot, render the `UserLocation` component this package re-exports from MapLibre.
+
+### Navigation
+
+`useNavigation()` gives you a navigation manager plus its state. Start it with a route, your driver's id and a location provider, the same as [on the web](/sdk/navigation). The device's location provider is on the map context:
+
+```jsx
+import { useGebetaMapContext, useNavigation } from "@gebeta/react-native";
+
+function Navigate({ auth, route }) {
+  const { platform } = useGebetaMapContext();
+  const { navigation, progress, arrived } = useNavigation({ auth });
+
+  function start() {
+    if (!navigation || !platform) return;
+    navigation.start(route, { userId: "driver-42" }, platform.locationProvider);
+  }
+
+  // ...
+}
+```
+
+To test without driving, `createSimulatedLocationProvider(route.geometry.coordinates)` moves along the route for you.

@@ -1,0 +1,124 @@
+---
+title: SDK
+description: JavaScript, React, React Native and Node.js packages for maps, routes, geocoding, clustering and geofences.
+order: 13
+icon: code
+---
+
+# Gebeta Maps SDK
+
+The Gebeta Maps SDK puts Gebeta maps in your app and wraps the APIs you need around them. It draws routes, finds places, clusters markers, draws geofences and follows a driver during navigation, so you don't build those on top of raw API calls. It's built on [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/), so anything MapLibre can do still works.
+
+Want to see it first? Browse the [examples](/examples).
+
+## Packages
+
+| Package                | Use it for                                                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| `@gebeta/js`           | Web pages and apps without a framework, or with one we don't have a package for.         |
+| `@gebeta/react`        | React apps. A `GebetaMap` component that sets up and cleans up the map for you.          |
+| `@gebeta/react-native` | iOS and Android apps built with React Native.                                            |
+| `@gebeta/node`         | Your backend. Exchanges your server token for the short-lived tokens your frontend uses. |
+| `@gebeta/api`          | TypeScript types and constants shared by the other packages. Installed with them.        |
+
+## Install
+
+<Tabs items={["npm", "pnpm", "yarn", "CDN"]}>
+<Tab value="npm">
+
+```bash
+npm install @gebeta/js
+```
+
+</Tab>
+<Tab value="pnpm">
+
+```bash
+pnpm add @gebeta/js
+```
+
+</Tab>
+<Tab value="yarn">
+
+```bash
+yarn add @gebeta/js
+```
+
+</Tab>
+<Tab value="CDN">
+
+```html
+<script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+```
+
+The script adds `GebetaMaps`, its managers and `maplibregl` to `window`, and loads the MapLibre styles for you. `v3` follows the latest 3.x release. To pin an exact version, use `https://tiles.gebeta.app/static/releases/3.0.12/gebeta-maps.umd.js`.
+
+</Tab>
+</Tabs>
+
+For React, install `@gebeta/react` instead. It includes `@gebeta/js`.
+
+## Show a map
+
+Give the map an element with a height:
+
+```html
+<div id="map" style="height: 400px"></div>
+```
+
+Then create the map in it:
+
+```javascript
+import "maplibre-gl/dist/maplibre-gl.css";
+import { GebetaMaps } from "@gebeta/js";
+
+const gebeta = new GebetaMaps({ apiKey: "{your-api-key}" });
+
+gebeta.init({
+  container: "map",
+  center: [38.7578, 9.0192],
+  zoom: 13,
+});
+```
+
+The stylesheet styles markers, popups and controls. `maplibre-gl` comes with `@gebeta/js`; with pnpm, add it to your own dependencies so the import resolves. With the CDN script, drop both `import` lines: the stylesheet is loaded for you and `GebetaMaps` is already on `window`. `container` is the element's id without `#`, or the element itself. `center` is `[lng, lat]`, longitude first. See it running in [Display a map](/examples/display-a-map).
+
+<Callout title="Use tokens in production">
+  An API key in frontend code can be copied by anyone who opens your page. For a live app, have your
+  backend issue short-lived tokens instead. See [Authentication](/sdk/authentication).
+</Callout>
+
+## What's in it
+
+<Cards>
+  <Card
+    title="Maps"
+    description="Styles, controls, and the MapLibre map underneath."
+    href="/sdk/js"
+  />
+  <Card
+    title="Directions"
+    description="Get a route, draw it, and list its turns."
+    href="/sdk/directions"
+  />
+  <Card
+    title="Geocoding"
+    description="Find places by name, or what's at a point."
+    href="/sdk/geocoding"
+  />
+  <Card
+    title="Markers and clustering"
+    description="Group many markers so busy maps stay readable."
+    href="/sdk/markers"
+  />
+  <Card
+    title="Geofencing"
+    description="Draw areas on the map, or show ones you have."
+    href="/sdk/fencing"
+  />
+  <Card
+    title="Navigation"
+    description="Follow a driver along a route, with arrival and off-route events."
+    href="/sdk/navigation"
+  />
+</Cards>

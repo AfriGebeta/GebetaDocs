@@ -1,0 +1,51 @@
+---
+title: Server-side
+description: Issue tokens for your frontend with @gebeta/node, and geocode from Node.js.
+order: 10
+---
+
+# Server-side
+
+Two parts of the SDK run on your server: `@gebeta/node`, which issues the tokens your frontend signs in with, and the geocoding manager. Both need Node 18 or later.
+
+## Issue tokens
+
+```bash
+npm install @gebeta/node
+```
+
+```typescript
+import { GebetaAuth } from "@gebeta/node";
+
+const gebetaAuth = new GebetaAuth({ serverToken: process.env.GEBETA_SERVER_TOKEN! });
+
+const { accessToken, refreshToken } = await gebetaAuth.authenticate(clientToken);
+```
+
+Send `accessToken` and `refreshToken` to the browser and pass them to the SDK as `auth`. [Authentication](/sdk/authentication) has a full Express endpoint and the frontend code.
+
+| Error               | When                                        |
+| ------------------- | ------------------------------------------- |
+| `UnauthorizedError` | Gebeta rejected the client or server token. |
+| `NetworkError`      | The request didn't reach Gebeta.            |
+
+## Geocode
+
+`@gebeta/js/geocoding` doesn't load the map, so it runs in Node:
+
+```bash
+npm install @gebeta/js
+```
+
+```typescript
+import { GeocodingManager } from "@gebeta/js/geocoding";
+
+const geocoder = new GeocodingManager(process.env.GEBETA_API_KEY!);
+
+const places = await geocoder.reverseGeocode({ lat: 9.0192, lng: 38.7578 });
+console.log(places[0].name);
+```
+
+The methods and results are the same as in the browser; see [Geocoding](/sdk/geocoding).
+
+For routing, matrices and the other APIs, call them over HTTP from your server. The [API reference](/api-playground) has every endpoint.

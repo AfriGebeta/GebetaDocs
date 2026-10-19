@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Route through stops</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+
+      .card { position: absolute; top: 12px; left: 12px; z-index: 1; max-width: calc(100% - 52px); padding: 10px 14px; border-radius: 8px; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 0 0 1px rgb(0 0 0 / 0.07); }
+      .card strong { display: block; font-weight: 500; }
+      .card small { color: #8a8a8a; font-size: 13px; }
+
+      .pin { width: 28px; height: 45px; filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); }
+      .pin span { position: absolute; top: -4px; left: 20px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border: 1px solid #fff; border-radius: 999px; background: #191715; color: #faf9f7; font: 500 10px/14px Geist, system-ui, sans-serif; text-align: center; }
+
+      .label { margin-bottom: 6px; padding: 6px 10px; border-radius: 999px; background: #191715; color: #faf9f7; font: 500 13px/1 Geist, system-ui, sans-serif; white-space: nowrap; pointer-events: none; }
+      .label::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: solid transparent; border-width: 6px 5px 0; border-top-color: #191715; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="card"><strong>Finding a route…</strong></div>
+    <script>
+      const INK = "#191715";
+
+      function pin(color, label) {
+        const element = document.createElement("div");
+        element.className = "pin";
+        element.innerHTML = `<svg width="28" height="45" viewBox="0 0 42 68"><path fill="${color}" d="M21 0a21 21 0 0 1 2 41.9V64a2 2 0 0 1-4 0V41.9A21 21 0 0 1 21 0Z"/><circle cx="21" cy="21" r="7" fill="#fff"/></svg>`;
+        if (label) element.insertAdjacentHTML("beforeend", `<span>${label}</span>`);
+        return element;
+      }
+
+      const origin = { lat: 8.989022, lng: 38.79036 };
+      const destination = { lat: 9.03045, lng: 38.7653 };
+      const stops = [
+        { lat: 9.0102, lng: 38.7612, color: "#2563eb" },
+        { lat: 9.0201, lng: 38.7701, color: "#dc2626" },
+      ];
+
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7785, 9.0098],
+        zoom: 12.5,
+      });
+
+      const ROUTE_STYLE = { "line-color": INK, "line-width": 5, "line-opacity": 1 };
+
+      function addCasing() {
+        if (map.getLayer("route-casing")) return;
+        map.addLayer(
+          {
+            id: "route-casing",
+            type: "line",
+            source: "gebeta-route",
+            layout: { "line-join": "round", "line-cap": "round" },
+            paint: { "line-color": "#fff", "line-width": 8 },
+          },
+          "gebeta-route"
+        );
+      }
+
+      function halfway(coordinates) {
+        const steps = coordinates.slice(1).map((point, i) => Math.hypot(point[0] - coordinates[i][0], point[1] - coordinates[i][1]));
+        let remaining = steps.reduce((sum, step) => sum + step, 0) / 2;
+        for (let i = 0; i < steps.length; i++) {
+          if (remaining <= steps[i]) return coordinates[i + 1];
+          remaining -= steps[i];
+        }
+        return coordinates[coordinates.length - 1];
+      }
+
+      function durationLabel(route) {
+        const element = document.createElement("div");
+        element.className = "label";
+        element.textContent = route.duration;
+        return new maplibregl.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+      }
+
+      function fitRoute(route, left = 64) {
+        const bounds = new maplibregl.LngLatBounds();
+        route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
+        map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
+      }
+
+      map.on("load", async () => {
+        const route = await gebeta.getDirections(origin, destination, { waypoints: stops });
+
+        gebeta.displayRoute(route, { showMarkers: false, routeStyle: ROUTE_STYLE });
+        addCasing();
+        fitRoute(route);
+
+        new maplibregl.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
+        stops.forEach((stop) => {
+          new maplibregl.Marker({ element: pin(stop.color), anchor: "bottom" }).setLngLat(stop).addTo(map);
+        });
+        new maplibregl.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
+        durationLabel(route).addTo(map);
+
+        document.querySelector(".card").innerHTML =
+          `<strong>${route.duration}</strong><small>${route.distance} · ${stops.length} stops</small>`;
+      });
+    </script>
+  </body>
+</html>

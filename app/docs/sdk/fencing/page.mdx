@@ -1,0 +1,97 @@
+---
+title: Geofencing
+description: Let users draw areas on the map, and show areas you already have.
+order: 8
+---
+
+# Geofencing
+
+`gebeta.fencing` draws geofences: polygons such as delivery zones, service areas or no-go areas. Users can draw a new one by clicking the map, and you can show the ones you've saved. It's ready once the map has loaded.
+
+## Draw a fence
+
+```javascript
+map.on("load", () => {
+  gebeta.fencing.on("fenceCompleted", (fence) => {
+    saveZone(fence.points);
+  });
+});
+
+drawButton.addEventListener("click", () => {
+  gebeta.fencing.startDrawing({ fillColor: "#f97316", lineColor: "#f97316" });
+});
+```
+
+After `startDrawing()`, each click on the map adds a corner. The fence closes when the user clicks within 50 meters of the first corner, once there are at least three. You can also close it from code with `closeFence()`. [Try it](/examples/draw-fence).
+
+`fenceCompleted` passes the fence:
+
+| Field     | Description                                                               |
+| --------- | ------------------------------------------------------------------------- |
+| `fenceId` | An id for this session, such as `"0"`.                                    |
+| `points`  | The corners as `{ lng, lat }`, with the first corner repeated at the end. |
+| `name`    | The name, if one was given.                                               |
+
+The fence stays on the map, but save `points` yourself if you need it later. To show it again on the next visit, pass it to `renderFences()`.
+
+### Drawing methods
+
+| Method                          | Description                                                             |
+| ------------------------------- | ----------------------------------------------------------------------- |
+| `startDrawing(style?)`          | Starts a new fence. Clicks on the map add corners.                      |
+| `closeFence()`                  | Closes the fence being drawn. Returns `null` with fewer than 3 corners. |
+| `stopDrawing()`                 | Stops listening for clicks, keeping the corners so far.                 |
+| `clearCurrentFence()`           | Stops drawing and removes the unfinished fence.                         |
+| `canCloseFence()`               | `true` once there are at least 3 corners.                               |
+| `getCurrentFencePoints()`       | The corners added so far.                                               |
+| `setProximityThreshold(meters)` | How close to the first corner a click must be to close the fence.       |
+
+### Drawing style
+
+| Option        | Default   | Description                    |
+| ------------- | --------- | ------------------------------ |
+| `fillColor`   | `#ff0000` | Fill color while drawing.      |
+| `fillOpacity` | `0.3`     | From 0 to 1.                   |
+| `lineColor`   | `#ff0000` | The outline's color.           |
+| `lineWidth`   | `2`       | The outline's width in pixels. |
+
+## Show saved fences
+
+```javascript
+map.on("load", () => {
+  gebeta.fencing.renderFences([
+    {
+      id: "piassa",
+      name: "Piassa",
+      color: "#7c3aed",
+      points: [
+        [38.744, 9.029],
+        [38.757, 9.029],
+        [38.757, 9.039],
+        [38.744, 9.039],
+      ],
+    },
+  ]);
+});
+```
+
+Each fence needs an `id` and at least three `points`, as `[lng, lat]` or `{ lng, lat }`. `color` sets the fill and outline, and `borderColor` overrides the outline. [Try it](/examples/show-fences), which also labels each fence at its center with `getFenceCentroid(id)`.
+
+### Methods
+
+| Method                    | Description                                   |
+| ------------------------- | --------------------------------------------- |
+| `renderFences(fences)`    | Shows a list of fences.                       |
+| `getFences()`             | The fences passed to `renderFences()`.        |
+| `getFence(id)`            | One of them, or `undefined`.                  |
+| `getFenceByName(name)`    | The first one with that name, or `undefined`. |
+| `getFenceCentroid(id)`    | The center of a fence, as `{ lng, lat }`.     |
+| `removeFence(id)`         | Removes a fence from the map.                 |
+| `removeFenceByName(name)` | Removes a fence by its name.                  |
+| `clearAllFences()`        | Removes every fence, including drawn ones.    |
+
+<Callout title="Checking if a point is inside">
+  The SDK draws fences but doesn't test points against them. To check whether a driver is inside a
+  zone, use a geometry library such as [Turf](https://turfjs.org/docs/api/booleanPointInPolygon)
+  with the fence's `points`.
+</Callout>

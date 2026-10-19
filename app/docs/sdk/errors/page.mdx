@@ -1,0 +1,69 @@
+---
+title: Errors
+description: The error classes the SDK throws, and their codes.
+order: 11
+---
+
+# Errors
+
+Every error the SDK throws extends `GebetaError`, so it has a `code` you can switch on and a `domain` that says which part of the SDK it came from. API errors also have the HTTP `statusCode`.
+
+```javascript
+try {
+  const route = await gebeta.getDirections(origin, destination);
+  gebeta.displayRoute(route);
+} catch (error) {
+  if (error.code === "API_3002") {
+    await refreshTokensAndRetry();
+  } else if (error.code?.startsWith("NETWORK_")) {
+    showOfflineMessage();
+  } else {
+    throw error;
+  }
+}
+```
+
+With npm you can also check the class, imported from `@gebeta/api`:
+
+```javascript
+import { UnauthorizedError, NetworkError } from "@gebeta/api";
+
+if (error instanceof UnauthorizedError) {
+  // ...
+}
+```
+
+## Classes
+
+| Class               | Thrown when                                                       |
+| ------------------- | ----------------------------------------------------------------- |
+| `ValidationError`   | An argument is missing or invalid, such as a point without `lat`. |
+| `NetworkError`      | A request didn't reach the API.                                   |
+| `ApiError`          | The API answered with an error status. Subclasses below.          |
+| `BadRequestError`   | `400`. The API rejected the request.                              |
+| `UnauthorizedError` | `401`. The API key or token was rejected, even after refreshing.  |
+| `ForbiddenError`    | `403`. The key isn't allowed to use this API.                     |
+| `NotFoundError`     | `404`.                                                            |
+| `RateLimitError`    | `429`. Too many requests; slow down and retry.                    |
+| `ServerError`       | `5xx`. Something went wrong on our side; retry later.             |
+| `GeocodingError`    | The geocoding API answered, but not with results.                 |
+| `RoutingError`      | No route was found, or the route couldn't be read.                |
+| `NavigationError`   | Navigation couldn't continue.                                     |
+| `PlatformError`     | A manager was used before the map loaded.                         |
+
+## Codes
+
+| Code              | Meaning                                               |
+| ----------------- | ----------------------------------------------------- |
+| `VALIDATION_1001` | A required value is missing.                          |
+| `VALIDATION_1002` | A value has the wrong format.                         |
+| `NETWORK_2004`    | The request failed before reaching the API.           |
+| `API_3001`        | Bad request.                                          |
+| `API_3002`        | Unauthorized.                                         |
+| `API_3003`        | Forbidden.                                            |
+| `API_3004`        | Not found.                                            |
+| `API_3005`        | Rate limited.                                         |
+| `API_3006`        | Server error.                                         |
+| `GEOCODING_4003`  | The geocoding request failed.                         |
+| `ROUTING_5003`    | The directions request failed.                        |
+| `PLATFORM_7004`   | The map hasn't loaded yet. Wait for its `load` event. |

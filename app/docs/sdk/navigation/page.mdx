@@ -1,0 +1,90 @@
+---
+title: Navigation
+description: Follow a driver along a route, with progress, step, off-route and arrival events.
+order: 9
+---
+
+# Navigation
+
+`gebeta.navigation` follows a device along a route. It moves a location dot, tilts the camera behind it, works out which step the driver is on and how far is left, and tells you when they leave the route or arrive. While navigating, it also shares the driver's position through the [Tracking API](/tracking).
+
+## Start navigating
+
+```javascript
+import { BrowserLocationProvider } from "@gebeta/js";
+
+map.on("load", async () => {
+  const route = await gebeta.getDirections(origin, destination);
+  gebeta.displayRoute(route);
+
+  gebeta.navigation.on("progress", (event) => {
+    showStep(event.currentStep?.instruction);
+    showRemaining(event.remainingDistance, event.remainingDuration);
+  });
+
+  gebeta.navigation.on("arrive", () => showArrived());
+
+  gebeta.navigation.start(route, { userId: "driver-42" }, BrowserLocationProvider.getInstance());
+});
+```
+
+`start()` takes three arguments:
+
+| Argument           | Description                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `route`            | A route from [`getDirections()`](/sdk/directions).                                                                                                                                                      |
+| options            | `userId` (required) names the driver in tracking. `role` defaults to `driver`. `precision` is `high` (the default, about every 5 seconds over a WebSocket) or `low` (about every 15 seconds over HTTP). |
+| `locationProvider` | Where positions come from. `BrowserLocationProvider.getInstance()` uses the browser's geolocation.                                                                                                      |
+
+The browser asks the user for location permission, and geolocation only works on HTTPS pages and `localhost`.
+
+## Events
+
+| Event        | Payload                                                                      | When                                                         |
+| ------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `start`      | `{ route }`                                                                  | Navigation started.                                          |
+| `progress`   | `{ remainingDistance, remainingDuration, currentStep, stepIndex, progress }` | Every new position.                                          |
+| `stepchange` | `{ step, stepIndex, previousStep }`                                          | The driver reached the next step.                            |
+| `offroute`   | `{ location, snapped }`                                                      | The driver is more than 40 meters from the route.            |
+| `arrive`     | `{ location }`                                                               | The driver is within 25 meters of the end. Navigation stops. |
+| `stop`       | `{ route }`                                                                  | Navigation stopped.                                          |
+| `error`      | `NavigationError`                                                            | Something went wrong while navigating.                       |
+
+In `progress`, `remainingDistance` is in meters, `remainingDuration` in seconds, and `progress` is a percentage from 0 to 100. `currentStep` is one of the route's [instructions](/sdk/directions#instructions). In `offroute`, `snapped.distance` is how far, in meters, the driver is from the nearest point on the route.
+
+Remove a listener with `gebeta.navigation.off(event, callback)`.
+
+## Stop
+
+```javascript
+gebeta.navigation.stop();
+```
+
+This stops location updates and tracking, and removes the location dot. `isNavigating()` tells you whether navigation is running, and `getCurrentStepIndex()` which step the driver is on.
+
+## Your own location source
+
+A location provider is any object with `start(onLocation)` and `stop()`. Call `onLocation` with `{ lat, lng }`, plus `heading` in degrees if you have it. Use this to feed positions from a native app, a GPS device, or a recording while you test:
+
+```javascript
+function replay(points, intervalMs = 1000) {
+  let timer;
+  return {
+    start(onLocation) {
+      let index = 0;
+      timer = setInterval(() => {
+        if (index >= points.length) return clearInterval(timer);
+        const [lng, lat] = points[index++];
+        onLocation({ lat, lng });
+      }, intervalMs);
+    },
+    stop() {
+      clearInterval(timer);
+    },
+  };
+}
+
+gebeta.navigation.start(route, { userId: "test-driver" }, replay(route.geometry.coordinates));
+```
+
+Replaying a route still shares positions through tracking under the `userId` you pass, so use a test id.

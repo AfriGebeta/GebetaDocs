@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cluster markers</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+
+      .cluster-marker { background-color: #191715 !important; color: #faf9f7 !important; font: 500 13px/40px Geist, system-ui, sans-serif !important; box-shadow: 0 0 0 4px rgb(25 23 21 / 0.2) !important; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const dot =
+        "data:image/svg+xml," +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="#191715" stroke="#fff" stroke-width="3"/></svg>'
+        );
+
+      const gebeta = new GebetaMaps({
+        apiKey: "YOUR_API_KEY",
+        clustering: { enabled: true, radius: 60, showClusterCount: true },
+      });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7578, 9.0192],
+        zoom: 11.5,
+      });
+
+      map.on("load", () => {
+        for (let i = 0; i < 300; i++) {
+          gebeta.clustering.addMarker({
+            id: `stop-${i}`,
+            lngLat: [38.68 + Math.random() * 0.16, 8.95 + Math.random() * 0.13],
+            imageUrl: dot,
+            size: [20, 20],
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

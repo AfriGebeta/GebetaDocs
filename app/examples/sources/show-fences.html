@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Show saved fences</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+
+      .label { margin-bottom: 6px; padding: 6px 10px; border-radius: 999px; background: #191715; color: #faf9f7; font: 500 13px/1 Geist, system-ui, sans-serif; white-space: nowrap; pointer-events: none; }
+      .label::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: solid transparent; border-width: 6px 5px 0; border-top-color: #191715; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const zones = [
+        {
+          id: "piassa",
+          name: "Piassa",
+          color: "#2563eb",
+          points: [[38.744, 9.029], [38.757, 9.029], [38.757, 9.039], [38.744, 9.039]],
+        },
+        {
+          id: "kazanchis",
+          name: "Kazanchis",
+          color: "#16a34a",
+          points: [[38.762, 9.014], [38.775, 9.014], [38.775, 9.024], [38.762, 9.024]],
+        },
+        {
+          id: "bole",
+          name: "Bole",
+          color: "#9333ea",
+          points: [[38.778, 8.99], [38.8, 8.99], [38.8, 9.004], [38.778, 9.004]],
+        },
+      ];
+
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.771, 9.0145],
+        zoom: 12.6,
+      });
+
+      map.on("load", () => {
+        gebeta.fencing.renderFences(zones);
+
+        zones.forEach((zone) => {
+          const element = document.createElement("div");
+          element.className = "label";
+          element.textContent = zone.name;
+          new maplibregl.Marker({ element, anchor: "bottom" })
+            .setLngLat(gebeta.fencing.getFenceCentroid(zone.id))
+            .addTo(map);
+        });
+      });
+    </script>
+  </body>
+</html>

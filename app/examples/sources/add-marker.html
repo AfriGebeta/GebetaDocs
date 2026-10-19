@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add a marker with a popup</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" />
+    <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
+    <style>
+      body { margin: 0; font: 13px/1.4 Geist, system-ui, sans-serif; color: #161616; }
+      #map { position: absolute; inset: 0; }
+
+      .pin { width: 28px; height: 45px; filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff); }
+      .pin span { position: absolute; top: -4px; left: 20px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border: 1px solid #fff; border-radius: 999px; background: #191715; color: #faf9f7; font: 500 10px/14px Geist, system-ui, sans-serif; text-align: center; }
+
+      .maplibregl-popup-content { padding: 10px 14px; border-radius: 8px; font: 13px/1.4 Geist, system-ui, sans-serif; box-shadow: 0 16px 40px rgb(0 0 0 / 0.12), 0 0 0 1px rgb(0 0 0 / 0.08); }
+      .maplibregl-popup-content strong { font-weight: 500; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const INK = "#191715";
+
+      function pin(color, label) {
+        const element = document.createElement("div");
+        element.className = "pin";
+        element.innerHTML = `<svg width="28" height="45" viewBox="0 0 42 68"><path fill="${color}" d="M21 0a21 21 0 0 1 2 41.9V64a2 2 0 0 1-4 0V41.9A21 21 0 0 1 21 0Z"/><circle cx="21" cy="21" r="7" fill="#fff"/></svg>`;
+        if (label) element.insertAdjacentHTML("beforeend", `<span>${label}</span>`);
+        return element;
+      }
+
+      const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
+
+      const map = gebeta.init({
+        container: "map",
+        center: [38.7613, 9.0106],
+        zoom: 14,
+      });
+
+      const popup = new maplibregl.Popup({ offset: [0, -40], closeButton: false }).setHTML(
+        "<strong>Meskel Square</strong><br>The city's main public square."
+      );
+
+      new maplibregl.Marker({ element: pin(INK), anchor: "bottom" })
+        .setLngLat([38.7613, 9.0106])
+        .setPopup(popup)
+        .addTo(map)
+        .togglePopup();
+    </script>
+  </body>
+</html>
