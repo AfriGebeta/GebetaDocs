@@ -794,7 +794,8 @@
             "description": "VROOM solver not configured or returned an error."
           }
         },
-        "security": []
+        "security": [],
+        "operationId": "optimizedTrip"
       }
     },
     "/api/route/tss": {
