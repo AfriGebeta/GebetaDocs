@@ -43,6 +43,18 @@ export default defineDocs({
     enabled: true,
     mode: "light-dark",
   },
+  ai: {
+    enabled: true,
+    mode: "floating",
+    model: "qwen/qwen3.8-27b",
+    baseUrl: "https://api.groq.com/openai/v1",
+    apiKey: process.env.GROQ_AI_TOKEN,
+    suggestedQuestions: [
+      "How do I get started with Gebeta Maps?",
+      "How do I geocode an address?",
+      "What is the VRP API?",
+    ],
+  },
   breadcrumb: { enabled: true },
   review: false,
   sidebar: { flat: false },
