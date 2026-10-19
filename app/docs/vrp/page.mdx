@@ -1,29 +1,20 @@
 ---
 title: VRP API
-description: Split deliveries across a fleet, respecting each vehicle's capacity and each order's depot.
+description: Solve a capacitated vehicle routing problem for a fleet — multiple depots, time windows, skills, shipments, and per-vehicle costs.
 order: 6
 icon: truck
 ---
 
 # VRP API
 
-The VRP (vehicle routing problem) API plans deliveries for a whole fleet. Send your vehicles with how much each can carry, your customers with how much each ordered, and the depots the orders come from. It returns which customers each driver should serve, from which depot, in what order.
+The VRP API (`POST /api/optimized-trip`) solves a capacitated vehicle routing problem for a fleet.
+Send vehicles, depots, and either delivery customers or pickup-and-delivery shipments; get back a
+fully sequenced set of routes, unassigned jobs, and a cost summary.
 
-## When to use it
+Powered by [VROOM](https://github.com/VROOM-Project/vroom). Travel times are straight-line
+(haversine at 56 km/h) — treat `duration` and `cost` as relative, not real ETAs.
 
-<Cards>
-  <Card icon={<ArchiveIcon />} title="Delivery fleets">
-    Assign the day's orders to drivers without overloading any vehicle.
-  </Card>
-  <Card icon={<HomeIcon />} title="Several warehouses">
-    Make sure each order is picked up from the depot it was placed with.
-  </Card>
-  <Card icon={<PaperPlaneIcon />} title="Dispatch">
-    Re-plan when new orders come in, starting from where each driver is now.
-  </Card>
-</Cards>
-
-For a single vehicle with no capacity limit, the [Route Optimization API](/route-optimization) is simpler.
+For a single vehicle with no capacity constraint, the [Route Optimization API](/docs/route-optimization) is simpler.
 
 ## Request
 
@@ -32,104 +23,210 @@ POST https://mapapi.gebeta.app/api/optimized-trip?apiKey={your-api-key}
 Content-Type: application/json
 ```
 
-The body has three lists, all required.
+All coordinates are **`[latitude, longitude]`** — latitude first, exactly two numbers.
 
-### `vehicles`
+### Top-level body
 
-| Field              | Type      | Description                                              |
-| ------------------ | --------- | -------------------------------------------------------- |
-| `name`             | `string`  | The driver or vehicle name. Returned in the result.      |
-| `current_location` | `array`   | Where the vehicle is now, as `[lat, lng]`.               |
-| `capacities`       | `integer` | How many boxes the vehicle can carry, as a whole number. |
+| Field       | Type         | Required                         |
+| ----------- | ------------ | -------------------------------- |
+| `vehicles`  | `Vehicle[]`  | yes (≥ 1)                        |
+| `depots`    | `Depot[]`    | yes (≥ 1)                        |
+| `customers` | `Customer[]` | one of `customers` / `shipments` |
+| `shipments` | `Shipment[]` | one of `customers` / `shipments` |
 
-### `customers`
+### `Vehicle`
 
-| Field                  | Type     | Description                                          |
-| ---------------------- | -------- | ---------------------------------------------------- |
-| `name`                 | `string` | The customer or order name. Returned in the result.  |
-| `location`             | `array`  | Where to deliver, as `[lat, lng]`.                   |
-| `demand`               | `number` | How many boxes this customer ordered.                |
-| `requested_from_depot` | `string` | The `name` of the depot this order has to come from. |
+| Field              | Type                        | Notes                                                                                                  |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `name`             | string                      | Label only — the response refers to vehicles by **array index**.                                       |
+| `capacity`         | `int[]`                     | Multi-dimensional capacity, e.g. `[boxes, kg]`. Dimension count must match `demands` / `amount`.       |
+| `capacities`       | int                         | Legacy single-dimension. Used only when `capacity` is absent.                                          |
+| `depot_id`         | string                      | A `Depot.id` (or `Depot.name`). Controls starting point and depot-restricted orders. Unknown id → 422. |
+| `current_location` | `[lat, lon]`                | Real starting point (e.g. live courier position). Overrides depot as start.                            |
+| `time_window`      | `{start, end}`              | Seconds. Omit for unrestricted.                                                                        |
+| `open_route`       | bool                        | `true` = route ends at last stop. `false` (default) = vehicle returns to start.                        |
+| `skills`           | `string[]`                  | Tags this vehicle provides, matched against customer `required_skills`.                                |
+| `costs`            | `{fixed, per_hour, per_km}` | Integers. Solver prefers cheaper vehicles.                                                             |
+| `max_travel_time`  | int (seconds)               | Cap on total route duration. `0` / omitted = unlimited.                                                |
 
-### `depots`
+**Start/eligibility rules:**
 
-| Field      | Type     | Description                                                      |
-| ---------- | -------- | ---------------------------------------------------------------- |
-| `name`     | `string` | The depot name. Customers refer to it in `requested_from_depot`. |
-| `location` | `array`  | Where the depot is, as `[lat, lng]`.                             |
+- No `depot_id`, no `current_location` → starts at the first depot; can serve that depot's restricted orders.
+- `depot_id` only → starts at that depot; eligible for its restricted orders.
+- `current_location` only (no `depot_id`) → starts there, but cannot serve any `requested_from_depot` order.
+- Both → starts at `current_location`, eligible for the named depot's restricted orders.
 
-## Example
+### `Depot`
+
+| Field      | Type         | Notes                                                                                       |
+| ---------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `id`       | string       | Referenced by `vehicle.depot_id` and `requested_from_depot`. Falls back to `name` if empty. |
+| `name`     | string       |                                                                                             |
+| `location` | `[lat, lon]` | **Required.**                                                                               |
+
+### `Customer`
+
+| Field                  | Type             | Notes                                                            |
+| ---------------------- | ---------------- | ---------------------------------------------------------------- |
+| `name`                 | string           | Label only.                                                      |
+| `location`             | `[lat, lon]`     | **Required.**                                                    |
+| `demands`              | `int[]`          | Same dimensions as vehicle `capacity`.                           |
+| `demand`               | int              | Legacy single-dimension. Used only when `demands` is absent.     |
+| `requested_from_depot` | string           | Restrict to vehicles whose `depot_id` matches. Unknown id → 422. |
+| `time_windows`         | `{start, end}[]` | Allowed arrival windows (seconds).                               |
+| `required_skills`      | `string[]`       | Every tag must appear in the assigned vehicle's `skills`.        |
+| `priority`             | int 0–100        | Higher = favoured when not everything fits.                      |
+
+### `Shipment` (pickup then delivery by the same vehicle)
+
+| Field                  | Type           | Notes                                  |
+| ---------------------- | -------------- | -------------------------------------- |
+| `name`                 | string         | Label only.                            |
+| `pickup`               | `ShipmentStop` | **Required.**                          |
+| `delivery`             | `ShipmentStop` | **Required.**                          |
+| `amount`               | `int[]`        | Same dimensions as vehicle `capacity`. |
+| `requested_from_depot` | string         | As for customers.                      |
+| `required_skills`      | `string[]`     | As for customers.                      |
+| `priority`             | int 0–100      |                                        |
+
+`ShipmentStop`: `{ "name": string, "location": [lat, lon], "time_windows": [{start, end}] }`
+
+Time values (`start`, `end`, `arrival`, `duration`) are integers in seconds. Use a single
+consistent reference (e.g. seconds since midnight) across all vehicles, customers, and shipments.
+
+## Minimal example
+
+One vehicle, one depot, two customers.
 
 ```bash
-curl -X POST "https://mapapi.gebeta.app/api/optimized-trip?apiKey={your-api-key}" \
-  -H "Content-Type: application/json" \
-  -d '{
+curl --request POST 'https://mapapi.gebeta.app/api/optimized-trip?apiKey=YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "vehicles":  [ { "name": "van-1", "capacities": 10 } ],
+    "depots":    [ { "id": "main", "name": "Main depot", "location": [9.0108, 38.7613] } ],
+    "customers": [
+      { "name": "cust-1", "location": [9.0200, 38.7700], "demand": 3 },
+      { "name": "cust-2", "location": [9.0350, 38.7500], "demand": 4 }
+    ]
+  }'
+```
+
+## Full example
+
+Two depots, time windows, skills, costs, and a pickup+delivery shipment.
+
+```bash
+curl --request POST 'https://mapapi.gebeta.app/api/optimized-trip?apiKey=YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "depots": [
+      { "id": "depot-a", "name": "Bole warehouse",   "location": [8.9890, 38.7904] },
+      { "id": "depot-b", "name": "Piassa warehouse", "location": [9.0500, 38.7800] }
+    ],
     "vehicles": [
-      { "name": "driver 1", "current_location": [9.020929, 38.801699], "capacities": 3 },
-      { "name": "driver 2", "current_location": [9.020929, 38.801699], "capacities": 3 }
+      {
+        "name": "truck-1",
+        "depot_id": "depot-a",
+        "capacity": [10, 500],
+        "time_window": { "start": 28800, "end": 61200 },
+        "open_route": false,
+        "skills": ["refrigerated"],
+        "costs": { "fixed": 0, "per_hour": 3600, "per_km": 100 },
+        "max_travel_time": 28800
+      },
+      {
+        "name": "courier-1",
+        "depot_id": "depot-b",
+        "current_location": [9.0300, 38.7650],
+        "capacity": [4, 100],
+        "open_route": true
+      }
     ],
     "customers": [
-      { "name": "a", "location": [9.022359, 38.799478], "demand": 1, "requested_from_depot": "bole-warehouse" },
-      { "name": "b", "location": [9.020431, 38.800401], "demand": 1, "requested_from_depot": "bole-warehouse" },
-      { "name": "c", "location": [9.021167, 38.798894], "demand": 1, "requested_from_depot": "bole-warehouse" },
-      { "name": "d", "location": [9.023101, 38.804816], "demand": 1, "requested_from_depot": "bole-warehouse" },
-      { "name": "e", "location": [9.022455, 38.804864], "demand": 1, "requested_from_depot": "bole-warehouse" },
-      { "name": "f", "location": [9.020251, 38.804151], "demand": 1, "requested_from_depot": "bole-warehouse" }
+      {
+        "name": "cust-1",
+        "location": [9.0200, 38.7700],
+        "demands": [1, 20],
+        "requested_from_depot": "depot-a",
+        "time_windows": [ { "start": 28800, "end": 36000 } ],
+        "required_skills": ["refrigerated"],
+        "priority": 50
+      }
     ],
-    "depots": [
-      { "name": "bole-warehouse", "location": [9.020929, 38.801699] }
+    "shipments": [
+      {
+        "name": "transfer-1",
+        "pickup":   { "name": "pickup-a",   "location": [9.0100, 38.7600], "time_windows": [ { "start": 28800, "end": 43200 } ] },
+        "delivery": { "name": "delivery-b", "location": [9.0400, 38.7900], "time_windows": [ { "start": 32400, "end": 50400 } ] },
+        "amount": [2, 30],
+        "requested_from_depot": "depot-b",
+        "priority": 10
+      }
     ]
   }'
 ```
 
 ## Response
 
-`routes` has one entry per driver that was given work. Each lists the depot to load at and the customers to visit, in order.
+Raw VROOM output:
 
 ```json
 {
+  "code": 0,
+  "summary": {
+    "cost": 1234,
+    "routes": 2,
+    "unassigned": 0,
+    "delivery": [3, 60],
+    "pickup": [2, 30],
+    "duration": 1800,
+    "computing_times": { "loading": 1, "solving": 3, "routing": 0 }
+  },
+  "unassigned": [],
   "routes": [
     {
-      "driver": "driver 1",
-      "depot": { "name": "bole-warehouse", "location": [9.020929, 38.801699] },
-      "customers": [
-        { "name": "b", "location": [9.020431, 38.800401], "requestedFromDepot": "bole-warehouse" },
-        { "name": "c", "location": [9.021167, 38.798894], "requestedFromDepot": "bole-warehouse" },
-        { "name": "a", "location": [9.022359, 38.799478], "requestedFromDepot": "bole-warehouse" }
-      ]
-    },
-    {
-      "driver": "driver 2",
-      "depot": { "name": "bole-warehouse", "location": [9.020929, 38.801699] },
-      "customers": [
-        { "name": "f", "location": [9.020251, 38.804151], "requestedFromDepot": "bole-warehouse" },
-        { "name": "e", "location": [9.022455, 38.804864], "requestedFromDepot": "bole-warehouse" },
-        { "name": "d", "location": [9.023101, 38.804816], "requestedFromDepot": "bole-warehouse" }
+      "vehicle": 0,
+      "cost": 800,
+      "duration": 900,
+      "steps": [
+        { "type": "start", "location_index": 0, "load": [1, 20], "arrival": 0, "duration": 0 },
+        {
+          "type": "job",
+          "location_index": 2,
+          "id": 0,
+          "load": [0, 0],
+          "arrival": 450,
+          "duration": 450
+        },
+        { "type": "end", "location_index": 0, "load": [0, 0], "arrival": 900, "duration": 900 }
       ]
     }
   ]
 }
 ```
 
-| Field                                     | Description                                     |
-| ----------------------------------------- | ----------------------------------------------- |
-| `routes[].driver`                         | The vehicle `name` this route is for.           |
-| `routes[].depot`                          | The depot the driver loads at.                  |
-| `routes[].customers`                      | The customers to deliver to, in visiting order. |
-| `routes[].customers[].requestedFromDepot` | The depot the order came from.                  |
+| Field                          | Description                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| `routes[].vehicle`             | **Array index** of the vehicle in your `vehicles` input.                              |
+| `steps[].type`                 | `start`, `job` (customer), `pickup`, `delivery`, `end`.                               |
+| `steps[].id`                   | Index into `customers` (for `job`) or `shipments` (for `pickup`/`delivery`).          |
+| `steps[].arrival` / `duration` | Seconds, in the same frame as your input time windows.                                |
+| `unassigned[]`                 | Jobs/shipments that couldn't be fit (capacity, skills, time windows, vehicle limits). |
 
-To draw a route, start at `depot.location` and connect each customer's `location` in order. For the road path between them, pass those points to the [Direction API](/direction) as `waypoints`.
+`location_index` is an internal matrix index (depots first, then customers, then shipment stops, then vehicle `current_location`s). Use `id` to map back to your input instead.
 
 ## Errors
 
-| Status | Message                          | What to do                                                                 |
-| ------ | -------------------------------- | -------------------------------------------------------------------------- |
-| `401`  | `Not Authorized - No Token`      | Add your API key as the `apiKey` parameter.                                |
-| `401`  | `Not Authorized - Invalid Token` | The key is wrong or expired. Copy a current key from your dashboard.       |
-| `404`  | `NoRoute`                        | A customer or depot can't be reached by road.                              |
-| `422`  | `InvalidInput`                   | Check the body: all three lists, and every location as a two-number array. |
+| Status | Cause                                                                                                                                                                                                                                                                 |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `401`  | Missing, invalid, or expired `apiKey` / token.                                                                                                                                                                                                                        |
+| `422`  | Validation error — empty body, malformed JSON, wrong field type, no vehicles, no customers and no shipments, no depots, unknown `depot_id` or `requested_from_depot`. Includes per-field messages, e.g. `customers[0].requested_from_depot: unknown depot "depot-z"`. |
+| `5xx`  | VROOM solver not configured or returned an error.                                                                                                                                                                                                                     |
 
-## Limits
+## Common mistakes
 
-- **Rate:** 50 requests per second per API key. Requests above that are rejected, so throttle or batch them.
-- **Countries:** All vehicles, customers and depots must be in the same country.
+- Coordinates must be `[lat, lon]`, not `[lon, lat]`.
+- `capacity`, `demands`, and `amount` must all have the same number of dimensions.
+- A vehicle with `current_location` but no `depot_id` cannot serve any `requested_from_depot` order.
+- `required_skills` strings are matched exactly — a customer requiring a skill no vehicle has goes into `unassigned`.
+- The response refers to vehicles and customers by **array index**, not by `name`.

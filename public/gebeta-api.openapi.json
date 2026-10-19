@@ -368,20 +368,19 @@
     },
     "/api/optimized-trip": {
       "post": {
-        "summary": "Get Optimized Delivery Routes for Multiple Drivers",
-        "deprecated": false,
-        "description": "Calculates the most efficient delivery routes for multiple drivers based on depot, customer locations, and vehicle capacities. Useful for logistics, courier services, or any multi-stop delivery scenario.",
+        "summary": "Optimized Trip (VRP)",
+        "description": "Solves a capacitated vehicle routing problem (VROOM) for a fleet: multiple depots, multi-dimensional capacity, time windows, skills, priorities, per-vehicle costs, and pickup+delivery shipments. Travel times are straight-line haversine at 56 km/h.",
         "tags": ["Optimization"],
         "parameters": [
           {
             "name": "apiKey",
             "in": "query",
             "required": true,
-            "description": "Your API key to authorize the request",
-            "example": "token.token",
+            "description": "Your API key",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "token.token"
           }
         ],
         "requestBody": {
@@ -390,76 +389,106 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["vehicles", "depots"],
                 "properties": {
                   "vehicles": {
                     "type": "array",
-                    "description": "List of available drivers/vehicles with their current locations and capacity limits",
+                    "description": "Fleet of vehicles. At least one required.",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
                       "properties": {
                         "name": {
                           "type": "string",
-                          "description": "Driver or vehicle name"
+                          "description": "Label only \u2014 the response identifies vehicles by array index."
                         },
-                        "current_location": {
+                        "capacity": {
                           "type": "array",
-                          "description": "Current location of the driver [longitude, latitude]",
+                          "description": "Multi-dimensional capacity, e.g. [boxes, kg]. Dimension count must match customer demands / shipment amount.",
                           "items": {
-                            "type": "number"
-                          },
-                          "minItems": 2,
-                          "maxItems": 2
+                            "type": "integer"
+                          }
                         },
                         "capacities": {
                           "type": "integer",
-                          "description": "How many boxes the vehicle can carry."
-                        }
-                      }
-                    }
-                  },
-                  "customers": {
-                    "type": "array",
-                    "description": "List of customer locations with delivery demand",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "description": "Customer name"
+                          "description": "Legacy single-dimension capacity. Used only when capacity is absent."
                         },
-                        "location": {
+                        "depot_id": {
+                          "type": "string",
+                          "description": "A Depot.id (or Depot.name). Controls starting point and eligibility for depot-restricted orders."
+                        },
+                        "current_location": {
                           "type": "array",
-                          "description": "Location of the customer [longitude, latitude]",
+                          "description": "Real starting point as [lat, lon]. Overrides depot as start.",
                           "items": {
                             "type": "number"
                           },
                           "minItems": 2,
                           "maxItems": 2
                         },
-                        "demand": {
-                          "type": "number",
-                          "description": "Number of boxes requested"
+                        "time_window": {
+                          "type": "object",
+                          "description": "Vehicle availability window in seconds.",
+                          "properties": {
+                            "start": {
+                              "type": "integer"
+                            },
+                            "end": {
+                              "type": "integer"
+                            }
+                          }
                         },
-                        "requested_from_depot": {
-                          "type": "string",
-                          "description": "Name of the depot the customer expects the delivery from"
+                        "open_route": {
+                          "type": "boolean",
+                          "description": "true = route ends at last stop. false (default) = vehicle returns to start."
+                        },
+                        "skills": {
+                          "type": "array",
+                          "description": "Tags this vehicle provides, matched against customer required_skills.",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "costs": {
+                          "type": "object",
+                          "description": "Cost model. Solver prefers cheaper vehicles.",
+                          "properties": {
+                            "fixed": {
+                              "type": "integer"
+                            },
+                            "per_hour": {
+                              "type": "integer"
+                            },
+                            "per_km": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "max_travel_time": {
+                          "type": "integer",
+                          "description": "Cap on total route duration in seconds. 0 or omitted = unlimited."
                         }
                       }
                     }
                   },
                   "depots": {
                     "type": "array",
-                    "description": "List of depot locations where deliveries originate",
+                    "description": "Depot locations. At least one required.",
+                    "minItems": 1,
                     "items": {
                       "type": "object",
+                      "required": ["location"],
                       "properties": {
-                        "name": {
+                        "id": {
                           "type": "string",
-                          "description": "Depot name"
+                          "description": "Referenced by vehicle.depot_id and requested_from_depot. Falls back to name if empty."
+                        },
+                        "name": {
+                          "type": "string"
                         },
                         "location": {
                           "type": "array",
-                          "description": "Depot location [longitude, latitude]",
+                          "description": "Depot location as [lat, lon].",
                           "items": {
                             "type": "number"
                           },
@@ -468,84 +497,301 @@
                         }
                       }
                     }
+                  },
+                  "customers": {
+                    "type": "array",
+                    "description": "Delivery-only stops. At least one of customers or shipments is required.",
+                    "items": {
+                      "type": "object",
+                      "required": ["location"],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Label only."
+                        },
+                        "location": {
+                          "type": "array",
+                          "description": "Delivery location as [lat, lon].",
+                          "items": {
+                            "type": "number"
+                          },
+                          "minItems": 2,
+                          "maxItems": 2
+                        },
+                        "demands": {
+                          "type": "array",
+                          "description": "Multi-dimensional demand. Same dimension count as vehicle capacity.",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "demand": {
+                          "type": "integer",
+                          "description": "Legacy single-dimension demand. Used only when demands is absent."
+                        },
+                        "requested_from_depot": {
+                          "type": "string",
+                          "description": "Restrict to vehicles whose depot_id matches this."
+                        },
+                        "time_windows": {
+                          "type": "array",
+                          "description": "Allowed arrival windows in seconds.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "start": {
+                                "type": "integer"
+                              },
+                              "end": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "required_skills": {
+                          "type": "array",
+                          "description": "Every tag must appear in the assigned vehicle's skills.",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "priority": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "description": "Higher = favoured when not everything fits."
+                        }
+                      }
+                    }
+                  },
+                  "shipments": {
+                    "type": "array",
+                    "description": "Pickup-then-delivery pairs served by the same vehicle. At least one of customers or shipments is required.",
+                    "items": {
+                      "type": "object",
+                      "required": ["pickup", "delivery"],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "pickup": {
+                          "type": "object",
+                          "required": ["location"],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            "time_windows": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "start": {
+                                    "type": "integer"
+                                  },
+                                  "end": {
+                                    "type": "integer"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "delivery": {
+                          "type": "object",
+                          "required": ["location"],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            "time_windows": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "start": {
+                                    "type": "integer"
+                                  },
+                                  "end": {
+                                    "type": "integer"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "amount": {
+                          "type": "array",
+                          "description": "Quantity moved. Same dimensions as vehicle capacity.",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "requested_from_depot": {
+                          "type": "string"
+                        },
+                        "required_skills": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "priority": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      }
+                    }
                   }
-                },
-                "required": ["vehicles", "customers", "depots"]
+                }
+              },
+              "example": {
+                "vehicles": [
+                  {
+                    "name": "van-1",
+                    "capacities": 10
+                  }
+                ],
+                "depots": [
+                  {
+                    "id": "main",
+                    "name": "Main depot",
+                    "location": [9.0108, 38.7613]
+                  }
+                ],
+                "customers": [
+                  {
+                    "name": "cust-1",
+                    "location": [9.02, 38.77],
+                    "demand": 3
+                  },
+                  {
+                    "name": "cust-2",
+                    "location": [9.035, 38.75],
+                    "demand": 4
+                  }
+                ]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Returns optimized routes with assigned customers and their respective depots for each driver",
+            "description": "Raw VROOM output with sequenced routes and unassigned jobs.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "0 = success."
+                    },
+                    "summary": {
+                      "type": "object",
+                      "properties": {
+                        "cost": {
+                          "type": "integer"
+                        },
+                        "routes": {
+                          "type": "integer"
+                        },
+                        "unassigned": {
+                          "type": "integer"
+                        },
+                        "duration": {
+                          "type": "integer",
+                          "description": "Total route duration in seconds."
+                        },
+                        "computing_times": {
+                          "type": "object"
+                        }
+                      }
+                    },
                     "routes": {
                       "type": "array",
-                      "description": "List of optimized delivery routes for each driver",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "driver": {
-                            "type": "string",
-                            "description": "Driver or vehicle name"
+                          "vehicle": {
+                            "type": "integer",
+                            "description": "Array index of the vehicle in your vehicles input."
                           },
-                          "customers": {
+                          "cost": {
+                            "type": "integer"
+                          },
+                          "duration": {
+                            "type": "integer"
+                          },
+                          "steps": {
                             "type": "array",
-                            "description": "List of customers assigned to this driver",
                             "items": {
                               "type": "object",
                               "properties": {
-                                "name": {
+                                "type": {
                                   "type": "string",
-                                  "description": "Customer name"
+                                  "description": "start, job, pickup, delivery, or end."
                                 },
-                                "location": {
+                                "id": {
+                                  "type": "integer",
+                                  "description": "Index into customers (for job) or shipments (for pickup/delivery)."
+                                },
+                                "arrival": {
+                                  "type": "integer",
+                                  "description": "Arrival time in seconds."
+                                },
+                                "duration": {
+                                  "type": "integer"
+                                },
+                                "load": {
                                   "type": "array",
-                                  "description": "Customer location [longitude, latitude]",
                                   "items": {
-                                    "type": "number"
-                                  },
-                                  "minItems": 2,
-                                  "maxItems": 2
-                                },
-                                "requestedFromDepot": {
-                                  "type": "string",
-                                  "description": "Depot from which the delivery was requested"
+                                    "type": "integer"
+                                  }
                                 }
-                              }
-                            }
-                          },
-                          "depot": {
-                            "type": "object",
-                            "description": "Depot assigned to this route",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "description": "Depot name"
-                              },
-                              "location": {
-                                "type": "array",
-                                "description": "Depot location [longitude, latitude]",
-                                "items": {
-                                  "type": "number"
-                                },
-                                "minItems": 2,
-                                "maxItems": 2
                               }
                             }
                           }
                         }
                       }
+                    },
+                    "unassigned": {
+                      "type": "array",
+                      "description": "Jobs/shipments that could not be assigned (capacity, skills, time windows, or vehicle limits).",
+                      "items": {
+                        "type": "object"
+                      }
                     }
-                  },
-                  "required": ["routes"]
+                  }
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing, invalid, or expired API key / token."
+          },
+          "422": {
+            "description": "Validation error \u2014 includes per-field messages, e.g. unknown depot id."
+          },
+          "500": {
+            "description": "VROOM solver not configured or returned an error."
           }
         },
         "security": []
@@ -561,7 +807,7 @@
           {
             "name": "json",
             "in": "query",
-            "description": "The stops, as `[{lat,lng},{lat,lng},…]`. The first stop is where the round trip starts and ends. Up to 10 stops.",
+            "description": "The stops, as `[{lat,lng},{lat,lng},\u2026]`. The first stop is where the round trip starts and ends. Up to 10 stops.",
             "required": true,
             "example": "[{8.987685259188599,38.764792722654455},{8.9879443,38.7651287},{9.087685259188599,38.764792722654455}]",
             "schema": {
