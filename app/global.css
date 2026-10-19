@@ -299,6 +299,17 @@ figure.shiki > div:first-child button {
   opacity: 1;
 }
 
+.example-code .shiki,
+.example-code .shiki span {
+  color: var(--shiki-light);
+  background-color: transparent !important;
+}
+
+.dark .example-code .shiki,
+.dark .example-code .shiki span {
+  color: var(--shiki-dark);
+}
+
 /* The API reference uses fumadocs' centered notebook layout; let its page column fill the width so it lines up with the docs. */
 .fd-api-reference-route #nd-notebook-layout {
   --fd-layout-width: 100%;
@@ -317,4 +328,12 @@ figure.shiki > div:first-child button {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--ds-scrollbar) transparent;
+}
+
+.fd-api-reference-pagination-description {
+  display: none;
+}
+
+.fd-api-reference-pagination-item {
+  min-height: unset !important;
 }
