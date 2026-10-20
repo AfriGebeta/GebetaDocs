@@ -48,44 +48,42 @@ Other [MapLibre map options](https://maplibre.org/maplibre-gl-js/docs/API/type-a
 
 ## Use the map instance
 
-`onLoad` gives you the same `GebetaMaps` instance as the [JavaScript SDK](/sdk/js), with every manager ready. Keep it in state to use it from event handlers:
+Pass a `ref` to get the `GebetaMaps` instance. `ref.current` is set once `onLoad` fires and cleared when the map unmounts. Storing it in a ref — not state — means the map load never triggers a re-render:
 
 ```jsx
-import { useState } from "react";
+import { useRef } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 export function MapWithInstance({ auth }) {
-  const [gebeta, setGebeta] = useState(null);
+  const gebeta = useRef(null);
 
   return (
     <GebetaMap
+      ref={gebeta}
       auth={auth}
       center={[38.7785, 9.0098]}
       zoom={12}
       style={{ height: 400 }}
-      onLoad={setGebeta}
     />
   );
 }
 ```
 
-You can also pass a `ref`. `ref.current` is the instance once `onLoad` has fired, and `null` after the map unmounts. For the underlying MapLibre map, call `gebeta.getMap()`.
+For the underlying MapLibre map, call `gebeta.current.getMap()`.
 
 ## Geocoding
 
-Use `onLoad` to get the `GebetaMaps` instance, then call `sdk.geocodingManager`:
-
 ```jsx
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 export function PlaceSearch({ auth }) {
-  const [gebeta, setGebeta] = useState(null);
+  const gebeta = useRef(null);
   const [results, setResults] = useState([]);
 
   async function search(query) {
-    if (!gebeta) return;
-    const places = await gebeta.geocodingManager.geocode(query);
+    if (!gebeta.current) return;
+    const places = await gebeta.current.geocodingManager.geocode(query);
     setResults(places);
   }
 
@@ -98,50 +96,49 @@ export function PlaceSearch({ auth }) {
         ))}
       </ul>
       <GebetaMap
+        ref={gebeta}
         auth={auth}
         center={[38.7578, 9.0192]}
         zoom={13}
         style={{ height: 400 }}
-        onLoad={setGebeta}
       />
     </>
   );
 }
 ```
 
-For reverse geocoding, call `sdk.geocodingManager.reverseGeocode({ lat, lng })`. See [Geocoding](/sdk/geocoding) for all options.
+For reverse geocoding, call `gebeta.current.geocodingManager.reverseGeocode({ lat, lng })`. See [Geocoding](/sdk/geocoding) for all options.
 
 ## Directions
 
 ```jsx
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 export function DeliveryRoute({ auth }) {
-  const [gebeta, setGebeta] = useState(null);
+  const gebeta = useRef(null);
   const [summary, setSummary] = useState("");
 
   async function showRoute() {
-    const route = await gebeta.getDirections(
+    if (!gebeta.current) return;
+    const route = await gebeta.current.getDirections(
       { lat: 8.989022, lng: 38.79036 },
       { lat: 9.03045, lng: 38.7653 }
     );
-    gebeta.displayRoute(route);
+    gebeta.current.displayRoute(route);
     setSummary(`${route.distance} · ${route.duration}`);
   }
 
   return (
     <>
-      <button onClick={showRoute} disabled={!gebeta}>
-        Show route
-      </button>
+      <button onClick={showRoute}>Show route</button>
       <p>{summary}</p>
       <GebetaMap
+        ref={gebeta}
         auth={auth}
         center={[38.7785, 9.0098]}
         zoom={12}
         style={{ height: 400 }}
-        onLoad={setGebeta}
       />
     </>
   );
@@ -152,7 +149,7 @@ export function DeliveryRoute({ auth }) {
 
 ## Markers and clustering
 
-Use `onLoad` to add markers directly:
+Use `onLoad` to add markers directly — this is one place where `onLoad` is still the right choice since you're firing a one-time setup, not storing the instance:
 
 ```jsx
 import { GebetaMap } from "@gebeta/react";
@@ -209,15 +206,15 @@ export function StoresMap({ auth, stores }) {
 ## Geofencing
 
 ```jsx
-import { useState } from "react";
+import { useRef } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 export function FenceMap({ auth }) {
-  const [gebeta, setGebeta] = useState(null);
+  const gebeta = useRef(null);
 
   function drawFence() {
-    if (!gebeta) return;
-    gebeta.fencingManager.addFence({
+    if (!gebeta.current) return;
+    gebeta.current.fencingManager.addFence({
       id: "delivery-zone",
       coordinates: [
         [38.74, 8.99],
@@ -231,15 +228,13 @@ export function FenceMap({ auth }) {
 
   return (
     <>
-      <button onClick={drawFence} disabled={!gebeta}>
-        Draw fence
-      </button>
+      <button onClick={drawFence}>Draw fence</button>
       <GebetaMap
+        ref={gebeta}
         auth={auth}
         center={[38.765, 9.015]}
         zoom={12}
         style={{ height: 400 }}
-        onLoad={setGebeta}
       />
     </>
   );
@@ -251,34 +246,32 @@ See [Geofencing](/sdk/fencing) for loading existing fences and checking whether 
 ## Navigation
 
 ```jsx
-import { useState } from "react";
+import { useRef } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 export function NavigationMap({ auth }) {
-  const [gebeta, setGebeta] = useState(null);
+  const gebeta = useRef(null);
 
   async function startNav() {
-    if (!gebeta) return;
-    const route = await gebeta.getDirections(
+    if (!gebeta.current) return;
+    const route = await gebeta.current.getDirections(
       { lat: 8.989022, lng: 38.79036 },
       { lat: 9.03045, lng: 38.7653 }
     );
-    gebeta.displayRoute(route);
-    gebeta.navigation.start(route, { userId: "driver-1" }, locationProvider);
-    gebeta.navigation.on("arrived", () => alert("Arrived!"));
+    gebeta.current.displayRoute(route);
+    gebeta.current.navigation.start(route, { userId: "driver-1" }, locationProvider);
+    gebeta.current.navigation.on("arrived", () => alert("Arrived!"));
   }
 
   return (
     <>
-      <button onClick={startNav} disabled={!gebeta}>
-        Start navigation
-      </button>
+      <button onClick={startNav}>Start navigation</button>
       <GebetaMap
+        ref={gebeta}
         auth={auth}
         center={[38.7785, 9.0098]}
         zoom={14}
         style={{ height: 400 }}
-        onLoad={setGebeta}
       />
     </>
   );
