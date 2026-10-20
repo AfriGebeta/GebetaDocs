@@ -28,21 +28,22 @@ The map fills its parent by default, so give either the component or its parent 
 
 ## Props
 
-| Prop                        | Type                            | Description                                                                               |
-| --------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------- |
-| `auth`                      | `{ accessToken, refreshToken }` | Tokens from your backend. Changing the tokens recreates the map.                          |
-| `apiKey`                    | `string`                        | Your API key, instead of `auth`. Passing both throws a `ValidationError`.                 |
-| `center`                    | `[lng, lat]`                    | Where the map starts. Only read on mount; move the map with `flyTo()` afterwards.         |
-| `zoom`                      | `number`                        | The starting zoom. Only read on mount.                                                    |
-| `mapStyle`                  | `string \| object`              | A style URL or style object. See [Map styles](/sdk/js#map-styles).                        |
-| `styleUrl`                  | `string`                        | A style URL. `mapStyle` wins if you pass both.                                            |
-| `clustering`                | `object`                        | Turns on [clustering](/sdk/markers), for example `{ enabled: true }`. Only read on mount. |
-| `navigationControl`         | `boolean`                       | Shows zoom and compass buttons.                                                           |
-| `navigationControlPosition` | `string`                        | Corner for the buttons. Defaults to `top-right`.                                          |
-| `onLoad`                    | `(gebeta) => void`              | Called once the map has loaded, with the `GebetaMaps` instance.                           |
-| `onError`                   | `(error) => void`               | Called when the map reports an error, such as a style or tile that won't load.            |
-| `style`, `className`        |                                 | Style the wrapper element, not the map.                                                   |
-| `children`                  | `ReactNode`                     | Drawn over the map once it has loaded.                                                    |
+| Prop                        | Type                            | Description                                                                                                           |
+| --------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `auth`                      | `{ accessToken, refreshToken }` | Tokens from your backend. Changing the tokens recreates the map.                                                      |
+| `apiKey`                    | `string`                        | Your API key, instead of `auth`. Passing both throws a `ValidationError`.                                             |
+| `center`                    | `[lng, lat]`                    | Where the map starts. Only read on mount; move the map with `flyTo()` afterwards.                                     |
+| `zoom`                      | `number`                        | The starting zoom. Only read on mount.                                                                                |
+| `mapStyle`                  | `string \| object`              | A style URL or style object. See [Map styles](/sdk/js#map-styles).                                                    |
+| `styleUrl`                  | `string`                        | A style URL. `mapStyle` wins if you pass both.                                                                        |
+| `clustering`                | `object`                        | Turns on [clustering](/sdk/markers), for example `{ enabled: true }`. Only read on mount.                             |
+| `navigationControl`         | `boolean`                       | Shows zoom and compass buttons.                                                                                       |
+| `navigationControlPosition` | `string`                        | Corner for the buttons. Defaults to `top-right`.                                                                      |
+| `ref`                       | `RefObject<GebetaMaps>`         | Receives the `GebetaMaps` instance once loaded; `null` after unmount. Prefer this over `onLoad` for imperative calls. |
+| `onLoad`                    | `(gebeta) => void`              | Called once the map has loaded, with the `GebetaMaps` instance.                                                       |
+| `onError`                   | `(error) => void`               | Called when the map reports an error, such as a style or tile that won't load.                                        |
+| `style`, `className`        |                                 | Style the wrapper element, not the map.                                                                               |
+| `children`                  | `ReactNode`                     | Drawn over the map once it has loaded.                                                                                |
 
 Other [MapLibre map options](https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/MapOptions/), such as `pitch`, `bearing` or `maxBounds`, are passed through.
 
