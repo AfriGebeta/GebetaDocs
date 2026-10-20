@@ -1,29 +1,29 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 const ORIGIN = { lat: 8.989022, lng: 38.79036 };
 const DESTINATION = { lat: 9.03045, lng: 38.7653 };
 
 export default function App() {
+  const sdk = useRef(null);
   const [route, setRoute] = useState(null);
   const [active, setActive] = useState(null);
-  const [sdk, setSdkState] = useState(null);
 
   async function handleLoad(gebeta) {
-    setSdkState(gebeta);
     const r = await gebeta.getDirections(ORIGIN, DESTINATION);
     gebeta.displayRoute(r, { showMarkers: false });
     setRoute(r);
   }
 
   function flyToStep(step, index) {
-    sdk?.getMap().flyTo({ center: step.coord, zoom: 16, essential: true });
+    sdk.current?.getMap().flyTo({ center: step.coord, zoom: 16, essential: true });
     setActive(index);
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
       <GebetaMap
+        ref={sdk}
         apiKey="YOUR_API_KEY"
         center={[38.7785, 9.0098]}
         zoom={12.5}

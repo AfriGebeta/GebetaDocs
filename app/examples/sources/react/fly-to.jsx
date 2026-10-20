@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GebetaMap } from "@gebeta/react";
 
 const PLACES = [
@@ -10,22 +10,22 @@ const PLACES = [
 ];
 
 export default function App() {
-  const [sdk, setSdk] = useState(null);
+  const sdk = useRef(null);
   const [active, setActive] = useState(null);
 
   function flyTo(place) {
-    sdk?.getMap().flyTo({ center: place.center, zoom: 15, essential: true });
+    sdk.current?.getMap().flyTo({ center: place.center, zoom: 15, essential: true });
     setActive(place.name);
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
       <GebetaMap
+        ref={sdk}
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={12}
         style={{ height: "100%" }}
-        onLoad={setSdk}
       />
       <div
         style={{
