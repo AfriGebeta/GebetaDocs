@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export default function App() {
   const sdk = useRef(null);
@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMap
+      <GebetaMaps
         ref={sdk}
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}

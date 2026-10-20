@@ -1,4 +1,4 @@
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 const ZONES = [
   {
@@ -55,7 +55,7 @@ export default function App() {
   }
 
   return (
-    <GebetaMap
+    <GebetaMaps
       apiKey="YOUR_API_KEY"
       center={[38.771, 9.0145]}
       zoom={12.6}

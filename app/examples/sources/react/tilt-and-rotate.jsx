@@ -1,4 +1,4 @@
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export default function App() {
   function handleLoad(sdk) {
@@ -11,7 +11,7 @@ export default function App() {
   }
 
   return (
-    <GebetaMap
+    <GebetaMaps
       apiKey="YOUR_API_KEY"
       center={[38.7613, 9.0106]}
       zoom={15.5}

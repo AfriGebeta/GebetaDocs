@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { GebetaMap, useClustering } from "@gebeta/react";
+import { GebetaMaps, useClustering } from "@gebeta/react";
 
 const CAFES = [
   { id: "tomoca", name: "Tomoca Coffee", color: "#2563eb", lngLat: [38.7527, 9.0339] },
@@ -34,7 +34,7 @@ function CafeMarkers() {
 
 export default function App() {
   return (
-    <GebetaMap
+    <GebetaMaps
       apiKey="YOUR_API_KEY"
       center={[38.77, 9.017]}
       zoom={13}
@@ -42,6 +42,6 @@ export default function App() {
       style={{ height: "100vh" }}
     >
       <CafeMarkers />
-    </GebetaMap>
+    </GebetaMaps>
   );
 }

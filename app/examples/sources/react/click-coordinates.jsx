@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export default function App() {
   const [coords, setCoords] = useState(null);
@@ -16,7 +16,7 @@ export default function App() {
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMap
+      <GebetaMaps
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={13}

@@ -56,7 +56,7 @@ const { accessToken, refreshToken } = await fetch("/gebeta-token", {
 const gebeta = new GebetaMaps({ auth: { accessToken, refreshToken } });
 ```
 
-In React, pass the same object as the `auth` prop of [`GebetaMap`](/sdk/react).
+In React, pass the same object as the `auth` prop of [`GebetaMaps`](/sdk/react).
 
 <Callout title="Keep the server token on the server">
   `GEBETA_SERVER_TOKEN` must never be sent to a browser or bundled into an app. Anyone with it can

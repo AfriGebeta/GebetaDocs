@@ -1,12 +1,12 @@
 ---
 title: React
-description: A GebetaMap component that creates the map on mount and removes it on unmount.
+description: A GebetaMaps component that creates the map on mount and removes it on unmount.
 order: 3
 ---
 
 # React
 
-`@gebeta/react` wraps [`@gebeta/js`](/sdk/js) in a `GebetaMap` component. It creates the map when it mounts, removes it when it unmounts, and loads the MapLibre stylesheet for you. It needs React 19.
+`@gebeta/react` wraps [`@gebeta/js`](/sdk/js) in a `GebetaMaps` component. It creates the map when it mounts, removes it when it unmounts, and loads the MapLibre stylesheet for you. It needs React 19.
 
 ```bash
 npm install @gebeta/react
@@ -15,10 +15,10 @@ npm install @gebeta/react
 ## Show a map
 
 ```jsx
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function StoreMap({ auth }) {
-  return <GebetaMap auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ height: 400 }} />;
+  return <GebetaMaps auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ height: 400 }} />;
 }
 ```
 
@@ -53,13 +53,13 @@ Pass a `ref` to get the `GebetaMaps` instance. `ref.current` is set once `onLoad
 
 ```jsx
 import { useRef } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function MapWithInstance({ auth }) {
   const gebeta = useRef(null);
 
   return (
-    <GebetaMap
+    <GebetaMaps
       ref={gebeta}
       auth={auth}
       center={[38.7785, 9.0098]}
@@ -76,7 +76,7 @@ For the underlying MapLibre map, call `gebeta.current.getMap()`.
 
 ```jsx
 import { useRef, useState } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function PlaceSearch({ auth }) {
   const gebeta = useRef(null);
@@ -96,7 +96,7 @@ export function PlaceSearch({ auth }) {
           <li key={place.id}>{place.name}</li>
         ))}
       </ul>
-      <GebetaMap
+      <GebetaMaps
         ref={gebeta}
         auth={auth}
         center={[38.7578, 9.0192]}
@@ -114,7 +114,7 @@ For reverse geocoding, call `gebeta.current.geocodingManager.reverseGeocode({ la
 
 ```jsx
 import { useRef, useState } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function DeliveryRoute({ auth }) {
   const gebeta = useRef(null);
@@ -134,7 +134,7 @@ export function DeliveryRoute({ auth }) {
     <>
       <button onClick={showRoute}>Show route</button>
       <p>{summary}</p>
-      <GebetaMap
+      <GebetaMaps
         ref={gebeta}
         auth={auth}
         center={[38.7785, 9.0098]}
@@ -153,7 +153,7 @@ export function DeliveryRoute({ auth }) {
 Use `onLoad` to add markers directly — this is one place where `onLoad` is still the right choice since you're firing a one-time setup, not storing the instance:
 
 ```jsx
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function StoreMap({ auth }) {
   function handleLoad(sdk) {
@@ -165,7 +165,7 @@ export function StoreMap({ auth }) {
   }
 
   return (
-    <GebetaMap
+    <GebetaMaps
       auth={auth}
       center={[38.7613, 9.0106]}
       zoom={14}
@@ -176,11 +176,11 @@ export function StoreMap({ auth }) {
 }
 ```
 
-Turn on clustering with the `clustering` prop, then call `useClustering()` from a component rendered inside `GebetaMap`:
+Turn on clustering with the `clustering` prop, then call `useClustering()` from a component rendered inside `GebetaMaps`:
 
 ```jsx
 import { useEffect } from "react";
-import { GebetaMap, useClustering } from "@gebeta/react";
+import { GebetaMaps, useClustering } from "@gebeta/react";
 
 function Stores({ stores }) {
   const { addMarker, clearMarkers } = useClustering();
@@ -195,9 +195,9 @@ function Stores({ stores }) {
 
 export function StoresMap({ auth, stores }) {
   return (
-    <GebetaMap auth={auth} clustering={{ enabled: true }} style={{ height: 500 }}>
+    <GebetaMaps auth={auth} clustering={{ enabled: true }} style={{ height: 500 }}>
       <Stores stores={stores} />
-    </GebetaMap>
+    </GebetaMaps>
   );
 }
 ```
@@ -208,7 +208,7 @@ export function StoresMap({ auth, stores }) {
 
 ```jsx
 import { useRef } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function FenceMap({ auth }) {
   const gebeta = useRef(null);
@@ -230,7 +230,7 @@ export function FenceMap({ auth }) {
   return (
     <>
       <button onClick={drawFence}>Draw fence</button>
-      <GebetaMap
+      <GebetaMaps
         ref={gebeta}
         auth={auth}
         center={[38.765, 9.015]}
@@ -248,7 +248,7 @@ See [Geofencing](/sdk/fencing) for loading existing fences and checking whether 
 
 ```jsx
 import { useRef } from "react";
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export function NavigationMap({ auth }) {
   const gebeta = useRef(null);
@@ -267,7 +267,7 @@ export function NavigationMap({ auth }) {
   return (
     <>
       <button onClick={startNav}>Start navigation</button>
-      <GebetaMap
+      <GebetaMaps
         ref={gebeta}
         auth={auth}
         center={[38.7785, 9.0098]}
@@ -286,7 +286,7 @@ See [Navigation](/sdk/navigation) for the full event list and off-route handling
 `@gebeta/react` re-exports the `gebeta` namespace so you never need to import from the rendering engine:
 
 ```jsx
-import { GebetaMap, gebeta } from "@gebeta/react";
+import { GebetaMaps, gebeta } from "@gebeta/react";
 
 function handleLoad(sdk) {
   const map = sdk.getMap();
@@ -306,10 +306,10 @@ The map only runs in the browser. Put it in its own component and load that with
 ```jsx title="components/store-map.jsx"
 "use client";
 
-import { GebetaMap } from "@gebeta/react";
+import { GebetaMaps } from "@gebeta/react";
 
 export default function StoreMap({ auth }) {
-  return <GebetaMap auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ height: 400 }} />;
+  return <GebetaMaps auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ height: 400 }} />;
 }
 ```
 
