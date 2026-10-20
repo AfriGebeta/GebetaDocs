@@ -38,11 +38,11 @@
         zoom: 14,
       });
 
-      const popup = new maplibregl.Popup({ offset: [0, -40], closeButton: false }).setHTML(
+      const popup = new gebeta.Popup({ offset: [0, -40], closeButton: false }).setHTML(
         "<strong>Meskel Square</strong><br>The city's main public square."
       );
 
-      new maplibregl.Marker({ element: pin(INK), anchor: "bottom" })
+      new gebeta.Marker({ element: pin(INK), anchor: "bottom" })
         .setLngLat([38.7613, 9.0106])
         .setPopup(popup)
         .addTo(map)

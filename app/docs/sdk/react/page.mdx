@@ -54,6 +54,69 @@ Other [MapLibre map options](https://maplibre.org/maplibre-gl-js/docs/API/type-a
 import { useState } from "react";
 import { GebetaMap } from "@gebeta/react";
 
+export function MapWithInstance({ auth }) {
+  const [gebeta, setGebeta] = useState(null);
+
+  return (
+    <GebetaMap
+      auth={auth}
+      center={[38.7785, 9.0098]}
+      zoom={12}
+      style={{ height: 400 }}
+      onLoad={setGebeta}
+    />
+  );
+}
+```
+
+You can also pass a `ref`. `ref.current` is the instance once `onLoad` has fired, and `null` after the map unmounts. For the underlying MapLibre map, call `gebeta.getMap()`.
+
+## Geocoding
+
+Use `onLoad` to get the `GebetaMaps` instance, then call `sdk.geocodingManager`:
+
+```jsx
+import { useState } from "react";
+import { GebetaMap } from "@gebeta/react";
+
+export function PlaceSearch({ auth }) {
+  const [gebeta, setGebeta] = useState(null);
+  const [results, setResults] = useState([]);
+
+  async function search(query) {
+    if (!gebeta) return;
+    const places = await gebeta.geocodingManager.geocode(query);
+    setResults(places);
+  }
+
+  return (
+    <>
+      <input placeholder="Search places..." onChange={(e) => search(e.target.value)} />
+      <ul>
+        {results.map((place) => (
+          <li key={place.id}>{place.name}</li>
+        ))}
+      </ul>
+      <GebetaMap
+        auth={auth}
+        center={[38.7578, 9.0192]}
+        zoom={13}
+        style={{ height: 400 }}
+        onLoad={setGebeta}
+      />
+    </>
+  );
+}
+```
+
+For reverse geocoding, call `sdk.geocodingManager.reverseGeocode({ lat, lng })`. See [Geocoding](/sdk/geocoding) for all options.
+
+## Directions
+
+```jsx
+import { useState } from "react";
+import { GebetaMap } from "@gebeta/react";
+
 export function DeliveryRoute({ auth }) {
   const [gebeta, setGebeta] = useState(null);
   const [summary, setSummary] = useState("");
@@ -85,9 +148,35 @@ export function DeliveryRoute({ auth }) {
 }
 ```
 
-You can also pass a `ref`. `ref.current` is the instance once `onLoad` has fired, and `null` after the map unmounts. For the MapLibre map, call `gebeta.getMap()`.
+`getDirections` and `displayRoute` are on the `GebetaMaps` instance. See [Directions](/sdk/directions) for stops, waypoints, and turn-by-turn instructions.
 
-## Clustered markers
+## Markers and clustering
+
+Use `onLoad` to add markers directly:
+
+```jsx
+import { GebetaMap } from "@gebeta/react";
+
+export function StoreMap({ auth }) {
+  function handleLoad(sdk) {
+    sdk.addMarker({
+      lngLat: [38.7613, 9.0106],
+      anchor: "bottom",
+      popup: "Meskel Square",
+    });
+  }
+
+  return (
+    <GebetaMap
+      auth={auth}
+      center={[38.7613, 9.0106]}
+      zoom={14}
+      style={{ height: 400 }}
+      onLoad={handleLoad}
+    />
+  );
+}
+```
 
 Turn on clustering with the `clustering` prop, then call `useClustering()` from a component rendered inside `GebetaMap`:
 
@@ -116,6 +205,105 @@ export function StoresMap({ auth, stores }) {
 ```
 
 `useClustering()` returns `addMarker`, `removeMarker`, `clearMarkers`, `getMarkers`, `getMarker`, `updateOptions` and `getOptions`. It throws if the parent map doesn't have clustering on. The marker fields are in [Markers](/sdk/markers#marker-options).
+
+## Geofencing
+
+```jsx
+import { useState } from "react";
+import { GebetaMap } from "@gebeta/react";
+
+export function FenceMap({ auth }) {
+  const [gebeta, setGebeta] = useState(null);
+
+  function drawFence() {
+    if (!gebeta) return;
+    gebeta.fencingManager.addFence({
+      id: "delivery-zone",
+      coordinates: [
+        [38.74, 8.99],
+        [38.79, 8.99],
+        [38.79, 9.04],
+        [38.74, 9.04],
+        [38.74, 8.99],
+      ],
+    });
+  }
+
+  return (
+    <>
+      <button onClick={drawFence} disabled={!gebeta}>
+        Draw fence
+      </button>
+      <GebetaMap
+        auth={auth}
+        center={[38.765, 9.015]}
+        zoom={12}
+        style={{ height: 400 }}
+        onLoad={setGebeta}
+      />
+    </>
+  );
+}
+```
+
+See [Geofencing](/sdk/fencing) for loading existing fences and checking whether a point is inside one.
+
+## Navigation
+
+```jsx
+import { useState } from "react";
+import { GebetaMap } from "@gebeta/react";
+
+export function NavigationMap({ auth }) {
+  const [gebeta, setGebeta] = useState(null);
+
+  async function startNav() {
+    if (!gebeta) return;
+    const route = await gebeta.getDirections(
+      { lat: 8.989022, lng: 38.79036 },
+      { lat: 9.03045, lng: 38.7653 }
+    );
+    gebeta.displayRoute(route);
+    gebeta.navigation.start(route, { userId: "driver-1" }, locationProvider);
+    gebeta.navigation.on("arrived", () => alert("Arrived!"));
+  }
+
+  return (
+    <>
+      <button onClick={startNav} disabled={!gebeta}>
+        Start navigation
+      </button>
+      <GebetaMap
+        auth={auth}
+        center={[38.7785, 9.0098]}
+        zoom={14}
+        style={{ height: 400 }}
+        onLoad={setGebeta}
+      />
+    </>
+  );
+}
+```
+
+See [Navigation](/sdk/navigation) for the full event list and off-route handling.
+
+## Controls and geo helpers
+
+`@gebeta/react` re-exports the `gebeta` namespace so you never need to import from the rendering engine:
+
+```jsx
+import { GebetaMap, gebeta } from "@gebeta/react";
+
+function handleLoad(sdk) {
+  const map = sdk.getMap();
+  map.addControl(new gebeta.ScaleControl(), "bottom-left");
+  map.addControl(new gebeta.FullscreenControl(), "top-left");
+
+  const bounds = new gebeta.LngLatBounds();
+  coordinates.forEach((c) => bounds.extend(c));
+  map.fitBounds(bounds, { padding: 64 });
+}
+```
 
 ## Next.js
 

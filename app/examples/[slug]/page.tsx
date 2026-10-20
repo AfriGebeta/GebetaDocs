@@ -4,7 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CopyButton } from "@/app/map-playground/ui";
 import { EXAMPLES, findExample } from "../registry";
-import { API_KEY_PLACEHOLDER, highlight, readSource } from "../source";
+import {
+  API_KEY_PLACEHOLDER,
+  highlight,
+  highlightJsx,
+  readSource,
+  readReactSource,
+} from "../source";
+import { CodeTabs } from "./code-tabs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -28,7 +35,11 @@ export default async function ExamplePage({ params }: Props) {
   if (!example) notFound();
 
   const source = await readSource(slug);
-  const code = await highlight(source);
+  const reactSource = await readReactSource(slug);
+  const [code, reactCode] = await Promise.all([
+    highlight(source),
+    reactSource ? highlightJsx(reactSource) : Promise.resolve(null),
+  ]);
   const live = `/examples/${slug}/live`;
 
   const index = EXAMPLES.indexOf(example);
@@ -71,24 +82,14 @@ export default async function ExamplePage({ params }: Props) {
       </div>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-[20px] font-medium leading-[1.3] text-foreground">Code</h2>
-          <CopyButton text={source} />
-        </div>
-        <p className="text-[14px] leading-[1.6] text-soft">
-          Replace{" "}
-          <code className="font-mono text-[13px] text-foreground">{API_KEY_PLACEHOLDER}</code> with
-          a key from your{" "}
-          <a href="https://gebeta.app/auth/register" className={textLink}>
-            Gebeta dashboard
-          </a>
-          , save the file as{" "}
-          <code className="font-mono text-[13px] text-foreground">index.html</code> and open it in a
-          browser.
-        </p>
-        <div
-          className="example-code overflow-x-auto rounded-lg border border-border bg-raised p-4 font-mono text-[13px] leading-[1.6]"
-          dangerouslySetInnerHTML={{ __html: code }}
+        <h2 className="text-[20px] font-medium leading-[1.3] text-foreground">Code</h2>
+        <CodeTabs
+          htmlSource={source}
+          htmlCode={code}
+          reactSource={reactSource}
+          reactCode={reactCode}
+          textLink={textLink}
+          apiKeyPlaceholder={API_KEY_PLACEHOLDER}
         />
       </section>
 

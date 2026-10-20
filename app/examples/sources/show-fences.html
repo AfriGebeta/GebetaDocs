@@ -53,7 +53,7 @@
           const element = document.createElement("div");
           element.className = "label";
           element.textContent = zone.name;
-          new maplibregl.Marker({ element, anchor: "bottom" })
+          new gebeta.Marker({ element, anchor: "bottom" })
             .setLngLat(gebeta.fencing.getFenceCentroid(zone.id))
             .addTo(map);
         });

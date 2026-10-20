@@ -73,18 +73,18 @@
         const element = document.createElement("div");
         element.className = "label";
         element.textContent = route.duration;
-        return new maplibregl.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+        return new gebeta.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
       }
 
       function fitRoute(route, left = 64) {
-        const bounds = new maplibregl.LngLatBounds();
+        const bounds = new gebeta.LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
       }
 
       const card = document.querySelector(".card");
-      const startPin = new maplibregl.Marker({ element: pin(INK, "A"), anchor: "bottom" });
-      const endPin = new maplibregl.Marker({ element: pin(INK, "B"), anchor: "bottom" });
+      const startPin = new gebeta.Marker({ element: pin(INK, "A"), anchor: "bottom" });
+      const endPin = new gebeta.Marker({ element: pin(INK, "B"), anchor: "bottom" });
       let label = null;
       let start = null;
 

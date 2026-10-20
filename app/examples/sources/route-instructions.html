@@ -93,11 +93,11 @@
         const element = document.createElement("div");
         element.className = "label";
         element.textContent = route.duration;
-        return new maplibregl.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+        return new gebeta.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
       }
 
       function fitRoute(route, left = 64) {
-        const bounds = new maplibregl.LngLatBounds();
+        const bounds = new gebeta.LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
       }
@@ -118,8 +118,8 @@
         addCasing();
         fitRoute(route, innerWidth > 560 ? 330 : 64);
 
-        new maplibregl.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
-        new maplibregl.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
+        new gebeta.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
+        new gebeta.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
 
         document.querySelector(".steps small").textContent = `${route.instructions.length} steps · ${route.duration}`;
 
@@ -128,7 +128,7 @@
           element.className = "step-marker";
           element.textContent = index + 1;
           element.addEventListener("click", () => select(index, step));
-          markers.push(new maplibregl.Marker({ element }).setLngLat(step.coord).addTo(map));
+          markers.push(new gebeta.Marker({ element }).setLngLat(step.coord).addTo(map));
 
           const item = document.createElement("li");
           item.innerHTML = `<button><span class="number">${index + 1}</span><span>${step.instruction}<small>${Math.round(step.length * 1000)} m</small></span></button>`;

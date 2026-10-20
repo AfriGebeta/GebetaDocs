@@ -13,9 +13,12 @@ const config = {
       { source: "/docs", destination: "/", permanent: true },
       { source: "/docs/:path*", destination: "/:path*", permanent: true },
       { source: "/geocoding/geocoding", destination: "/geocoding", permanent: true },
-      { source: "/tiles/overview", destination: "/tiles", permanent: true },
+      { source: "/tiles", destination: "/sdk", permanent: true },
+      { source: "/tiles/overview", destination: "/sdk", permanent: true },
       { source: "/tiles/js", destination: "/sdk/js", permanent: true },
       { source: "/tiles/react", destination: "/sdk/react", permanent: true },
+      { source: "/tiles/flutter", destination: "/sdk/flutter", permanent: true },
+      { source: "/tiles/react-native", destination: "/sdk/react-native", permanent: true },
       ...["/changelogs/:path*", "/community", "/authentication"].map((source) => ({
         source,
         destination: "/",

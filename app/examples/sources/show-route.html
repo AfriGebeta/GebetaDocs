@@ -76,11 +76,11 @@
         const element = document.createElement("div");
         element.className = "label";
         element.textContent = route.duration;
-        return new maplibregl.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+        return new gebeta.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
       }
 
       function fitRoute(route, left = 64) {
-        const bounds = new maplibregl.LngLatBounds();
+        const bounds = new gebeta.LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
       }
@@ -92,8 +92,8 @@
         addCasing();
         fitRoute(route);
 
-        new maplibregl.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
-        new maplibregl.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
+        new gebeta.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
+        new gebeta.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
         durationLabel(route).addTo(map);
 
         document.querySelector(".card").innerHTML = `<strong>${route.duration}</strong><small>${route.distance}</small>`;

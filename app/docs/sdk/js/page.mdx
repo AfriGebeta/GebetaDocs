@@ -99,16 +99,97 @@ Pass `navigationControl: true` to `init()`, or add the buttons later:
 gebeta.addNavigationControls("bottom-right");
 ```
 
-Other MapLibre controls work as usual:
+Add scale and fullscreen controls using the `gebeta` namespace:
 
 ```javascript
-import maplibregl from "maplibre-gl";
+import { gebeta } from "@gebeta/js";
 
-map.addControl(new maplibregl.ScaleControl(), "bottom-left");
-map.addControl(new maplibregl.FullscreenControl(), "top-left");
+map.addControl(new gebeta.ScaleControl(), "bottom-left");
+map.addControl(new gebeta.FullscreenControl(), "top-left");
 ```
 
-With the CDN script, use `window.maplibregl` instead of importing it. [Try it](/examples/navigation-controls).
+With the CDN script, `window.gebeta` is available automatically — no import needed. [Try it](/examples/navigation-controls).
+
+## Add markers and popups
+
+Use `sdk.addMarker()` and `sdk.addPopup()` instead of constructing maplibre objects directly. Both accept a `lngLat` and return the maplibre instance.
+
+```javascript
+// Marker with an inline popup
+sdk.addMarker({
+  lngLat: [38.7613, 9.0106],
+  anchor: "bottom",
+  popup: "Meskel Square",
+});
+
+// Custom element
+const el = document.createElement("div");
+el.className = "pin";
+sdk.addMarker({ lngLat: [38.7578, 9.0192], element: el, anchor: "bottom" });
+
+// Draggable
+sdk.addMarker({
+  lngLat: [38.7578, 9.0192],
+  draggable: true,
+  onDragEnd: ({ lng, lat }) => console.log(lng, lat),
+});
+
+// Standalone popup
+sdk.addPopup({ lngLat: [38.7613, 9.0106], text: "Hello" });
+```
+
+### `addMarker` options
+
+| Option      | Type                           | Description                                                   |
+| ----------- | ------------------------------ | ------------------------------------------------------------- |
+| `lngLat`    | `[lng, lat]` or `{lng, lat}`   | Position. **Required.**                                       |
+| `element`   | `HTMLElement`                  | Custom element. Wins over `imageUrl` and `color`.             |
+| `imageUrl`  | `string`                       | URL for the marker icon.                                      |
+| `size`      | `[width, height]`              | Pixels when using `imageUrl` (default `[30, 30]`).            |
+| `color`     | `string`                       | Pin color when using the default pin.                         |
+| `anchor`    | `string`                       | Which part of the element is at `lngLat`. Default `'center'`. |
+| `offset`    | `[x, y]`                       | Pixel offset.                                                 |
+| `draggable` | `boolean`                      | Allow dragging.                                               |
+| `rotation`  | `number`                       | Degrees.                                                      |
+| `popup`     | `string \| HTMLElement`        | Popup opened on click.                                        |
+| `onClick`   | `(marker, event) => void`      | Click handler.                                                |
+| `onDragEnd` | `({lng, lat}, marker) => void` | Called after dragging stops.                                  |
+
+### `addPopup` options
+
+| Option        | Type                         | Description                         |
+| ------------- | ---------------------------- | ----------------------------------- |
+| `lngLat`      | `[lng, lat]` or `{lng, lat}` | Position. **Required.**             |
+| `text`        | `string`                     | Plain text (safe for user data).    |
+| `html`        | `string`                     | HTML markup (trusted only).         |
+| `element`     | `HTMLElement`                | DOM element content.                |
+| `closeButton` | `boolean`                    | Show close button (default `true`). |
+| `anchor`      | `string`                     | Popup direction.                    |
+| `offset`      | `number \| [number, number]` | Pixel offset.                       |
+| `maxWidth`    | `string`                     | CSS max-width (default `'240px'`).  |
+
+## The `gebeta` namespace
+
+The `gebeta` namespace re-exports every maplibre building block so app code only imports from Gebeta:
+
+```javascript
+import { gebeta } from "@gebeta/js";
+
+// Controls
+map.addControl(new gebeta.ScaleControl(), "bottom-left");
+map.addControl(new gebeta.FullscreenControl(), "top-left");
+map.addControl(new gebeta.GeolocateControl(), "top-right");
+
+// Raw marker/popup (prefer sdk.addMarker/addPopup for new code)
+new gebeta.Marker({ color: "#e63946" }).setLngLat([38.7613, 9.0106]).addTo(map);
+
+// Geo helpers
+const bounds = new gebeta.LngLatBounds();
+coordinates.forEach((c) => bounds.extend(c));
+map.fitBounds(bounds, { padding: 64 });
+```
+
+On the CDN script, the same object is on `window.gebeta`. `window.maplibregl` is still available for backwards compatibility.
 
 ## Use MapLibre directly
 
@@ -126,20 +207,22 @@ The [examples](/examples) include [flying to a place](/examples/fly-to), [tiltin
 
 ## Methods
 
-| Member                                         | Description                                                                          |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `init(options)`                                | Draws the map and returns the MapLibre map.                                          |
-| `getMap()`                                     | The MapLibre map, or `null` before `init()`.                                         |
-| `addNavigationControls(position?)`             | Adds zoom and compass buttons.                                                       |
-| `getDirections(origin, destination, options?)` | Gets a route. See [Directions](/sdk/directions).                                     |
-| `displayRoute(route, options?)`                | Draws a route and fits the map to it.                                                |
-| `updateRouteStyle(style)`                      | Changes the drawn route's color, width or opacity.                                   |
-| `clearRoute()`                                 | Removes the drawn route and its markers.                                             |
-| `getCurrentRoute()`                            | The last route from `getDirections()`, or `null`.                                    |
-| `geocodingManager`                             | Forward and reverse geocoding. See [Geocoding](/sdk/geocoding).                      |
-| `clustering`                                   | The clustering manager, or `null` if clustering is off. See [Markers](/sdk/markers). |
-| `fencing`                                      | Draw and show geofences. See [Geofencing](/sdk/fencing).                             |
-| `navigation`                                   | Turn-by-turn navigation. See [Navigation](/sdk/navigation).                          |
+| Member                                         | Description                                                                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `init(options)`                                | Draws the map and returns the MapLibre map.                                                                 |
+| `getMap()`                                     | The MapLibre map, or `null` before `init()`.                                                                |
+| `addNavigationControls(position?)`             | Adds zoom and compass buttons.                                                                              |
+| `getDirections(origin, destination, options?)` | Gets a route. See [Directions](/sdk/directions).                                                            |
+| `displayRoute(route, options?)`                | Draws a route and fits the map to it.                                                                       |
+| `updateRouteStyle(style)`                      | Changes the drawn route's color, width or opacity.                                                          |
+| `clearRoute()`                                 | Removes the drawn route and its markers.                                                                    |
+| `getCurrentRoute()`                            | The last route from `getDirections()`, or `null`.                                                           |
+| `addMarker(options)`                           | Creates a marker, adds it to the map and returns it. See [Add markers and popups](#add-markers-and-popups). |
+| `addPopup(options)`                            | Creates a popup, opens it on the map and returns it.                                                        |
+| `geocodingManager`                             | Forward and reverse geocoding. See [Geocoding](/sdk/geocoding).                                             |
+| `clustering`                                   | The clustering manager, or `null` if clustering is off. See [Markers](/sdk/markers).                        |
+| `fencing`                                      | Draw and show geofences. See [Geofencing](/sdk/fencing).                                                    |
+| `navigation`                                   | Turn-by-turn navigation. See [Navigation](/sdk/navigation).                                                 |
 
 ## Smaller bundles
 

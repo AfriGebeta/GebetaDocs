@@ -34,7 +34,7 @@
       });
 
       function fitRoute(route) {
-        const bounds = new maplibregl.LngLatBounds();
+        const bounds = new gebeta.LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left: 64, right: 64 }, maxZoom: 16, duration: 800 });
       }
