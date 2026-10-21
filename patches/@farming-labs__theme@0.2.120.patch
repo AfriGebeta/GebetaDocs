@@ -1,3 +1,36 @@
+diff --git a/dist/ai-markdown.mjs b/dist/ai-markdown.mjs
+index b3a39d1854a71f6ecce2fd8e9dcd943408ba30c8..6c8ff529c43e568daf09593c1dd45b42112ca666 100644
+--- a/dist/ai-markdown.mjs
++++ b/dist/ai-markdown.mjs
+@@ -6,6 +6,19 @@ function buildCodeBlock(lang, code) {
+ 	const highlighted = highlight(code.replace(/\n$/, "")).replace(/<\/span>\n<span/g, "</span><span");
+ 	return `<div class="fd-ai-code-block"><div class="fd-ai-code-header">${lang ? `<div class="fd-ai-code-lang">${escapeHtml(lang)}</div>` : ""}<button class="fd-ai-code-copy" onclick="(function(btn){var code=btn.closest('.fd-ai-code-block').querySelector('code').textContent;navigator.clipboard.writeText(code).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy'},1500)})})(this)">Copy</button></div><pre><code>${highlighted}</code></pre></div>`;
+ }
++const installManagers = [
++	["pnpm", "pnpm add"],
++	["npm", "npm install"],
++	["yarn", "yarn add"],
++	["bun", "bun add"]
++];
++const copyButton = `<button class="fd-ai-code-copy" onclick="(function(btn){var code=btn.closest('.fd-ai-code-block').querySelector('code').textContent;navigator.clipboard.writeText(code).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy'},1500)})})(this)">Copy</button>`;
++function buildInstallTabs(code) {
++	const packages = code.trim().split(/\s+/).filter((name) => /^[@a-zA-Z0-9._\/-]+$/.test(name)).join(" ");
++	if (!packages) return buildCodeBlock("", code);
++	const tabs = installManagers.map(([manager, command], index) => `<button type="button" class="fd-ai-install-tab" data-active="${index === 0}" data-cmd="${escapeAttribute(`${command} ${packages}`)}" onclick="(function(tab){var block=tab.closest('.fd-ai-install');block.querySelectorAll('.fd-ai-install-tab').forEach(function(t){t.dataset.active=String(t===tab)});block.querySelector('code').textContent=tab.dataset.cmd})(this)">${manager}</button>`).join("");
++	return `<div class="fd-ai-code-block fd-ai-install"><div class="fd-ai-code-header"><div class="fd-ai-install-tabs">${tabs}</div>${copyButton}</div><pre><code>${escapeHtml(`${installManagers[0][1]} ${packages}`)}</code></pre></div>`;
++}
+ function getCodeFenceOpening(line) {
+ 	const match = /^(?: {0,3})(`{3,}|~{3,})(.*)$/.exec(line);
+ 	if (!match) return null;
+@@ -46,7 +59,7 @@ function replaceFencedCodeBlocks(text, codeBlocks, tokenBoundary) {
+ 			i += 1;
+ 		}
+ 		if (i < lines.length) i += 1;
+-		codeBlocks.push(buildCodeBlock(fence.lang, codeLines.join("\n")));
++		codeBlocks.push(fence.lang === "package-install" ? buildInstallTabs(codeLines.join("\n")) : buildCodeBlock(fence.lang, codeLines.join("\n")));
+ 		output.push(`${tokenBoundary}CB${codeBlocks.length - 1}${tokenBoundary}`);
+ 	}
+ 	return output.join("\n");
 diff --git a/dist/docs-page-client.mjs b/dist/docs-page-client.mjs
 index 8ac96c717d3d5fc9c01259af4b315039bb98725e..817bd9721c74e9fa5d9b3625221890e9d9773e41 100644
 --- a/dist/docs-page-client.mjs
@@ -15,6 +48,47 @@ index 8ac96c717d3d5fc9c01259af4b315039bb98725e..817bd9721c74e9fa5d9b3625221890e9
  			url: `#${el.id}`,
  			depth: parseInt(el.tagName[1], 10)
  		})));
+diff --git a/styles/ai.css b/styles/ai.css
+index c3bff17a1cfd0d80526d14d9f6a0c3d606078904..7539f0b1935bfbefcd220d03596855579680719f 100644
+--- a/styles/ai.css
++++ b/styles/ai.css
+@@ -1593,3 +1593,36 @@
+ .fd-ai-fm-trigger-btn:active {
+   transform: scale(0.97);
+ }
++
++/* Package-manager install tabs in AI answers (```package-install blocks) */
++.fd-ai-install-tabs {
++  display: flex;
++  gap: 2px;
++}
++
++.fd-ai-install-tab {
++  font-size: 12px;
++  font-family: var(--fd-font-mono, ui-monospace, monospace);
++  color: var(--color-fd-muted-foreground, #71717a);
++  background: transparent;
++  border: 0;
++  border-radius: var(--radius, 4px);
++  padding: 2px 10px;
++  cursor: pointer;
++}
++
++.fd-ai-install-tab:hover {
++  color: var(--color-fd-foreground, #e4e4e7);
++}
++
++.fd-ai-install-tab[data-active="true"] {
++  color: var(--color-fd-foreground, #e4e4e7);
++  background: var(--color-fd-background, #fff);
++  box-shadow: 0 0 0 1px var(--color-fd-border, rgba(0, 0, 0, 0.08));
++}
++
++.fd-ai-install code::before {
++  content: "$ ";
++  color: var(--color-fd-muted-foreground, #71717a);
++  user-select: none;
++}
 diff --git a/styles/bundles/browser-framework.css b/styles/bundles/browser-framework.css
 index bcce5162db16f0cf7bc5d0471f482ff7a32f27b4..56eba03645ecd484368c2ba48e5528e2df190389 100644
 --- a/styles/bundles/browser-framework.css
