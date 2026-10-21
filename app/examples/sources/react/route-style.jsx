@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const ORIGIN = { lat: 8.989022, lng: 38.79036 };
 const DESTINATION = { lat: 9.03045, lng: 38.7653 };
@@ -11,7 +12,7 @@ const STYLES = [
 ];
 
 export default function App() {
-  const sdk = useRef(null);
+  const gebetaRef = useRef(null);
   const [active, setActive] = useState(0);
 
   async function handleLoad(gebeta) {
@@ -24,7 +25,7 @@ export default function App() {
 
   function applyStyle(index) {
     const s = STYLES[index];
-    sdk.current?.updateRouteStyle({
+    gebetaRef.current?.updateRouteStyle({
       "line-color": s.color,
       "line-width": s.width,
       ...(s.dasharray ? { "line-dasharray": s.dasharray } : {}),
@@ -34,8 +35,8 @@ export default function App() {
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
-        ref={sdk}
+      <GebetaMap
+        ref={gebetaRef}
         apiKey="YOUR_API_KEY"
         center={[38.7785, 9.0098]}
         zoom={12.5}

@@ -11,7 +11,7 @@ order: 2
 ## Create a map
 
 ```javascript
-import "maplibre-gl/dist/maplibre-gl.css";
+import "@gebeta/js/style.css";
 import { GebetaMaps } from "@gebeta/js";
 
 const gebeta = new GebetaMaps({ auth: { accessToken, refreshToken } });
@@ -99,24 +99,24 @@ Pass `navigationControl: true` to `init()`, or add the buttons later:
 gebeta.addNavigationControls("bottom-right");
 ```
 
-Add scale and fullscreen controls using the `gebeta` namespace:
+Add scale and fullscreen controls:
 
 ```javascript
-import { gebeta } from "@gebeta/js";
+import { ScaleControl, FullscreenControl } from "@gebeta/js";
 
-map.addControl(new gebeta.ScaleControl(), "bottom-left");
-map.addControl(new gebeta.FullscreenControl(), "top-left");
+map.addControl(new ScaleControl(), "bottom-left");
+map.addControl(new FullscreenControl(), "top-left");
 ```
 
-With the CDN script, `window.gebeta` is available automatically — no import needed. [Try it](/examples/navigation-controls).
+With the CDN script, take them from `window.gebeta` instead: `const { ScaleControl, FullscreenControl } = window.gebeta;`. [Try it](/examples/navigation-controls).
 
 ## Add markers and popups
 
-Use `sdk.addMarker()` and `sdk.addPopup()` instead of constructing maplibre objects directly. Both accept a `lngLat` and return the maplibre instance.
+Use `gebeta.addMarker()` and `gebeta.addPopup()` once the map has loaded. Both take a `lngLat` and return the marker or popup they added.
 
 ```javascript
-// Marker with an inline popup
-sdk.addMarker({
+// Marker with a popup that opens on click
+gebeta.addMarker({
   lngLat: [38.7613, 9.0106],
   anchor: "bottom",
   popup: "Meskel Square",
@@ -125,17 +125,17 @@ sdk.addMarker({
 // Custom element
 const el = document.createElement("div");
 el.className = "pin";
-sdk.addMarker({ lngLat: [38.7578, 9.0192], element: el, anchor: "bottom" });
+gebeta.addMarker({ lngLat: [38.7578, 9.0192], element: el, anchor: "bottom" });
 
 // Draggable
-sdk.addMarker({
+gebeta.addMarker({
   lngLat: [38.7578, 9.0192],
   draggable: true,
   onDragEnd: ({ lng, lat }) => console.log(lng, lat),
 });
 
 // Standalone popup
-sdk.addPopup({ lngLat: [38.7613, 9.0106], text: "Hello" });
+gebeta.addPopup({ lngLat: [38.7613, 9.0106], text: "Hello" });
 ```
 
 ### `addMarker` options
@@ -151,7 +151,7 @@ sdk.addPopup({ lngLat: [38.7613, 9.0106], text: "Hello" });
 | `offset`    | `[x, y]`                       | Pixel offset.                                                 |
 | `draggable` | `boolean`                      | Allow dragging.                                               |
 | `rotation`  | `number`                       | Degrees.                                                      |
-| `popup`     | `string \| HTMLElement`        | Popup opened on click.                                        |
+| `popup`     | `string \| HTMLElement`        | Popup opened on click. A string is shown as plain text.       |
 | `onClick`   | `(marker, event) => void`      | Click handler.                                                |
 | `onDragEnd` | `({lng, lat}, marker) => void` | Called after dragging stops.                                  |
 
@@ -168,28 +168,41 @@ sdk.addPopup({ lngLat: [38.7613, 9.0106], text: "Hello" });
 | `offset`      | `number \| [number, number]` | Pixel offset.                       |
 | `maxWidth`    | `string`                     | CSS max-width (default `'240px'`).  |
 
-## The `gebeta` namespace
+## Map building blocks
 
-The `gebeta` namespace re-exports every maplibre building block so app code only imports from Gebeta:
+`@gebeta/js` exports the map building blocks, so app code only imports from Gebeta:
 
 ```javascript
-import { gebeta } from "@gebeta/js";
+import {
+  ScaleControl,
+  FullscreenControl,
+  GeolocateControl,
+  Marker,
+  LngLatBounds,
+} from "@gebeta/js";
 
 // Controls
-map.addControl(new gebeta.ScaleControl(), "bottom-left");
-map.addControl(new gebeta.FullscreenControl(), "top-left");
-map.addControl(new gebeta.GeolocateControl(), "top-right");
+map.addControl(new ScaleControl(), "bottom-left");
+map.addControl(new FullscreenControl(), "top-left");
+map.addControl(new GeolocateControl(), "top-right");
 
-// Raw marker/popup (prefer sdk.addMarker/addPopup for new code)
-new gebeta.Marker({ color: "#e63946" }).setLngLat([38.7613, 9.0106]).addTo(map);
+// A marker you build yourself (gebeta.addMarker() covers most cases)
+new Marker({ color: "#e63946" }).setLngLat([38.7613, 9.0106]).addTo(map);
 
-// Geo helpers
-const bounds = new gebeta.LngLatBounds();
+// Fit the map to some points
+const bounds = new LngLatBounds();
 coordinates.forEach((c) => bounds.extend(c));
 map.fitBounds(bounds, { padding: 64 });
 ```
 
-On the CDN script, the same object is on `window.gebeta`. `window.maplibregl` is still available for backwards compatibility.
+With the CDN script they're on `window.gebeta`. Take what you need before you create your map, because the examples name the map instance `gebeta` too:
+
+```javascript
+const { Marker, LngLatBounds } = window.gebeta;
+const gebeta = new GebetaMaps({ apiKey: "{your-api-key}" });
+```
+
+`window.maplibregl` is still available for backwards compatibility.
 
 ## Use MapLibre directly
 

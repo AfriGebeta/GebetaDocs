@@ -1,4 +1,5 @@
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const AREA = {
   type: "Feature",
@@ -19,8 +20,8 @@ const AREA = {
 };
 
 export default function App() {
-  function handleLoad(sdk) {
-    const map = sdk.getMap();
+  function handleLoad(gebeta) {
+    const map = gebeta.getMap();
     map.addSource("delivery-area", { type: "geojson", data: AREA });
     map.addLayer({
       id: "delivery-area-fill",
@@ -37,7 +38,7 @@ export default function App() {
   }
 
   return (
-    <GebetaMaps
+    <GebetaMap
       apiKey="YOUR_API_KEY"
       center={[38.7613, 9.0106]}
       zoom={14}

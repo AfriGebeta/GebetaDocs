@@ -1,6 +1,6 @@
 ---
 title: React Native
-description: A GebetaMaps component and hooks for directions, clustering, geofencing, navigation and location on iOS and Android.
+description: A GebetaMap component and hooks for directions, clustering, geofencing, navigation and location on iOS and Android.
 order: 4
 ---
 
@@ -24,10 +24,10 @@ cd ios && pod install
 ## Show a map
 
 ```jsx
-import { GebetaMaps } from "@gebeta/react-native";
+import { GebetaMap } from "@gebeta/react-native";
 
 export function StoreMap({ auth }) {
-  return <GebetaMaps auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ flex: 1 }} />;
+  return <GebetaMap auth={auth} center={[38.7578, 9.0192]} zoom={13} style={{ flex: 1 }} />;
 }
 ```
 
@@ -43,7 +43,7 @@ export function StoreMap({ auth }) {
 
 ## Hooks
 
-Each hook must be called from a component rendered inside `GebetaMaps`. They return `null` managers until the map is ready, so check before you call them.
+Each hook must be called from a component rendered inside `GebetaMap`. They return `null` managers until the map is ready, so check before you call them.
 
 | Hook                                | Returns                                           |
 | ----------------------------------- | ------------------------------------------------- |
@@ -60,10 +60,9 @@ Pass `useDirections` and `useNavigation` the same `auth` or `apiKey` you gave th
 Geocoding doesn't need a map. Import `GeocodingManager` from `@gebeta/core` and call it directly anywhere in your app:
 
 ```jsx
-import { GeocodingManager, AuthManager } from "@gebeta/core";
+import { GeocodingManager } from "@gebeta/core";
 
-const auth = new AuthManager({ apiKey: "your-api-key" });
-const geocoding = new GeocodingManager(auth);
+const geocoding = new GeocodingManager(process.env.GEBETA_TOKEN);
 
 async function searchPlaces(query) {
   const results = await geocoding.geocode(query);
@@ -71,17 +70,17 @@ async function searchPlaces(query) {
 }
 
 async function reverseGeocode(lat, lng) {
-  const place = await geocoding.reverseGeocode({ lat, lng });
-  return place;
+  const places = await geocoding.reverseGeocode({ lat, lng });
+  return places;
 }
 ```
 
-See [Geocoding](/sdk/geocoding) for all options, including the `language` and `limit` parameters.
+Pass it your API key, or an `AuthManager` for [service-account tokens](/sdk/authentication). See [Geocoding](/sdk/geocoding) for the result fields.
 
 ## Directions
 
 ```jsx
-import { GebetaMaps, useDirections } from "@gebeta/react-native";
+import { GebetaMap, useDirections } from "@gebeta/react-native";
 import { Button } from "react-native";
 
 function RouteButton({ auth }) {
@@ -100,9 +99,9 @@ function RouteButton({ auth }) {
 
 export function RouteMap({ auth }) {
   return (
-    <GebetaMaps auth={auth} center={[38.7785, 9.0098]} zoom={12} style={{ flex: 1 }}>
+    <GebetaMap auth={auth} center={[38.7785, 9.0098]} zoom={12} style={{ flex: 1 }}>
       <RouteButton auth={auth} />
-    </GebetaMaps>
+    </GebetaMap>
   );
 }
 ```
@@ -130,46 +129,49 @@ The markers are added when the map is ready and replaced whenever the `markers` 
 ## Geofencing
 
 ```jsx
-import { GebetaMaps, useFencing } from "@gebeta/react-native";
+import { GebetaMap, useFencing } from "@gebeta/react-native";
 import { Button } from "react-native";
 
 function FenceControls() {
   const { fencing } = useFencing();
 
-  function drawFence() {
+  function showZone() {
     if (!fencing) return;
-    fencing.addFence({
-      id: "delivery-zone",
-      coordinates: [
-        [38.74, 8.99],
-        [38.79, 8.99],
-        [38.79, 9.04],
-        [38.74, 9.04],
-        [38.74, 8.99],
-      ],
-    });
+    fencing.renderFences([
+      {
+        id: "delivery-zone",
+        name: "Delivery zone",
+        points: [
+          [38.74, 8.99],
+          [38.79, 8.99],
+          [38.79, 9.04],
+          [38.74, 9.04],
+        ],
+        color: "#2563eb",
+      },
+    ]);
   }
 
-  return <Button title="Draw fence" onPress={drawFence} disabled={!fencing} />;
+  return <Button title="Show delivery zone" onPress={showZone} disabled={!fencing} />;
 }
 
 export function FenceMap({ auth }) {
   return (
-    <GebetaMaps auth={auth} center={[38.765, 9.015]} zoom={12} style={{ flex: 1 }}>
+    <GebetaMap auth={auth} center={[38.765, 9.015]} zoom={12} style={{ flex: 1 }}>
       <FenceControls />
-    </GebetaMaps>
+    </GebetaMap>
   );
 }
 ```
 
-`fencing` has the same `addFence()`, `removeFence()`, `clearFences()` and `isPointInFence()` as the [web SDK](/sdk/fencing).
+`fencing` has the same `renderFences()`, `removeFence()`, `clearAllFences()` and drawing methods (`startDrawing()`, `closeFence()`) as the [web SDK](/sdk/fencing).
 
 ## Location
 
 `useUserLocation()` asks for location permission and returns the device's latest position. Declare `ACCESS_FINE_LOCATION` on Android and `NSLocationWhenInUseUsageDescription` on iOS. To draw the location dot, render the `UserLocation` component this package re-exports from MapLibre:
 
 ```jsx
-import { GebetaMaps, UserLocation, useUserLocation } from "@gebeta/react-native";
+import { GebetaMap, UserLocation, useUserLocation } from "@gebeta/react-native";
 
 function LocationDot() {
   const { location } = useUserLocation(true);
@@ -178,9 +180,9 @@ function LocationDot() {
 
 export function LiveMap({ auth }) {
   return (
-    <GebetaMaps auth={auth} center={[38.7578, 9.0192]} zoom={14} style={{ flex: 1 }}>
+    <GebetaMap auth={auth} center={[38.7578, 9.0192]} zoom={14} style={{ flex: 1 }}>
       <LocationDot />
-    </GebetaMaps>
+    </GebetaMap>
   );
 }
 ```
@@ -190,13 +192,8 @@ export function LiveMap({ auth }) {
 `useNavigation()` gives you a navigation manager plus its state. Start it with a route, your driver's id and a location provider, the same as [on the web](/sdk/navigation). The device's location provider is on the map context:
 
 ```jsx
-import {
-  GebetaMaps,
-  useGebetaMapContext,
-  useNavigation,
-  useDirections,
-} from "@gebeta/react-native";
-import { Button } from "react-native";
+import { GebetaMap, useGebetaMapContext, useNavigation, useDirections } from "@gebeta/react-native";
+import { Button, Text } from "react-native";
 
 function Navigator({ auth }) {
   const { platform } = useGebetaMapContext();
@@ -228,9 +225,9 @@ function Navigator({ auth }) {
 
 export function NavMap({ auth }) {
   return (
-    <GebetaMaps auth={auth} center={[38.7785, 9.0098]} zoom={14} style={{ flex: 1 }}>
+    <GebetaMap auth={auth} center={[38.7785, 9.0098]} zoom={14} style={{ flex: 1 }}>
       <Navigator auth={auth} />
-    </GebetaMaps>
+    </GebetaMap>
   );
 }
 ```

@@ -16,7 +16,7 @@ Want to see it first? Browse the [examples](/examples).
 | Package                | Use it for                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------- |
 | `@gebeta/js`           | Web pages and apps without a framework, or with one we don't have a package for.         |
-| `@gebeta/react`        | React apps. A `GebetaMaps` component that sets up and cleans up the map for you.         |
+| `@gebeta/react`        | React apps. A `GebetaMap` component that sets up and cleans up the map for you.          |
 | `@gebeta/react-native` | iOS and Android apps built with React Native.                                            |
 | `@gebeta/node`         | Your backend. Exchanges your server token for the short-lived tokens your frontend uses. |
 | `@gebeta/api`          | TypeScript types and constants shared by the other packages. Installed with them.        |
@@ -51,7 +51,7 @@ yarn add @gebeta/js
 <script src="https://tiles.gebeta.app/static/v3/gebeta-maps.umd.js"></script>
 ```
 
-The script adds `GebetaMaps`, its managers and `maplibregl` to `window`, and loads the MapLibre styles for you. `v3` follows the latest 3.x release. To pin an exact version, use `https://tiles.gebeta.app/static/releases/3.0.12/gebeta-maps.umd.js`.
+The script adds `GebetaMaps`, its managers and the `gebeta` namespace (markers, popups, controls) to `window`, and loads the map styles for you. `v3` follows the latest 3.x release. To pin an exact version, use `https://tiles.gebeta.app/static/releases/3.3.0/gebeta-maps.umd.js`.
 
 </Tab>
 </Tabs>
@@ -69,7 +69,7 @@ Give the map an element with a height:
 Then create the map in it:
 
 ```javascript
-import "maplibre-gl/dist/maplibre-gl.css";
+import "@gebeta/js/style.css";
 import { GebetaMaps } from "@gebeta/js";
 
 const gebeta = new GebetaMaps({ apiKey: "{your-api-key}" });
@@ -81,7 +81,7 @@ gebeta.init({
 });
 ```
 
-The stylesheet styles markers, popups and controls. `maplibre-gl` comes with `@gebeta/js`; with pnpm, add it to your own dependencies so the import resolves. With the CDN script, drop both `import` lines: the stylesheet is loaded for you and `GebetaMaps` is already on `window`. `container` is the element's id without `#`, or the element itself. `center` is `[lng, lat]`, longitude first. See it running in [Display a map](/examples/display-a-map).
+The stylesheet positions and styles markers, popups and controls. With the CDN script, drop both `import` lines: the stylesheet is loaded for you and `GebetaMaps` is already on `window`. `container` is the element's id without `#`, or the element itself. `center` is `[lng, lat]`, longitude first. See it running in [Display a map](/examples/display-a-map).
 
 <Callout title="Use tokens in production">
   An API key in frontend code can be copied by anyone who opens your page. For a live app, have your

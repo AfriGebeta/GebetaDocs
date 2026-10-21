@@ -1,8 +1,9 @@
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 export default function App() {
-  function handleLoad(sdk) {
-    const map = sdk.getMap();
+  function handleLoad(gebeta) {
+    const map = gebeta.getMap();
     function rotate(timestamp) {
       map.rotateTo((timestamp / 150) % 360, { duration: 0 });
       requestAnimationFrame(rotate);
@@ -11,7 +12,7 @@ export default function App() {
   }
 
   return (
-    <GebetaMaps
+    <GebetaMap
       apiKey="YOUR_API_KEY"
       center={[38.7613, 9.0106]}
       zoom={15.5}

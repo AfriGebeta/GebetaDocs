@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { GebetaMaps, useClustering } from "@gebeta/react";
+import { GebetaMap, useClustering } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const DOT =
   "data:image/svg+xml," +
@@ -27,7 +28,7 @@ function RandomMarkers() {
 
 export default function App() {
   return (
-    <GebetaMaps
+    <GebetaMap
       apiKey="YOUR_API_KEY"
       center={[38.7578, 9.0192]}
       zoom={11.5}
@@ -35,6 +36,6 @@ export default function App() {
       style={{ height: "100vh" }}
     >
       <RandomMarkers />
-    </GebetaMaps>
+    </GebetaMap>
   );
 }

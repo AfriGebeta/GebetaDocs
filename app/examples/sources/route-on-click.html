@@ -35,6 +35,8 @@
         return element;
       }
 
+      const { LngLatBounds, Marker } = window.gebeta;
+
       const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
 
       const map = gebeta.init({
@@ -73,18 +75,18 @@
         const element = document.createElement("div");
         element.className = "label";
         element.textContent = route.duration;
-        return new gebeta.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+        return new Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
       }
 
       function fitRoute(route, left = 64) {
-        const bounds = new gebeta.LngLatBounds();
+        const bounds = new LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
       }
 
       const card = document.querySelector(".card");
-      const startPin = new gebeta.Marker({ element: pin(INK, "A"), anchor: "bottom" });
-      const endPin = new gebeta.Marker({ element: pin(INK, "B"), anchor: "bottom" });
+      const startPin = new Marker({ element: pin(INK, "A"), anchor: "bottom" });
+      const endPin = new Marker({ element: pin(INK, "B"), anchor: "bottom" });
       let label = null;
       let start = null;
 

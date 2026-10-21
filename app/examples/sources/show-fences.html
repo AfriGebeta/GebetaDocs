@@ -38,6 +38,8 @@
         },
       ];
 
+      const { Marker } = window.gebeta;
+
       const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
 
       const map = gebeta.init({
@@ -53,7 +55,7 @@
           const element = document.createElement("div");
           element.className = "label";
           element.textContent = zone.name;
-          new gebeta.Marker({ element, anchor: "bottom" })
+          new Marker({ element, anchor: "bottom" })
             .setLngLat(gebeta.fencing.getFenceCentroid(zone.id))
             .addTo(map);
         });

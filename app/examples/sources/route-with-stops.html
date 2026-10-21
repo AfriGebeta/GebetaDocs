@@ -42,6 +42,8 @@
         { lat: 9.0201, lng: 38.7701, color: "#dc2626" },
       ];
 
+      const { LngLatBounds, Marker } = window.gebeta;
+
       const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
 
       const map = gebeta.init({
@@ -80,11 +82,11 @@
         const element = document.createElement("div");
         element.className = "label";
         element.textContent = route.duration;
-        return new gebeta.Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
+        return new Marker({ element, anchor: "bottom" }).setLngLat(halfway(route.geometry.coordinates));
       }
 
       function fitRoute(route, left = 64) {
-        const bounds = new gebeta.LngLatBounds();
+        const bounds = new LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left, right: 64 }, maxZoom: 16, duration: 800 });
       }
@@ -96,11 +98,11 @@
         addCasing();
         fitRoute(route);
 
-        new gebeta.Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
+        new Marker({ element: pin(INK, "A"), anchor: "bottom" }).setLngLat(origin).addTo(map);
         stops.forEach((stop) => {
-          new gebeta.Marker({ element: pin(stop.color), anchor: "bottom" }).setLngLat(stop).addTo(map);
+          new Marker({ element: pin(stop.color), anchor: "bottom" }).setLngLat(stop).addTo(map);
         });
-        new gebeta.Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
+        new Marker({ element: pin(INK, "B"), anchor: "bottom" }).setLngLat(destination).addTo(map);
         durationLabel(route).addTo(map);
 
         document.querySelector(".card").innerHTML =

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const PLACES = [
   { name: "Meskel Square", center: [38.7613, 9.0106] },
@@ -10,18 +11,18 @@ const PLACES = [
 ];
 
 export default function App() {
-  const sdk = useRef(null);
+  const gebetaRef = useRef(null);
   const [active, setActive] = useState(null);
 
   function flyTo(place) {
-    sdk.current?.getMap().flyTo({ center: place.center, zoom: 15, essential: true });
+    gebetaRef.current?.getMap().flyTo({ center: place.center, zoom: 15, essential: true });
     setActive(place.name);
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
-        ref={sdk}
+      <GebetaMap
+        ref={gebetaRef}
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={12}

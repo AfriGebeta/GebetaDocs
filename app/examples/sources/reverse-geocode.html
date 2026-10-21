@@ -32,6 +32,8 @@
         return element;
       }
 
+      const { Marker } = window.gebeta;
+
       const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
 
       const map = gebeta.init({
@@ -41,7 +43,7 @@
       });
 
       const card = document.querySelector(".card");
-      const marker = new gebeta.Marker({ element: pin(INK), anchor: "bottom" });
+      const marker = new Marker({ element: pin(INK), anchor: "bottom" });
 
       map.getCanvas().style.cursor = "crosshair";
 

@@ -25,6 +25,8 @@
       <button data-color="#191715" data-width="5" data-opacity="0.35">Faded</button>
     </div>
     <script>
+      const { LngLatBounds } = window.gebeta;
+
       const gebeta = new GebetaMaps({ apiKey: "YOUR_API_KEY" });
 
       const map = gebeta.init({
@@ -34,7 +36,7 @@
       });
 
       function fitRoute(route) {
-        const bounds = new gebeta.LngLatBounds();
+        const bounds = new LngLatBounds();
         route.geometry.coordinates.forEach((coordinate) => bounds.extend(coordinate));
         map.fitBounds(bounds, { padding: { top: 96, bottom: 48, left: 64, right: 64 }, maxZoom: 16, duration: 800 });
       }

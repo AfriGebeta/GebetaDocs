@@ -1,16 +1,17 @@
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 export default function App() {
-  function handleLoad(sdk) {
-    sdk.addMarker({
+  function handleLoad(gebeta) {
+    gebeta.addMarker({
       lngLat: [38.7613, 9.0106],
       anchor: "bottom",
-      popup: "<strong>Meskel Square</strong><br>The city's main public square.",
+      popup: "Meskel Square, the city's main public square.",
     });
   }
 
   return (
-    <GebetaMaps
+    <GebetaMap
       apiKey="YOUR_API_KEY"
       center={[38.7613, 9.0106]}
       zoom={14}

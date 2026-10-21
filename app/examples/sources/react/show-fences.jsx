@@ -1,4 +1,5 @@
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const ZONES = [
   {
@@ -37,11 +38,11 @@ const ZONES = [
 ];
 
 export default function App() {
-  function handleLoad(sdk) {
-    sdk.fencing.renderFences(ZONES);
+  function handleLoad(gebeta) {
+    gebeta.fencing.renderFences(ZONES);
     ZONES.forEach((zone) => {
-      sdk.addMarker({
-        lngLat: sdk.fencing.getFenceCentroid(zone.id),
+      gebeta.addMarker({
+        lngLat: gebeta.fencing.getFenceCentroid(zone.id),
         element: (() => {
           const el = document.createElement("div");
           el.textContent = zone.name;
@@ -55,7 +56,7 @@ export default function App() {
   }
 
   return (
-    <GebetaMaps
+    <GebetaMap
       apiKey="YOUR_API_KEY"
       center={[38.771, 9.0145]}
       zoom={12.6}

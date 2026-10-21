@@ -1,20 +1,21 @@
 import { useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 export default function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function handleLoad(sdk) {
-    const map = sdk.getMap();
+  function handleLoad(gebeta) {
+    const map = gebeta.getMap();
     map.getCanvas().style.cursor = "crosshair";
 
     map.on("click", async (e) => {
       setLoading(true);
-      const places = await sdk.geocodingManager.reverseGeocode(e.lngLat);
+      const places = await gebeta.geocodingManager.reverseGeocode(e.lngLat);
       const nearest = places[0];
       if (nearest) {
-        sdk.addMarker({ lngLat: [nearest.lngLat.lng, nearest.lngLat.lat], anchor: "bottom" });
+        gebeta.addMarker({ lngLat: [nearest.lngLat.lng, nearest.lngLat.lat], anchor: "bottom" });
         setResult({ name: nearest.name, detail: `${nearest.type} · ${nearest.City}` });
       } else {
         setResult({ name: "Nothing found here", detail: "" });
@@ -25,7 +26,7 @@ export default function App() {
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
+      <GebetaMap
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={15}

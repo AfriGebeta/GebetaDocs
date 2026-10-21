@@ -40,7 +40,7 @@ npm install @gebeta/js
 ```typescript
 import { GeocodingManager } from "@gebeta/js/geocoding";
 
-const geocoder = new GeocodingManager(process.env.GEBETA_API_KEY!);
+const geocoder = new GeocodingManager(process.env.GEBETA_TOKEN!);
 
 const places = await geocoder.reverseGeocode({ lat: 9.0192, lng: 38.7578 });
 console.log(places[0].name);

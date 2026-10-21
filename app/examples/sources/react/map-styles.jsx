@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const STYLES = [
   { label: "Standard", url: "https://tiles.gebeta.app/styles/standard/style.json" },
@@ -12,7 +13,7 @@ export default function App() {
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
+      <GebetaMap
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={13}

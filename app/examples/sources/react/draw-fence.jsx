@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 export default function App() {
-  const sdk = useRef(null);
+  const gebetaRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
   const [status, setStatus] = useState('Click "Draw a fence", then click the map');
 
@@ -15,23 +16,27 @@ export default function App() {
   }
 
   function startDrawing() {
-    sdk.current?.fencing.startDrawing({ fillColor: "#2563eb", lineColor: "#2563eb" });
-    sdk.current?.getMap().getCanvas().style.cursor = "crosshair";
+    const gebeta = gebetaRef.current;
+    if (!gebeta) return;
+    gebeta.fencing.startDrawing({ fillColor: "#2563eb", lineColor: "#2563eb" });
+    gebeta.getMap().getCanvas().style.cursor = "crosshair";
     setDrawing(true);
     setStatus("Click to add corners. Click the first one to close.");
   }
 
   function clearAll() {
-    sdk.current?.fencing.clearAllFences();
-    sdk.current?.getMap().getCanvas().style.cursor = "";
+    const gebeta = gebetaRef.current;
+    if (!gebeta) return;
+    gebeta.fencing.clearAllFences();
+    gebeta.getMap().getCanvas().style.cursor = "";
     setDrawing(false);
     setStatus("Cleared");
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
-        ref={sdk}
+      <GebetaMap
+        ref={gebetaRef}
         apiKey="YOUR_API_KEY"
         center={[38.7578, 9.0192]}
         zoom={14}

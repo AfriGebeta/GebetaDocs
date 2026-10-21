@@ -6,7 +6,7 @@ order: 5
 
 # Geocoding
 
-The geocoding manager turns place names into coordinates (forward geocoding) and coordinates into nearby places (reverse geocoding). It's on every `GebetaMaps` instance once the map has loaded, and you can also use it [without a map](#without-a-map).
+The geocoding manager turns place names into coordinates (forward geocoding) and coordinates into nearby places (reverse geocoding). It's on every `GebetaMaps` instance (`gebeta.geocodingManager`) once the map has loaded, and you can also use it [without a map](#without-a-map).
 
 ## Forward geocoding
 
@@ -32,22 +32,52 @@ map.on("click", async (event) => {
 
 ## Results
 
-Both methods resolve to an array of places like this:
+Every place has a `name` and an `lngLat` you can pass straight to MapLibre or a marker. The other fields depend on the method.
+
+### `geocode()`
+
+With an API key, forward geocoding uses the search endpoint and returns richer places:
 
 ```json
 {
-  "name": "bole",
-  "lngLat": { "lng": 38.79036, "lat": 8.989022 },
+  "name": "Moyee Coffee Bole - Bole Medhanialem, Ednamal akababi",
+  "lngLat": { "lng": 38.784589, "lat": 8.995481 },
+  "id": "forge-3036",
+  "display_name": "Moyee Coffee Bole - Bole Medhanialem, Ednamal akababi, Addis Ababa, Ethiopia",
+  "category": "Coffee shop",
+  "address": { "city": "Addis Ababa", "country": "Ethiopia", "country_code": "ET" },
+  "neighborhood": "Ednamal akababi"
+}
+```
+
+| Field          | Description                                         |
+| -------------- | --------------------------------------------------- |
+| `name`         | The place's name.                                   |
+| `lngLat`       | Where it is, as `{ lng, lat }`.                     |
+| `id`           | A stable id for the place.                          |
+| `display_name` | The full name, with neighborhood, city and country. |
+| `category`     | What kind of place it is, such as `Coffee shop`.    |
+| `address`      | `{ city, country, country_code }`.                  |
+| `neighborhood` | The neighborhood it's in.                           |
+
+With [service-account tokens](/sdk/authentication), `geocode()` returns the same fields as `reverseGeocode()` below.
+
+### `reverseGeocode()`
+
+```json
+{
+  "name": "bole to piassa",
+  "lngLat": { "lng": 38.790125, "lat": 8.988743 },
   "City": "Addis Ababa",
   "Country": "Ethiopia",
-  "type": "neighborhood"
+  "type": "establishment"
 }
 ```
 
 | Field     | Description                                                                   |
 | --------- | ----------------------------------------------------------------------------- |
 | `name`    | The place's name.                                                             |
-| `lngLat`  | Where it is, as `{ lng, lat }`. Pass it straight to MapLibre or a marker.     |
+| `lngLat`  | Where it is, as `{ lng, lat }`.                                               |
 | `City`    | The city it's in.                                                             |
 | `Country` | The country it's in.                                                          |
 | `type`    | What kind of place it is, such as `neighborhood`, `establishment` or `Store`. |

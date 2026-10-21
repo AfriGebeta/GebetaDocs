@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const ORIGIN = { lat: 8.989022, lng: 38.79036 };
 const DESTINATION = { lat: 9.03045, lng: 38.7653 };
 
 export default function App() {
-  const sdk = useRef(null);
+  const gebetaRef = useRef(null);
   const [route, setRoute] = useState(null);
   const [active, setActive] = useState(null);
 
@@ -16,14 +17,14 @@ export default function App() {
   }
 
   function flyToStep(step, index) {
-    sdk.current?.getMap().flyTo({ center: step.coord, zoom: 16, essential: true });
+    gebetaRef.current?.getMap().flyTo({ center: step.coord, zoom: 16, essential: true });
     setActive(index);
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
-        ref={sdk}
+      <GebetaMap
+        ref={gebetaRef}
         apiKey="YOUR_API_KEY"
         center={[38.7785, 9.0098]}
         zoom={12.5}

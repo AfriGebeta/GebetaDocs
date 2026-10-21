@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { GebetaMaps } from "@gebeta/react";
+import { GebetaMap } from "@gebeta/react";
+import "@gebeta/js/style.css";
 
 const ORIGIN = { lat: 8.989022, lng: 38.79036 };
 const DESTINATION = { lat: 9.03045, lng: 38.7653 };
@@ -7,15 +8,15 @@ const DESTINATION = { lat: 9.03045, lng: 38.7653 };
 export default function App() {
   const [summary, setSummary] = useState("Finding a route…");
 
-  async function handleLoad(sdk) {
-    const route = await sdk.getDirections(ORIGIN, DESTINATION);
-    sdk.displayRoute(route, { showMarkers: false });
+  async function handleLoad(gebeta) {
+    const route = await gebeta.getDirections(ORIGIN, DESTINATION);
+    gebeta.displayRoute(route, { showMarkers: false });
     setSummary(`${route.duration} · ${route.distance}`);
   }
 
   return (
     <div style={{ position: "relative", height: "100vh" }}>
-      <GebetaMaps
+      <GebetaMap
         apiKey="YOUR_API_KEY"
         center={[38.7785, 9.0098]}
         zoom={12.5}
