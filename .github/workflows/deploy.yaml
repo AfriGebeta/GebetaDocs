@@ -40,19 +40,19 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "24.x"
       - name: Download .env file
         uses: actions/download-artifact@v4
         with:
           name: dot-env
           path: .
-      - run: npm install -g pnpm@latest-10
+      - run: npm install -g pnpm@11
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Prepare Deployment Artifacts
         run: |
           mkdir -p deploy
-          cp -r .env .next public package.json pnpm-lock.yaml source.config.ts deploy/
+          cp -r .env .next public package.json pnpm-lock.yaml deploy/
       - uses: actions/upload-artifact@v4
         with:
           name: build
