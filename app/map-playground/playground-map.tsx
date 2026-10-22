@@ -289,7 +289,7 @@ export default function PlaygroundMap(props: Props) {
       container: containerRef.current,
       style: MAP_STYLES[0].url,
       center: ADDIS_ABABA,
-      zoom: 13,
+      zoom: 1,
       attributionControl: false,
       transformRequest,
     });

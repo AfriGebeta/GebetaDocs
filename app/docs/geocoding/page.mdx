@@ -9,6 +9,13 @@ icon: pin
 
 The Geocoding API works in both directions. Forward geocoding takes text like `Bole Road` and returns where it is. Reverse geocoding takes a point like `9.0192, 38.7578` and returns what is there, from a single address up to the city and country around it.
 
+<Callout title="Autocomplete is forward geocoding">
+  An autocomplete or search-as-you-type box is built on [forward
+  geocoding](/geocoding/geocoding-forward): call it with the text typed so far and show the results
+  as suggestions. There is no separate autocomplete API. This is different from the `autocomplete`
+  parameter, which only controls whether partial words match.
+</Callout>
+
 <Cards>
   <Card
     title="Forward geocoding"

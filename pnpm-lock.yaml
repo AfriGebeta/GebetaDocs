@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@farming-labs/theme@0.2.120':
-    hash: 7a82a8a6cf71c30d13d4c31b960b3add4dbaab7df62464123e51ca31200f3115
+    hash: eb03664c9d113d0737b6b20dcd634bbb304cb4befd6732dd97844407b69782c5
     path: patches/@farming-labs__theme@0.2.120.patch
 
 importers:
@@ -21,10 +21,10 @@ importers:
         version: 0.2.120(react@19.2.0)
       '@farming-labs/next':
         specifier: ^0.2.120
-        version: 0.2.120(c14b6004c111cfe74f0937fdba7e36ca)
+        version: 0.2.120(29e1dc6f1da6d39a213503bc6ae59bdc)
       '@farming-labs/theme':
         specifier: ^0.2.120
-        version: 0.2.120(patch_hash=7a82a8a6cf71c30d13d4c31b960b3add4dbaab7df62464123e51ca31200f3115)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
+        version: 0.2.120(patch_hash=eb03664c9d113d0737b6b20dcd634bbb304cb4befd6732dd97844407b69782c5)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
       '@gebeta/tiles':
         specifier: ^1.1.4
         version: 1.1.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -4776,11 +4776,11 @@ snapshots:
       - react-native-b4a
       - supports-color
 
-  '@farming-labs/next@0.2.120(c14b6004c111cfe74f0937fdba7e36ca)':
+  '@farming-labs/next@0.2.120(29e1dc6f1da6d39a213503bc6ae59bdc)':
     dependencies:
       '@babel/parser': 7.29.7
       '@farming-labs/docs': 0.2.120(react@19.2.0)
-      '@farming-labs/theme': 0.2.120(patch_hash=7a82a8a6cf71c30d13d4c31b960b3add4dbaab7df62464123e51ca31200f3115)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
+      '@farming-labs/theme': 0.2.120(patch_hash=eb03664c9d113d0737b6b20dcd634bbb304cb4befd6732dd97844407b69782c5)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
       '@mdx-js/loader': 3.1.1(webpack@5.107.0(postcss@8.5.15))
       '@mdx-js/react': 3.1.1(@types/react@19.3.0)(react@19.2.0)
       '@next/mdx': 16.4.2(@mdx-js/loader@3.1.1(webpack@5.107.0(postcss@8.5.15)))(@mdx-js/react@3.1.1(@types/react@19.3.0)(react@19.2.0))
@@ -4824,7 +4824,7 @@ snapshots:
       - waku
       - webpack
 
-  '@farming-labs/theme@0.2.120(patch_hash=7a82a8a6cf71c30d13d4c31b960b3add4dbaab7df62464123e51ca31200f3115)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)':
+  '@farming-labs/theme@0.2.120(patch_hash=eb03664c9d113d0737b6b20dcd634bbb304cb4befd6732dd97844407b69782c5)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)':
     dependencies:
       '@farming-labs/docs': 0.2.120(react@19.2.0)
       fumadocs-core: 16.17.1(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(zod@3.25.76)
@@ -7700,8 +7700,8 @@ snapshots:
     dependencies:
       '@better-fetch/fetch': 1.1.21
       '@farming-labs/docs': 0.2.120(react@19.2.0)
-      '@farming-labs/next': 0.2.120(c14b6004c111cfe74f0937fdba7e36ca)
-      '@farming-labs/theme': 0.2.120(patch_hash=7a82a8a6cf71c30d13d4c31b960b3add4dbaab7df62464123e51ca31200f3115)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
+      '@farming-labs/next': 0.2.120(29e1dc6f1da6d39a213503bc6ae59bdc)
+      '@farming-labs/theme': 0.2.120(patch_hash=eb03664c9d113d0737b6b20dcd634bbb304cb4befd6732dd97844407b69782c5)(@farming-labs/docs@0.2.120(react@19.2.0))(@mdx-js/mdx@3.1.1)(@modelcontextprotocol/server@2.0.0)(@types/estree-jsx@1.0.5)(@types/hast@3.0.5)(@types/mdast@4.0.4)(@types/mdx@2.0.13)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(flexsearch@0.7.21)(lucide-react@0.453.0(react@19.2.0))(next@16.3.8(@types/node@22.5.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(tailwindcss@4.3.3)
       '@gebeta/tiles': 1.1.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-accordion': 1.2.12(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-alert-dialog': 1.1.15(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

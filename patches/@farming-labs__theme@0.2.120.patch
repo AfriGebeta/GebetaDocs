@@ -31,6 +31,20 @@ index b3a39d1854a71f6ecce2fd8e9dcd943408ba30c8..6c8ff529c43e568daf09593c1dd45b42
  		output.push(`${tokenBoundary}CB${codeBlocks.length - 1}${tokenBoundary}`);
  	}
  	return output.join("\n");
+diff --git a/dist/docs-api.mjs b/dist/docs-api.mjs
+index eeb2056775d555db267128ad6fe6aa92b2422a95..6d37bafe538b3588ce6cc1bbe4ac6a35d527515b 100644
+--- a/dist/docs-api.mjs
++++ b/dist/docs-api.mjs
+@@ -2465,7 +2465,8 @@ async function handleAskAI(request, indexes, aiConfig, cloudConfig, search, anal
+ 			retrievedCount: scored.length,
+ 			model: resolved.model
+ 		});
+-		return Response.json({ error: `LLM API error (${llmResponse.status}): ${errText}` }, { status: 502 });
++		const friendlyError = "The AI assistant couldn't answer right now. Clear this chat to start a new one, or try again in a minute.";
++		return Response.json({ error: friendlyError }, { status: 502 });
+ 	}
+ 	await emitDocsAnalyticsEvent(analytics, {
+ 		type: "api_ai_response",
 diff --git a/dist/docs-page-client.mjs b/dist/docs-page-client.mjs
 index 8ac96c717d3d5fc9c01259af4b315039bb98725e..817bd9721c74e9fa5d9b3625221890e9d9773e41 100644
 --- a/dist/docs-page-client.mjs
