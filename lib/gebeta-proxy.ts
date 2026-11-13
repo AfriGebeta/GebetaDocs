@@ -57,10 +57,11 @@ export function fromOwnSite(req: Request) {
 }
 
 export function publicOrigin(req: Request) {
+  const host = requestHost(req);
+  const local = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host);
   const proto =
-    req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ||
-    new URL(req.url).protocol.replace(":", "");
-  return `${proto}://${requestHost(req)}`;
+    req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || (local ? "http" : "https");
+  return `${proto}://${host}`;
 }
 
 export const forbidden = () => Response.json({ error: "Forbidden" }, { status: 403 });
