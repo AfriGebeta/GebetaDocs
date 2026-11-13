@@ -5,7 +5,6 @@ import maplibregl, {
   type Map as MapLibreMap,
   type MapMouseEvent,
   type Marker,
-  type RequestTransformFunction,
 } from "maplibre-gl";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -14,13 +13,6 @@ import { LogoControl, MAP_STYLES, StyleControl } from "./map-controls";
 import type { Drawing, Instruction, LatLng, PickTarget, RouteLabel } from "./types";
 
 const ADDIS_ABABA: [number, number] = [38.75238, 9.03596];
-
-const tileKey = process.env.NEXT_PUBLIC_GEBETA_MAP_KEY;
-const transformRequest: RequestTransformFunction | undefined =
-  process.env.NODE_ENV === "development" && tileKey
-    ? (url, resourceType) =>
-        resourceType === "Tile" ? { url, headers: { Authorization: `Bearer ${tileKey}` } } : { url }
-    : undefined;
 
 type Line = {
   coordinates: [number, number][];
@@ -291,7 +283,6 @@ export default function PlaygroundMap(props: Props) {
       center: ADDIS_ABABA,
       zoom: 1,
       attributionControl: false,
-      transformRequest,
     });
     map.addControl(new maplibregl.NavigationControl(), "top-right");
     map.addControl(new StyleControl(MAP_STYLES), "top-right");

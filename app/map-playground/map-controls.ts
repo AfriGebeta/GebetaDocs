@@ -1,21 +1,22 @@
 import type { IControl, Map as MapLibreMap } from "maplibre-gl";
+import { TILES_PROXY_PATH } from "@/lib/gebeta-proxy";
 
 export type MapStyle = { label: string; url: string; image: string };
 
 export const MAP_STYLES: MapStyle[] = [
   {
     label: "Standard",
-    url: "https://tiles.gebeta.app/styles/standard/style.json",
+    url: `${TILES_PROXY_PATH}/styles/standard/style.json`,
     image: "/vector.png",
   },
   {
     label: "Raster",
-    url: "https://tiles.gebeta.app/styles/raster/raster.json",
+    url: `${TILES_PROXY_PATH}/styles/raster/raster.json`,
     image: "/raster.png",
   },
   {
     label: "Terrain",
-    url: "https://tiles.gebeta.app/styles/standard/terrain/terrain.json",
+    url: `${TILES_PROXY_PATH}/styles/standard/terrain/terrain.json`,
     image: "/terrain.png",
   },
 ];
