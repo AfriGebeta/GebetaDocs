@@ -107,4 +107,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ln -sfn ~/gebeta-docs/releases/$NEW_VERSION ~/gebeta-docs/current"
 
           ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP \
-            "pm2 delete gebeta-docs || true; pm2 start ~/gebeta-docs/current/ecosystem.config.cjs && pm2 save"
+            "node -v; pm2 delete gebeta-docs || true; pm2 start ~/gebeta-docs/current/ecosystem.config.cjs && pm2 save"

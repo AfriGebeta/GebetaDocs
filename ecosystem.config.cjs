@@ -3,6 +3,7 @@ module.exports = {
     {
       name: "gebeta-docs",
       script: "server.js",
+      interpreter: process.execPath,
       cwd: __dirname,
       env: {
         NODE_ENV: "production",
