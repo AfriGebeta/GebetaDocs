@@ -1,8 +1,19 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { withDocs } from "@farming-labs/next/config";
+
+const root = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  output: "standalone",
+  outputFileTracingRoot: root,
+  outputFileTracingIncludes: {
+    "/examples/**": ["./app/examples/sources/**/*"],
+    "/*": ["./app/docs/**/*.mdx"],
+  },
+  turbopack: { root },
   agentRules: false,
   logging: {
     browserToTerminal: process.env.NODE_ENV === "production",

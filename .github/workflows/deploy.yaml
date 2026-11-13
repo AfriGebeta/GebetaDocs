@@ -52,7 +52,10 @@ jobs:
       - name: Prepare Deployment Artifacts
         run: |
           mkdir -p deploy
-          cp -r .env .next public package.json pnpm-lock.yaml deploy/
+          cp -r .next/standalone/. deploy/
+          cp -r .next/static deploy/.next/static
+          cp -r public deploy/public
+          cp ecosystem.config.cjs deploy/
       - uses: actions/upload-artifact@v4
         with:
           name: build
@@ -86,7 +89,11 @@ jobs:
           echo "Current working directory:"
           pwd
           # Create a directory for the new version
-          NEW_VERSION=$(echo ${{ github.ref }} | sed 's/refs\/tags\/v//')
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            NEW_VERSION="${GITHUB_REF_NAME#v}"
+          else
+            NEW_VERSION="main-${GITHUB_SHA::7}"
+          fi
           ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "mkdir -p ~/gebeta-docs/releases/$NEW_VERSION"
 
           # Copy files to the new version directory
@@ -97,5 +104,5 @@ jobs:
           # Update the symlink to point to the new version
           ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "ln -sfn ~/gebeta-docs/releases/$NEW_VERSION ~/gebeta-docs/current"
 
-          # Restart the server
-          ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP "pm2 restart all"
+          ssh -o StrictHostKeyChecking=no $AZURE_SERVER_USER@$AZURE_SERVER_IP \
+            "pm2 delete gebeta-docs || true; pm2 start ~/gebeta-docs/current/ecosystem.config.cjs && pm2 save"
