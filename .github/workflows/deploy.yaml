@@ -21,6 +21,8 @@ jobs:
           echo "NEXT_PUBLIC_GEBETA_MAP_API_KEY=${{ secrets.GEBETA_MAP_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_LOCAL_TEST_URL=${{ secrets.PUBLIC_LOCAL_TEST_URL }}" >> .env
           echo "NEXT_PUBLIC_PRODUCTION_URL=${{ secrets.PUBLIC_PRODUCTION_URL }}" >> .env
+          echo "GEBETA_TOKEN=${{ secrets.GEBETA_TOKEN }}" >> .env
+          echo "GROQ_AI_TOKEN=${{ secrets.GROQ_AI_TOKEN }}" >> .env
       - name: Verify .env file exists
         run: ls -la
       - name: Show .env file contents
