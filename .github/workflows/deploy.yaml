@@ -56,11 +56,11 @@ jobs:
           cp -r .next/static deploy/.next/static
           cp -r public deploy/public
           cp ecosystem.config.cjs deploy/
+          tar -czf build.tar.gz -C deploy .
       - uses: actions/upload-artifact@v4
         with:
           name: build
-          path: deploy
-          include-hidden-files: true
+          path: build.tar.gz
 
   deploy:
     needs: lint-and-build
@@ -75,7 +75,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: build
+          path: .
+      - name: Extract build
+        run: mkdir build && tar -xzf build.tar.gz -C build
       - name: Show directory contents
         run: ls -la
       - name: Deploy to Azure
