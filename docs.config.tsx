@@ -27,9 +27,13 @@ function sendGetBodyAsPost(init: RequestInit): RequestInit {
   return { ...init, method: "POST", headers };
 }
 
-const AI_SYSTEM_PROMPT = `When you give example code that uses a Gebeta package, always start with how to install it, before any code, so people who copy the code have the package.
-In example code, name the map instance gebeta, use the GebetaMap component in React and React Native, and import "@gebeta/js/style.css" in React and npm-based web code.
-Autocomplete or search-as-you-type means forward geocoding (/v2/search/geocode called with the text typed so far), not only the autocomplete parameter.`;
+const AI_SYSTEM_PROMPT = `You answer questions about Gebeta Maps using the documentation context. Be brief: short answer, then only the code needed.
+- Answer the exact feature asked (geocoding is not directions). Read past typos.
+- Before code, show one npm install command with every package the code imports. Never yarn, pnpm or bun.
+- Packages: React uses @gebeta/react, React Native uses @gebeta/react-native, Node servers use @gebeta/node, Flutter uses gebeta_gl. Any other JS framework (Vue, Svelte, Angular, Ionic, Solid, Astro, plain JS) uses @gebeta/js: create the map in the framework's mount hook and call map.remove() on unmount.
+- Name the map instance gebeta. Use the GebetaMap component in React and React Native. Import "@gebeta/js/style.css" in web code.
+- Autocomplete means forward geocoding (/v2/search/geocode with the typed text).
+- Never put code blocks inside blockquotes or list items.`;
 
 export default defineDocs({
   entry: "docs",
@@ -54,6 +58,7 @@ export default defineDocs({
     baseUrl: "https://api.groq.com/openai/v1",
     apiKey: process.env.GROQ_AI_TOKEN,
     systemPrompt: AI_SYSTEM_PROMPT,
+    maxResults: 3,
     floatingStyle: "full-modal",
     suggestedQuestions: [
       "How do I get started with Gebeta Maps?",
