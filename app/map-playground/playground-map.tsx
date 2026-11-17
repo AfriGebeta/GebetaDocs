@@ -281,7 +281,7 @@ export default function PlaygroundMap(props: Props) {
       container: containerRef.current,
       style: MAP_STYLES[0].url,
       center: ADDIS_ABABA,
-      zoom: 1,
+      zoom: 15.5,
       attributionControl: false,
     });
     map.addControl(new maplibregl.NavigationControl(), "top-right");
